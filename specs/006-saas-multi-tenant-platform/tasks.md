@@ -30,11 +30,11 @@
 
 **Goal**: Quota verification engine (7 cat / 50 prod for Free, 50 cat / 500 prod for Pro, Infinity for Enterprise) with WhatsApp deep-linking.
 
-- [ ] T007 [P] Implement `QuotaService` in `src/features/subscription/services/quota-service.ts`
-- [ ] T008 [P] Implement `SubscriptionService` (WhatsApp upgrade URL builder) in `src/features/subscription/services/subscription-service.ts`
-- [ ] T009 Implement `QuotaProgressBar` and `QuotaUpgradeModal` in `src/features/subscription/components/`
-- [ ] T010 Implement `PricingComparison` with Monthly/Yearly toggle in `src/features/subscription/components/pricing-comparison.tsx`
-- [ ] T011 [P] Unit tests for Quota calculations, limits blocking, and WhatsApp URL generation in `tests/unit/quota-service.test.ts`
+- [X] T007 [P] Implement `QuotaService` in `src/features/subscription/services/quota-service.ts`
+- [X] T008 [P] Implement `SubscriptionService` (WhatsApp upgrade URL builder) in `src/features/subscription/services/subscription-service.ts`
+- [X] T009 Implement `QuotaProgressBar` and `QuotaUpgradeModal` in `src/features/subscription/components/`
+- [X] T010 Implement `PricingComparison` with Monthly/Yearly toggle in `src/features/subscription/components/pricing-comparison.tsx`
+- [X] T011 [P] Unit tests for Quota calculations, limits blocking, and WhatsApp URL generation in `tests/unit/quota-service.test.ts`
 
 ---
 
@@ -53,10 +53,10 @@
 
 **Goal**: Super Admin console at `/admin` with global platform KPIs, store management table with 1-click tier modification, and PostgreSQL migration schema with RLS.
 
-- [ ] T016 [P] Create PostgreSQL DDL and RLS policies in `supabase/migrations/20261108_saas_schema.sql`
-- [ ] T017 [P] Implement Supabase client with graceful local fallback in `src/lib/supabase/client.ts` and `src/lib/supabase/types.ts`
-- [ ] T018 Build Super Admin console at `/admin` (`src/app/admin/page.tsx`) with KPI cards, store list, 1-click plan modifier, and store active toggler
-- [ ] T019 [P] Unit tests for Super Admin service and Supabase client fallback in `tests/unit/superadmin-service.test.ts`
+- [X] T016 [P] Create PostgreSQL DDL and RLS policies in `supabase/migrations/20261108_saas_schema.sql`
+- [X] T017 [P] Implement Supabase client with graceful local fallback in `src/lib/supabase/client.ts` and `src/lib/supabase/types.ts`
+- [X] T018 Build Super Admin console at `/admin` (`src/app/admin/page.tsx`) with KPI cards, store list, 1-click plan modifier, and store active toggler
+- [X] T019 [P] Unit tests for Super Admin service and Supabase client fallback in `tests/unit/superadmin-service.test.ts`
 
 ---
 
@@ -64,6 +64,6 @@
 
 **Purpose**: Strict compliance verification, linting, type-checking, and production build
 
-- [ ] T020 Audit component line counts across all 4 sub-agent directories ensuring each file is <= 180 lines
-- [ ] T021 Verify 100% logical directional CSS (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`) and zero native dialogs
-- [ ] T022 Run TypeScript strict type-check (`npm run type-check`), ESLint (`npm run lint`), Vitest test suite (`npm test`), and Next.js 16 production build (`npm run build`)
+- [X] T020 Audit component line counts across all 4 sub-agent directories ensuring each file is <= 180 lines
+- [X] T021 Verify 100% logical directional CSS (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`) and zero native dialogs
+- [X] T022 Run TypeScript strict type-check (`npm run type-check`), ESLint (`npm run lint`), Vitest test suite (`npm test`), and Next.js 16 production build (`npm run build`)
