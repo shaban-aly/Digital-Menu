@@ -6,144 +6,151 @@
 
 **Status**: Draft
 
-**Input**: User description: "سلة الطلبات والطلب عبر واتساب (Cart & WhatsApp Order): تمكين العميل من إضافة الأصناف وتحديد الكميات وإضافة ملاحظات، شريط سفلي عائم يوضح عدد الأصناف والإجمالي بالجنيه المصري (ج.م)، نافذة جانبية/سفلية للسلة لتعديل الكميات وإدخال رقم الطاولة أو الاسم، وزر إرسال الطلب بتنسيق أنيق ومحسوب التكلفة مباشرة إلى واتساب المطعم."
+**Input**: User description: "سلة الطلبات والطلب عبر واتساب (Cart & WhatsApp Order): (1) إضافة الأصناف للسلة بزر سريع (+) على البطاقة وداخل نافذة التفاصيل، مع منع إضافة الأصناف غير المتاحة. (2) حفظ محتويات السلة في localStorage. (3) شريط سفلي عائم يظهر تلقائياً عند وجود صنف واحد أو أكثر ويعرض عدد القطع والإجمالي (ج.م) وزر عرض السلة. (4) نافذة مراجعة السلة (Drawer/Modal) للتحكم في الكميات أو الحذف أو إفراغ السلة، إضافة ملاحظات خاصة، واختيار نوع الطلب: داخل المطعم (Dine-in) مع رقم طاولة إجباري أو استلام من الفرع (Takeaway). (5) زر إرسال الطلب بتنسيق أنيق ومحسوب التكلفة يفتح رابط wa.me مباشرة."
 
 ## User Scenarios & Testing
 
-### User Story 1 - Add Items to Cart & Floating Summary Bar (Priority: P1)
+### User Story 1 - Quick Add to Cart & Sticky Floating Bar (Priority: P1)
 
-A customer browsing the digital menu wants to select items to order. They can tap an "Add to Cart" button directly on any available menu item card or from inside the item detail modal. When an item is added, a floating summary bar appears at the bottom of the screen showing the current total item count and total cost in Egyptian Pounds (EGP).
+A customer browsing the digital menu wants to quickly order dishes. They can tap a prominent quick-add button (+) on any available item card or within the item detail modal. When the first item is added, an animated sticky floating bar slides up at the bottom of the screen showing the total item count, total price in Egyptian Pounds (`ج.م` / `EGP`), and a "View Cart" action.
 
-**Why this priority**: Without adding items and viewing the running total, no order can be constructed. This is the entry point for the ordering experience.
+**Why this priority**: Core entry point to purchasing. Without adding items and viewing the live total, no checkout or order can happen.
 
-**Independent Test**: Browse to `/ar/menu`, tap "Add" on a dish, verify the floating cart bar immediately appears at the bottom displaying "1 صنف" and the correct price in `ج.م`.
+**Independent Test**: Navigate to `/ar/menu`, click (+) on a menu card, verify the card reflects the added state and the sticky bottom bar immediately displays "1 صنف" with the correct item price in `ج.م`.
 
 **Acceptance Scenarios**:
 
-1. **Given** a customer is viewing an available menu item, **When** they tap the add button, **Then** the item is added to the cart with quantity 1, and the floating bottom bar displays the updated item count and total in EGP.
-2. **Given** an item is marked as unavailable, **When** the customer views the card, **Then** the add button is disabled and cannot be pressed.
-3. **Given** an item is already in the cart, **When** the customer taps the increment (+) or decrement (-) buttons on the card or detail view, **Then** the quantity updates and the floating bar total recalculates instantly.
-4. **Given** all items are removed from the cart (quantity 0), **When** the last item is removed, **Then** the floating bottom bar smoothly hides.
+1. **Given** an available menu item on the menu or in the modal, **When** the customer taps the (+) button, **Then** the item is added to the cart and the sticky bottom bar appears with the updated item count and running total in EGP.
+2. **Given** an unavailable item, **When** viewed on the card or in the modal, **Then** the add button is disabled and cannot be tapped.
+3. **Given** an item already in the cart, **When** the customer taps (+) or (-) on the card or in the modal, **Then** the quantity updates in place and the floating bar updates in real time.
+4. **Given** the customer decreases an item's quantity to zero, **When** no other items remain in the cart, **Then** the sticky floating bar smoothly disappears.
 
 ---
 
-### User Story 2 - View and Manage Cart Sheet (Priority: P1)
+### User Story 2 - Cart Persistence in Local Storage (Priority: P1)
 
-A customer taps on the floating cart bar to open a cart drawer/sheet. Inside the sheet, they see an itemized breakdown of selected dishes, their unit prices, individual item quantities with +/- controls, an option to add special instructions (e.g. "بدون بصل" / "سكر خفيف"), and the order subtotal.
+A customer adds several dishes to their cart while on their mobile phone, then accidentally refreshes the browser, locks their screen, or switches the interface language between Arabic and English. Their cart contents, selected quantities, and custom notes remain intact without data loss.
 
-**Why this priority**: Customers must review their selected items, adjust quantities, customize their dishes, or remove mistakes before finalizing an order.
+**Why this priority**: Mobile browser reloads and memory evictions are extremely common in restaurants. Losing cart contents causes customer frustration and abandoned orders.
 
-**Independent Test**: Tap the floating cart bar to open the cart sheet. Modify item quantities, add an item note, and verify total recalculates in real-time.
+**Independent Test**: Add 3 items to the cart, refresh the browser page, and verify the cart still retains all 3 items with their exact quantities and total price.
 
 **Acceptance Scenarios**:
 
-1. **Given** the customer has items in the cart, **When** they tap the floating bottom bar, **Then** a cart sheet slides up displaying all selected items, quantities, and prices.
-2. **Given** the cart sheet is open, **When** the customer changes the quantity of an item using the (+) and (-) buttons, **Then** the item total and overall cart total update immediately.
-3. **Given** the customer wants to customize an item, **When** they tap "Add Note" on an item, **Then** an input field appears where they can enter custom instructions.
-4. **Given** the cart sheet is open, **When** the customer taps the close button or outside the sheet, **Then** the cart sheet dismisses and the menu position is preserved.
+1. **Given** items in the cart, **When** the page is reloaded or the browser tab is closed and reopened on the same device, **Then** all items, quantities, and notes are automatically restored from local storage.
+2. **Given** items in the cart, **When** the customer toggles the language between Arabic (RTL) and English (LTR), **Then** the cart items remain preserved, displaying item titles and currency in the newly selected language.
 
 ---
 
-### User Story 3 - Submit Order via WhatsApp (Priority: P1)
+### User Story 3 - Review & Customize Cart in Drawer / Modal (Priority: P1)
 
-A customer reviewing their cart enters their table number (or table is pre-filled) and optional name, then taps "Send Order via WhatsApp". The application formats a clean, readable, itemized text message in the selected language and opens WhatsApp directly to the restaurant's designated phone number.
+The customer taps "View Cart" on the floating bar. A slide-up drawer (or modal on desktop) opens, showing an itemized list of selected dishes, their unit prices, individual item quantities with (+ / -) controls, a delete button per item, an option to add special instructions per item (e.g., "بدون شطة" / "extra sauce"), and an "Empty Cart" button to wipe the order if desired.
 
-**Why this priority**: This completes the core ordering loop, delivering actionable orders directly to the restaurant staff without requiring third-party payment gateways.
+**Why this priority**: Customers need to review their order, customize individual dishes according to dietary needs, and see the itemized breakdown before committing to the order.
 
-**Independent Test**: Fill in a table number in the cart sheet, click "Send Order via WhatsApp", and verify the WhatsApp link opens with the exact item list, quantities, notes, and calculated total in EGP.
+**Independent Test**: Open the cart drawer, increase quantity of an item, add an item-level note, delete another item, and verify the total recalculates instantly.
 
 **Acceptance Scenarios**:
 
-1. **Given** the cart sheet is open with items, **When** the customer enters their table number and taps "Send Order via WhatsApp", **Then** the system opens WhatsApp (`https://wa.me/<phone>?text=...`) addressed to the restaurant.
-2. **Given** the generated WhatsApp message, **When** viewed, **Then** it contains the restaurant name, table number, customer name (if provided), line-by-line item names, quantities, unit prices, custom notes, and the grand total in EGP.
-3. **Given** the customer attempts to submit without specifying a table number, **When** they tap submit, **Then** a validation message highlights the table number field as required.
-4. **Given** the order is submitted successfully, **When** returning to the app, **Then** the customer is presented with an option to clear the cart or keep it.
+1. **Given** items exist in the cart, **When** the customer taps "View Cart", **Then** the cart drawer slides up displaying the itemized breakdown, quantity buttons (+ / -), item-level notes, and total price.
+2. **Given** the customer taps (+), (-), or the delete trash icon for an item, **Then** the item's quantity updates or is removed, and the total price recalculates instantly.
+3. **Given** the customer taps "Add Note" on an item, **When** they type a custom instruction, **Then** the note is saved with that specific cart item.
+4. **Given** the customer taps "Empty Cart", **When** they confirm, **Then** all items are removed from the cart, local storage is cleared, and the drawer displays an empty state.
 
 ---
 
-### User Story 4 - Pre-fill Table Number via QR Code URL (Priority: P2)
+### User Story 4 - Order Type Selection (Dine-in vs. Takeaway) (Priority: P1)
 
-When a customer scans a table-specific QR code (e.g., `https://menu.restaurant.com/ar/menu?table=12`), the system detects the `table` query parameter and automatically pre-fills the table number in the cart, saving the customer from having to type it manually.
+Before submitting the order, the customer chooses their order fulfillment type:
+1. **داخل المطعم (Dine-in)**: Requires entering a Table Number (إجباري). If opened via QR code with `?table=N`, the table number is automatically pre-filled.
+2. **استلام من الفرع (Takeaway)**: Table number is not required; customer enters their name/phone for pickup identification.
 
-**Why this priority**: Eliminates human error in busy restaurants where customers might type the wrong table number.
+**Why this priority**: Restaurants must know where to deliver the food (which table or pickup counter). Table number validation prevents lost orders.
 
-**Independent Test**: Navigate to `/ar/menu?table=7`, add an item to the cart, open the cart sheet, and verify Table 7 is pre-filled and displayed prominently.
+**Independent Test**: Select "Dine-in" and attempt to submit without table number -> verify error message. Fill table number -> verify validation passes. Switch to "Takeaway" -> verify table number is optional.
 
 **Acceptance Scenarios**:
 
-1. **Given** a customer opens the menu via a URL containing `?table=N`, **When** the page loads, **Then** the table number `N` is stored in the current session.
-2. **Given** a pre-filled table number from the URL, **When** the customer opens the cart sheet, **Then** the table number displays "Table N" (e.g., "طاولة 7") automatically.
+1. **Given** the customer selects "داخل المطعم (Dine-in)", **When** they attempt to submit without entering a table number, **Then** the system prevents submission and highlights the table number input as required.
+2. **Given** the customer opens the menu with a URL parameter `?table=5`, **When** the cart opens, **Then** "Dine-in" is selected and Table 5 is pre-filled automatically.
+3. **Given** the customer selects "استلام من الفرع (Takeaway)", **When** they submit, **Then** table number validation is bypassed and the order is marked as Takeaway.
 
 ---
 
-### User Story 5 - Persist Cart Across Language Switching & Reload (Priority: P2)
+### User Story 5 - Send Order via WhatsApp (Priority: P1)
 
-A customer adds items to their cart in Arabic and decides to switch to English (or accidentally reloads the page). The items in the cart are preserved, and their names and currency formatting automatically translate to the active language.
+The customer taps "Send Order via WhatsApp" (إرسال الطلب عبر واتساب). The system validates the inputs, composes an elegant, clear, structured plain-text message in the current language, and opens a direct `https://wa.me/<phone>?text=...` link addressing the restaurant's WhatsApp number.
 
-**Why this priority**: Prevents frustrating data loss if a customer switches language or refreshes their browser.
+**Why this priority**: Delivers the finalized order directly to the restaurant kitchen/waiter staff with zero friction and without requiring a paid payment gateway.
 
-**Independent Test**: Add 2 items in Arabic, toggle language to English, verify the cart retains both items with names displayed in English and prices formatted as `EGP`.
+**Independent Test**: Complete a cart with 2 items and Table 3 in Arabic mode, click WhatsApp button, verify the generated URL contains an encoded message listing restaurant name, Table 3, both items with quantities and prices in `ج.م`, and the exact grand total.
 
 **Acceptance Scenarios**:
 
-1. **Given** items exist in the cart, **When** the customer toggles the language between Arabic and English, **Then** all items remain in the cart with their names, descriptions, and labels rendered in the new language.
-2. **Given** items exist in the cart, **When** the page is refreshed within the same session, **Then** all cart items and quantities are restored from session storage.
+1. **Given** a valid cart with order type and table number (if dine-in), **When** the customer taps "Send Order via WhatsApp", **Then** the browser launches WhatsApp directly to the restaurant's phone number.
+2. **Given** the generated WhatsApp text in Arabic, **When** inspected, **Then** it includes:
+   - Header with restaurant name and order type (e.g. `طلب جديد - داخل المطعم (طاولة 3)`).
+   - Itemized list with bullets (e.g. `• 2x كباب وكفتة مشوية (580 ج.م) - ملاحظة: بدون بصل`).
+   - General order notes (if provided).
+   - Grand Total (e.g. `الإجمالي: 580 ج.م`).
+3. **Given** the customer is viewing the site in English, **When** they submit, **Then** the message is formatted in English with `EGP` currency formatting.
+4. **Given** special characters or spaces in the notes, **When** encoded, **Then** all characters are properly URL-encoded using `encodeURIComponent` to prevent message truncation.
 
 ---
 
 ### Edge Cases
 
-- What happens if a customer adds an item, but that item later becomes unavailable? The cart highlights the item with an "Unavailable" warning and prevents checkout until it is removed.
-- What happens if the customer has an empty cart? The floating bar is hidden; if the cart sheet is opened, an empty state message ("Your cart is empty") with a "Browse Menu" button is shown.
-- What happens if the restaurant has no WhatsApp phone number configured? The system falls back to a friendly error state instructing the customer to inform the waiter directly.
-- What happens if special characters or emojis are used in the notes? The message text is properly URL-encoded (`encodeURIComponent`) to ensure no corruption in WhatsApp.
-- What happens if the customer changes the quantity to 0 in the cart? A confirmation or immediate removal removes the item from the list.
+- What happens if the customer has an empty cart? The floating bar is hidden; if the cart drawer is accessed directly, it shows an empty state with a "Browse Menu" button.
+- What happens if an item in the cart becomes out-of-stock after being added? The cart sheet displays an "Unavailable" badge on that item and disables the submit button until the item is removed.
+- What happens if the restaurant has no WhatsApp number configured? A clear notification is shown advising the customer to inform their waiter directly.
+- What happens if the customer closes WhatsApp and returns to the app? The cart remains in memory, giving the customer the option to keep or clear the cart.
+- What happens when a user enters long text in the notes? Notes are limited to 150 characters to prevent message overflow.
 
 ## Requirements
 
 ### Functional Requirements
 
-- **FR-001**: System MUST provide an "Add to Cart" action on each available menu item card and inside the item detail modal.
-- **FR-002**: System MUST allow customers to increment and decrement item quantities (minimum 1, maximum 99) directly from the card, modal, and cart sheet.
-- **FR-003**: System MUST display a floating bottom bar whenever the cart contains one or more items, showing total item count, total price in Egyptian Pounds (EGP), and a "View Order" trigger button.
-- **FR-004**: System MUST hide the floating bottom bar smoothly when the cart is empty.
-- **FR-005**: Tapping the floating bottom bar MUST open a slide-up cart drawer/sheet displaying the itemized order breakdown.
-- **FR-006**: The cart sheet MUST list each item with its title, unit price, quantity controls (+ / -), and an option to attach custom instructions/notes (max 100 characters).
-- **FR-007**: The cart sheet MUST allow removing individual items completely via a delete icon button.
-- **FR-008**: The cart sheet MUST include a required "Table Number" input field (alphanumeric, max 10 characters).
-- **FR-009**: System MUST automatically extract and pre-fill the table number if provided in the URL query parameter `?table=<value>`.
-- **FR-010**: The cart sheet MUST include an optional "Customer Name" field (max 50 characters).
-- **FR-011**: System MUST calculate the grand total in real-time as the sum of (item unit price × quantity) for all active cart items, formatted in EGP (`ج.م` in Arabic, `EGP` in English).
-- **FR-012**: System MUST provide a prominent "Send Order via WhatsApp" button with a WhatsApp icon and minimum 44×44px touch target.
-- **FR-013**: Clicking "Send Order via WhatsApp" MUST validate that the cart is not empty and the table number is filled.
-- **FR-014**: System MUST construct a well-formatted bilingual WhatsApp message containing: Header (Restaurant Name & Table Number), itemized list with quantities and item notes, and Grand Total in EGP.
-- **FR-015**: System MUST URL-encode the WhatsApp message and open `https://wa.me/<phone>?text=<encoded_message>` in a new tab or trigger the native WhatsApp client.
-- **FR-016**: System MUST persist cart items in browser storage (`sessionStorage` / `localStorage`) so that page refreshes or language switches retain the order without loss.
-- **FR-017**: All cart UI elements, buttons, inputs, and drawers MUST adhere to bidirectional layout rules (RTL for Arabic, LTR for English) using CSS logical properties.
-- **FR-018**: System MUST provide a "Clear Cart" button inside the cart sheet to allow wiping the order with a single confirmation.
+- **FR-001**: System MUST provide a quick-add (+) button on each available menu item card and inside the item detail modal.
+- **FR-002**: System MUST prevent adding unavailable (out-of-stock) items to the cart and disable their add triggers.
+- **FR-003**: System MUST persist the entire cart state (items, quantities, item notes, order type, table number, general notes) in `localStorage`.
+- **FR-004**: System MUST restore the cart state from `localStorage` upon page load or reload without data loss.
+- **FR-005**: System MUST display a sticky floating bottom bar when the cart contains one or more items.
+- **FR-006**: The floating bottom bar MUST show the total item count, the calculated total price in Egyptian Pounds (`ج.م` / `EGP`), and a "View Cart" button.
+- **FR-007**: The floating bottom bar MUST hide smoothly when the cart item count reaches zero.
+- **FR-008**: Tapping "View Cart" MUST open a cart drawer/modal displaying all selected items with individual quantity adjusters (+ / -), item unit prices, and individual item subtotals.
+- **FR-009**: The cart drawer MUST allow attaching an optional custom note (up to 150 characters) to any individual item.
+- **FR-010**: The cart drawer MUST allow deleting individual items, as well as an "Empty Cart" button that clears the entire cart with confirmation.
+- **FR-011**: The cart drawer MUST provide an Order Type toggle: "داخل المطعم (Dine-in)" vs. "استلام من الفرع (Takeaway)".
+- **FR-012**: When "Dine-in" is selected, the Table Number field MUST be strictly required before order submission.
+- **FR-013**: System MUST automatically extract and pre-populate the table number if the URL contains a `?table=<value>` query parameter.
+- **FR-014**: When "Takeaway" is selected, the Table Number field MUST be hidden or optional, and a Customer Name/Phone field is provided.
+- **FR-015**: System MUST calculate the grand total in real-time as the sum of all item subtotals, formatted in EGP (`ج.م` in Arabic, `EGP` in English).
+- **FR-016**: System MUST provide an "Send Order via WhatsApp" button with a WhatsApp icon and minimum 44×44px touch target.
+- **FR-017**: Clicking the WhatsApp button MUST validate all required fields, construct a cleanly formatted, itemized plain-text message in the current language, URL-encode it, and open `https://wa.me/<phone>?text=<encoded_text>` in a new tab or trigger the WhatsApp mobile app.
+- **FR-018**: All cart components MUST reside in `src/features/cart/` with maximum 180 lines per file, strictly following CSS logical properties (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`) for full RTL/LTR bilingual support.
 
 ### Key Entities
 
-- **CartItem**: Represents a selected menu item in the customer's cart. Attributes: `itemId`, `quantity`, `unitPrice`, `itemNote` (optional).
-- **Cart**: The collection of `CartItem`s. Attributes: `items`, `tableNumber`, `customerName`, `totalPrice`, `totalCount`.
-- **OrderMessage**: The structured representation of the text message sent to WhatsApp. Attributes: `restaurantName`, `tableNumber`, `customerName`, `itemsList`, `totalFormatted`.
+- **CartItem**: Represents a selected menu item in the cart. Attributes: `id`, `menuItemId`, `name_ar`, `name_en`, `unitPrice`, `quantity`, `itemNote`, `image_url`, `is_available`.
+- **OrderType**: Enum: `'dine_in' | 'takeaway'`.
+- **CartState**: The comprehensive cart entity: `items: CartItem[]`, `orderType: OrderType`, `tableNumber: string`, `customerName?: string`, `generalNote?: string`, `totalCount: number`, `totalPrice: number`.
+- **WhatsAppMessage**: Structured plain-text template formatted per locale for transmission via WhatsApp.
 
 ## Success Criteria
 
 ### Measurable Outcomes
 
-- **SC-001**: Customers can add an item to the cart and see the floating summary bar appear with updated total in under 200 milliseconds.
-- **SC-002**: Cart sheet opens smoothly within 300 milliseconds of tapping the floating bar.
-- **SC-003**: 100% of generated WhatsApp messages accurately list all items, notes, table number, and exact grand total matching the cart display.
-- **SC-004**: Tapping "Send Order via WhatsApp" launches WhatsApp immediately without intermediate page redirects or delay.
-- **SC-005**: All touch targets for quantity controls (+ / -), delete buttons, and checkout buttons meet the minimum 44 × 44 px standard.
-- **SC-006**: Zero cart data loss when switching languages or refreshing the page.
-- **SC-007**: 100% adherence to CSS logical properties; zero physical directional CSS properties in the cart feature.
+- **SC-001**: Tapping (+) adds an item and displays the sticky floating bar in under 150 milliseconds.
+- **SC-002**: 100% of cart data is persisted in `localStorage` and successfully recovered after browser reload.
+- **SC-003**: 100% of generated WhatsApp links properly open the WhatsApp interface with all items, quantities, notes, table number, and exact grand total correctly listed.
+- **SC-004**: Form submission with missing table number in "Dine-in" mode is blocked 100% of the time with immediate inline validation feedback.
+- **SC-005**: All interactive buttons (quantity +/-, delete, drawer open/close, WhatsApp submit) maintain minimum 44×44px touch targets.
+- **SC-006**: 100% adherence to CSS logical properties; zero physical directional properties (`left`, `right`, `ml-`, `mr-`, `pl-`, `pr-`) in `src/features/cart/`.
+- **SC-007**: Zero component files exceeding the 180-line constitutional limit.
 
 ## Assumptions
 
-- The restaurant's WhatsApp phone number (with international country code, e.g., `201xxxxxxxxx` for Egypt) is configured in the restaurant profile or environment.
-- Payment processing is not integrated into this feature; payment is settled offline (cash / card at the table or cashier).
-- WhatsApp is accessible on the customer's device (native app or WhatsApp Web).
-- Tax and service charges: prices displayed are inclusive of taxes unless specified otherwise in future features.
-- Cart is client-managed per device session; multi-device synchronization is out of scope.
+- The restaurant's WhatsApp phone number is configured in the environment or restaurant settings (e.g. Egyptian number format `201xxxxxxxxx`).
+- Customers settle payments in person (cash, credit card, or digital wallet) at the table or counter; online payment gateways are out of scope for this feature.
+- WhatsApp is accessible on the customer's mobile device or desktop browser.
+- Menu items added to the cart reflect prices inclusive of any applicable taxes.
