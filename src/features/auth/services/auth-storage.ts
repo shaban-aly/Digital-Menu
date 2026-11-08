@@ -47,3 +47,4 @@ export function saveStoredUsers(users: StoredUserAccount[]) {
     console.error("Failed saving users", e);
   }
 }
+
