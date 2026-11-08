@@ -52,19 +52,23 @@ BEGIN
   ) VALUES (
     NEW.id,
     COALESCE(NEW.plan, 'free'::public.plan_tier),
-    'monthly'::public.billing_cycle,
+    CASE
+      WHEN NEW.plan = 'pro_yearly' THEN 'yearly'::public.billing_cycle
+      ELSE 'monthly'::public.billing_cycle
+    END,
     CASE
       WHEN NEW.plan = 'enterprise' THEN -1
-      WHEN NEW.plan = 'pro' THEN 50
+      WHEN NEW.plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 50
       ELSE 7
     END,
     CASE
       WHEN NEW.plan = 'enterprise' THEN -1
-      WHEN NEW.plan = 'pro' THEN 500
+      WHEN NEW.plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 500
       ELSE 50
     END,
     CASE
-      WHEN NEW.plan = 'pro' THEN 250.00
+      WHEN NEW.plan = 'pro_yearly' THEN 2500.00
+      WHEN NEW.plan IN ('pro', 'pro_monthly') THEN 250.00
       ELSE 0.00
     END,
     true
@@ -78,3 +82,42 @@ DROP TRIGGER IF EXISTS trg_on_store_created_subscription ON public.stores;
 CREATE TRIGGER trg_on_store_created_subscription
   AFTER INSERT ON public.stores
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_store_subscription();
+
+-- 4. Automatic subscription synchronization on store plan update
+CREATE OR REPLACE FUNCTION public.handle_store_plan_update()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.plan IS DISTINCT FROM OLD.plan THEN
+    UPDATE public.subscriptions
+    SET
+      plan = NEW.plan,
+      billing_cycle = CASE
+        WHEN NEW.plan = 'pro_yearly' THEN 'yearly'::public.billing_cycle
+        ELSE billing_cycle
+      END,
+      max_categories = CASE
+        WHEN NEW.plan = 'enterprise' THEN -1
+        WHEN NEW.plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 50
+        ELSE 7
+      END,
+      max_products = CASE
+        WHEN NEW.plan = 'enterprise' THEN -1
+        WHEN NEW.plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 500
+        ELSE 50
+      END,
+      price_egp = CASE
+        WHEN NEW.plan = 'pro_yearly' THEN 2500.00
+        WHEN NEW.plan IN ('pro', 'pro_monthly') THEN 250.00
+        ELSE 0.00
+      END,
+      updated_at = timezone('utc'::text, now())
+    WHERE store_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trg_on_store_updated_subscription ON public.stores;
+CREATE TRIGGER trg_on_store_updated_subscription
+  AFTER UPDATE OF plan ON public.stores
+  FOR EACH ROW EXECUTE FUNCTION public.handle_store_plan_update();
