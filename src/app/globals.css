@@ -25,6 +25,12 @@
   }
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -33,10 +39,12 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Hide scrollbar for category tabs */
+/* Hide scrollbars cleanly for horizontal tab bars */
+.scrollbar-none::-webkit-scrollbar,
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+.scrollbar-none,
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -49,7 +49,7 @@ export const RoiCalculator: React.FC = () => {
         </div>
 
         {/* Calculator Body */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8 text-start">
+        <div className="p-4 sm:p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-start">
           {/* Controls */}
           <div className="space-y-5">
             <div>
@@ -112,13 +112,13 @@ export const RoiCalculator: React.FC = () => {
           </div>
 
           {/* Results Card */}
-          <div className="p-6 rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/80 dark:border-neutral-700 flex flex-col justify-between text-center">
+          <div className="p-4 sm:p-6 rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/80 dark:border-neutral-700 flex flex-col justify-between text-center">
             <div className="space-y-4">
               <span className="text-xs font-extrabold text-neutral-500 uppercase tracking-wider block">
                 {isAr ? "أرباح مستردة في جيبك" : "Money Kept in Your Pocket"}
               </span>
               <div>
-                <span className="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 block">
+                <span className="text-2xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 block break-words">
                   {formatCurrency(monthlySavings, locale)}
                 </span>
                 <span className="text-xs text-neutral-500 font-bold block mt-1">
@@ -131,7 +131,7 @@ export const RoiCalculator: React.FC = () => {
                   <TrendingUp className="w-4 h-4 text-emerald-600" />
                   <span>{isAr ? "توفير سنوي يصل إلى:" : "Annual savings up to:"}</span>
                 </div>
-                <span className="text-lg font-black text-emerald-700 dark:text-emerald-300 block mt-0.5">
+                <span className="text-base sm:text-lg font-black text-emerald-700 dark:text-emerald-300 block mt-0.5 break-words">
                   {formatCurrency(annualSavings, locale)}
                 </span>
               </div>

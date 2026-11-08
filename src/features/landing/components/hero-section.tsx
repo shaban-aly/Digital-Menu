@@ -65,7 +65,7 @@ export const HeroSection: React.FC = () => {
   );
 
   return (
-    <section className="relative pt-12 pb-16 px-4 sm:px-6 overflow-hidden">
+    <section className="relative pt-12 pb-16 px-4 sm:px-6 overflow-hidden w-full max-w-full">
       <div className="max-w-5xl mx-auto text-center space-y-6">
         {/* Top Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200/80 dark:border-brand-800/60 text-xs font-bold text-brand-700 dark:text-brand-300 shadow-2xs">
@@ -74,7 +74,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl font-black text-neutral-900 dark:text-neutral-50 tracking-tight leading-tight max-w-3xl mx-auto">
+        <h1 className="text-3xl sm:text-5xl font-black text-neutral-900 dark:text-neutral-50 tracking-tight leading-tight max-w-3xl mx-auto break-words">
           {isAr ? (
             <>
               استقبل طلباتك مباشرة على واتساب{" "}
@@ -109,19 +109,19 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4 w-full max-w-md mx-auto sm:max-w-none">
           <a
             href={trialUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all min-h-[48px]"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all min-h-[48px]"
           >
             <span>{isAr ? "ابدأ تجربتك المجانية" : "Start Free Trial"}</span>
             <ArrowIcon className="w-4 h-4" />
           </a>
           <a
             href="#models"
-            className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 font-bold text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all min-h-[48px]"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 font-bold text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all min-h-[48px]"
           >
             <span>{isAr ? "تصفح النماذج التجريبية الحية" : "Explore Live Pilot Demos"}</span>
           </a>

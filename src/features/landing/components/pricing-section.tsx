@@ -41,7 +41,7 @@ export const PricingSection: React.FC = () => {
                 key={plan.id}
                 className={`relative p-6 rounded-3xl flex flex-col justify-between transition-all ${
                   plan.isPopular
-                    ? "bg-white dark:bg-neutral-900 border-2 border-brand-500 shadow-xl scale-102 z-10"
+                    ? "bg-white dark:bg-neutral-900 border-2 border-brand-500 shadow-xl md:scale-102 z-10"
                     : "bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-md"
                 }`}
               >

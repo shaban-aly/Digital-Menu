@@ -32,12 +32,12 @@ export const LandingFooter: React.FC = () => {
         </div>
 
         {/* Links & WhatsApp CTA */}
-        <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all min-h-[44px]"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all min-h-[44px]"
           >
             <MessageSquare className="w-4 h-4" />
             <span>{isAr ? "ابدأ متجرك عبر واتساب" : "Launch Store via WhatsApp"}</span>

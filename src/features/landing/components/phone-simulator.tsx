@@ -85,7 +85,7 @@ export const PhoneSimulator: React.FC = () => {
               : "Select a business model, tap (+) to add items, and watch the responsive bottom cart calculate totals inside this live interactive phone frame."}
           </p>
 
-          <div className="flex gap-2 p-1.5 rounded-2xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 max-w-md">
+          <div className="flex gap-2 p-1.5 rounded-2xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 w-full max-w-md">
             {[
               { id: "restaurant", label: isAr ? "مطعم" : "Restaurant" },
               { id: "cafe", label: isAr ? "كافيه" : "Café" },
@@ -108,10 +108,10 @@ export const PhoneSimulator: React.FC = () => {
         </div>
 
         {/* Smartphone Mockup */}
-        <div className="lg:w-1/2 flex justify-center">
-          <div className="w-[310px] sm:w-[330px] rounded-[44px] bg-neutral-900 p-3 shadow-2xl border-4 border-neutral-800">
+        <div className="lg:w-1/2 flex justify-center w-full">
+          <div className="w-full max-w-[310px] sm:max-w-[330px] rounded-[40px] sm:rounded-[44px] bg-neutral-900 p-2.5 sm:p-3 shadow-2xl border-4 border-neutral-800 mx-auto">
             {/* Phone Screen */}
-            <div className="relative rounded-[36px] bg-white dark:bg-neutral-950 overflow-hidden flex flex-col h-[520px] text-start border border-neutral-200 dark:border-neutral-800">
+            <div className="relative rounded-[32px] sm:rounded-[36px] bg-white dark:bg-neutral-950 overflow-hidden flex flex-col h-[500px] sm:h-[520px] text-start border border-neutral-200 dark:border-neutral-800">
               {/* Notch */}
               <div className="w-28 h-4 bg-neutral-900 rounded-b-xl mx-auto mb-2 shrink-0" />
 
