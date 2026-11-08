@@ -64,6 +64,42 @@
 
 **Purpose**: Strict compliance verification, linting, type-checking, and production build
 
-- [ ] T020 Audit component line counts across all 4 sub-agent directories ensuring each file is <= 180 lines
-- [ ] T021 Verify 100% logical directional CSS (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`) and zero native dialogs
-- [ ] T022 Run TypeScript strict type-check (`npm run type-check`), ESLint (`npm run lint`), Vitest test suite (`npm test`), and Next.js 16 production build (`npm run build`)
+- [X] T020 Audit component line counts across all 4 sub-agent directories ensuring each file is <= 180 lines
+- [X] T021 Verify 100% logical directional CSS (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`) and zero native dialogs
+- [X] T022 Run TypeScript strict type-check (`npm run type-check`), ESLint (`npm run lint`), Vitest test suite (`npm test`), and Next.js 16 production build (`npm run build`)
+
+---
+
+## Phase 7: Full Integration & Supabase Activation (Sub-Agents Parallel Execution)
+
+**Goal**: Seamless end-to-end integration across Supabase modular migrations, live menu/cart syncing, unified navigation headers, routing transitions, and AI translation integration.
+
+### Sub-Agent 1: Supabase Migrations, CLI & Environment Configuration
+- [ ] T023 [P] Delete old unified `20261108_saas_schema.sql` and initialize `supabase/config.toml` for Supabase CLI.
+- [ ] T024 [P] Split database migrations into 5 modular, clean SQL files under `supabase/migrations/`:
+  - `20261108000001_clean_reset_and_enums.sql`: Drop tables with CASCADE and create enums (`business_type`, `plan_tier`, `billing_cycle`, `user_role`).
+  - `20261108000002_profiles_and_subscriptions.sql`: `profiles` linked to `auth.users` via trigger, `subscriptions` with plan quotas.
+  - `20261108000003_stores_table.sql`: `stores` table linked to `owner_id` and `slug`.
+  - `20261108000004_categories_and_products.sql`: `categories` & `products` tables with AR/EN fields, units, and quota trigger.
+  - `20261108000005_rls_policies_and_indexes.sql`: Declarative RLS policies for public read and merchant write.
+  - `supabase/seed.sql`: Seed data for the 3 demo businesses.
+- [ ] T025 [P] Update `.env.local` and `.env.example` with Supabase configuration keys and credentials.
+- [ ] T026 [P] Add Supabase CLI npm scripts (`db:link`, `db:push`, `db:reset`) to `package.json`.
+
+### Sub-Agent 2: Live Supabase Layer Sync for Menu & Cart
+- [ ] T027 [P] Connect `/menu/[slug]` (`src/features/menu/`) to unified data repository with Supabase live fetch and graceful fallback.
+- [ ] T028 [P] Ensure store settings (name, logo, phone, delivery fee, business type) in `/menu/[slug]` are dynamically read from the live store profile.
+- [ ] T029 Connect `/features/cart/` to live product/store data and verify WhatsApp order payload matches live store data.
+- [ ] T030 [P] Write integration unit tests verifying instant reflection of merchant modifications in `/menu/[slug]`.
+
+### Sub-Agent 3: Unified Header, Flow Transitions & Pricing Page
+- [ ] T031 [P] Build unified responsive Navbar/Header component (`src/components/layout/platform-header.tsx`) with dynamic auth state, store links, and language switcher.
+- [ ] T032 [P] Wire all navigation links and router transitions across landing page `/`, `/login`, `/register`, and `/onboarding`.
+- [ ] T033 [P] Implement dedicated pricing page `/pricing` (`src/app/pricing/page.tsx`) with monthly/yearly toggle and WhatsApp CTA.
+- [ ] T034 [P] Add direct "معاينة المنيو" and "إضافة نشاط جديد" action buttons and upgrade links inside `/dashboard`.
+
+### Sub-Agent 4: Smart AI Translation Integration & Super Admin Live Sync
+- [ ] T035 [P] Integrate `/api/translate` automatic Arabic-to-English translation into catalog modals in `/dashboard`.
+- [ ] T036 [P] Integrate `/api/translate` into store creation form in `/onboarding`.
+- [ ] T037 [P] Connect `/admin` to live database/repository so Super Admin tier updates immediately sync quotas to `/dashboard`.
+- [ ] T038 [P] Unit tests for live Super Admin plan updates and translation triggers.
