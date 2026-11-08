@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Language Switching (US3)", () => {
-  test("toggles between Arabic RTL and English LTR", async ({ page }) => {
-    await page.goto("/ar/menu");
+  test("toggles between Arabic RTL and English LTR in-place without URL change", async ({ page }) => {
+    await page.goto("/menu/oriental-grill");
 
     // Check Arabic layout and html dir
     const html = page.locator("html");
@@ -13,8 +13,8 @@ test.describe("Language Switching (US3)", () => {
     const switcher = page.locator('button:has-text("English")');
     await switcher.click();
 
-    // Verify switched to English LTR
-    await expect(page).toHaveURL(/\/en\/menu/);
+    // Verify switched to English LTR without changing URL
+    await expect(page).toHaveURL("/menu/oriental-grill");
     await expect(html).toHaveAttribute("dir", "ltr");
     await expect(html).toHaveAttribute("lang", "en");
 
@@ -23,4 +23,3 @@ test.describe("Language Switching (US3)", () => {
     await expect(egpPrice.first()).toBeVisible();
   });
 });
-

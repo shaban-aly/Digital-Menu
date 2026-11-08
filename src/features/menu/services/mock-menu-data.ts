@@ -11,8 +11,8 @@ export const STORES_MAP: Record<string, MenuData> = {
 
 export const MOCK_MENU_DATA: MenuData = ORIENTAL_GRILL_DATA;
 
-export function getMockStoreBySlug(slug: string): MenuData {
-  return STORES_MAP[slug] || ORIENTAL_GRILL_DATA;
+export function getMockStoreBySlug(slug: string): MenuData | null {
+  return STORES_MAP[slug] || null;
 }
 
 export function getAllMockStores(): Restaurant[] {

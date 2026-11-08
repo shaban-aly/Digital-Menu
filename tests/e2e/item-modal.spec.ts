@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Item Detail Modal & URL Hash (US4)", () => {
   test("opens detail modal on card click and syncs with URL hash", async ({ page }) => {
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // Click on the first menu item card
     const firstCard = page.locator('div[role="button"]').first();

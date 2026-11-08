@@ -20,14 +20,13 @@ import enTranslations from "@/lib/i18n/en.json";
 
 interface MenuPageProps {
   initialData: MenuData;
-  initialLocale: Locale;
+  initialLocale?: Locale;
 }
 
 const MenuContent: React.FC<MenuPageProps> = ({
   initialData,
-  initialLocale,
 }) => {
-  const { locale, toggleLanguage } = useLanguage(initialLocale);
+  const { locale, toggleLanguage } = useLanguage();
   const t = locale === "ar" ? arTranslations : enTranslations;
 
   const {

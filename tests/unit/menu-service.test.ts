@@ -25,6 +25,8 @@ describe("menu-service", () => {
 
   it("should return supermarket store without dine_in and with unit items", async () => {
     const market = await getStoreBySlug("fresh-market");
+    expect(market).not.toBeNull();
+    if (!market) return;
     expect(market.restaurant.business_type).toBe("supermarket");
     expect(market.restaurant.supported_order_types).not.toContain("dine_in");
     expect(market.restaurant.supported_order_types).toContain("delivery");
@@ -33,5 +35,10 @@ describe("menu-service", () => {
     // Check sales units on produce items
     const tomatoes = market.categories[0].items[0];
     expect(tomatoes.unit_ar).toBe("1 كجم");
+  });
+
+  it("should return null for unknown store slug", async () => {
+    const unknown = await getStoreBySlug("non-existent-store");
+    expect(unknown).toBeNull();
   });
 });

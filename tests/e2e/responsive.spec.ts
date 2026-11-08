@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Responsiveness & Touch Targets (US6)", () => {
   test("renders correctly without horizontal overflow on 320px viewport", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // Check no horizontal scrollbar on body
     const scrollWidth = await page.evaluate(() => document.body.scrollWidth);

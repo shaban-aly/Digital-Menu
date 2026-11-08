@@ -10,7 +10,7 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
   test("opens drawer, edits quantity, attaches note, validates table number, and triggers WhatsApp", async ({
     page,
   }) => {
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // 1. Add item to cart
     const addButtons = page.locator('[data-testid^="add-to-cart-"]');
@@ -67,7 +67,7 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
   });
 
   test("auto-selects table number from ?table=N URL parameter", async ({ page }) => {
-    await page.goto("/ar/menu?table=12");
+    await page.goto("/menu/oriental-grill?table=12");
 
     // Add item and open drawer
     const addButtons = page.locator('[data-testid^="add-to-cart-"]');
@@ -80,7 +80,7 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
   });
 
   test("supermarket model hides dine-in and validates delivery fields with fee", async ({ page }) => {
-    await page.goto("/ar/fresh-market");
+    await page.goto("/menu/fresh-market");
 
     // Add produce item to cart
     const addButtons = page.locator('[data-testid^="add-to-cart-"]');

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Real-time Arabic Search (US5)", () => {
   test("filters menu items and handles alef normalization", async ({ page }) => {
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     const searchInput = page.locator('input[type="text"]');
     await expect(searchInput).toBeVisible();

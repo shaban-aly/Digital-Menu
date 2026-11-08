@@ -113,3 +113,4 @@ export const FRESH_MARKET_DATA: MenuData = {
     },
   ],
 };
+

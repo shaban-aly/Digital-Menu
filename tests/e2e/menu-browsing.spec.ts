@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Menu Browsing (US1)", () => {
   test("loads menu and displays categories with items in EGP", async ({ page }) => {
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // Header title check
     await expect(page.locator("h1")).toBeVisible();

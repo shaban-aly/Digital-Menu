@@ -113,3 +113,4 @@ export const SPECIALTY_CAFE_DATA: MenuData = {
     },
   ],
 };
+

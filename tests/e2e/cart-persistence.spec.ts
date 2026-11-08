@@ -10,7 +10,7 @@ test.describe("Cart Persistence & Language Switching (US5)", () => {
   test("persists items across page reloads and switches language smoothly", async ({
     page,
   }) => {
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // 1. Add item to cart
     const addButtons = page.locator('[data-testid^="add-to-cart-"]');
@@ -31,8 +31,8 @@ test.describe("Cart Persistence & Language Switching (US5)", () => {
     const langToggle = page.locator('button[aria-label*="English"], button[aria-label*="العربية"]');
     await langToggle.click();
 
-    // Verify URL changed to English route or locale changed
-    await expect(page).toHaveURL(/\/en\/menu/);
+    // Verify URL does not change upon language toggle
+    await expect(page).toHaveURL("/menu/oriental-grill");
 
     // Verify cart bar still shows 1 item, but currency changed to EGP
     await expect(page.locator('[data-testid="cart-bar"]')).toBeVisible();

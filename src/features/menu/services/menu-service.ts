@@ -8,8 +8,7 @@ import {
   MOCK_MENU_DATA,
 } from "./mock-menu-data";
 
-export async function getStoreBySlug(slug: string): Promise<MenuData> {
-  // Currently operating in mock mode for pilot experiments
+export async function getStoreBySlug(slug: string): Promise<MenuData | null> {
   return getMockStoreBySlug(slug);
 }
 

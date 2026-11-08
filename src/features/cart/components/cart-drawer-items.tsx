@@ -69,3 +69,4 @@ export const CartDrawerItems: React.FC<CartDrawerItemsProps> = ({
     </div>
   );
 };
+

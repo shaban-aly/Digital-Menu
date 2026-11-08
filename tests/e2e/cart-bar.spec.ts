@@ -9,7 +9,7 @@ test.describe("Cart Bar & Quick Add (US1)", () => {
       window.localStorage.clear();
     });
 
-    await page.goto("/ar/menu");
+    await page.goto("/menu/oriental-grill");
 
     // 1. Initially, cart bar should not be visible
     const cartBar = page.locator('[data-testid="cart-bar"]');
