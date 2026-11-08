@@ -14,6 +14,7 @@ interface CategoriesTabProps {
   locale: Locale;
   onSaveCategory: (cat: { id?: string; name_ar: string; name_en: string }) => Promise<boolean>;
   onDeleteCategory: (id: string) => Promise<boolean>;
+  onBeforeAdd?: () => boolean;
 }
 
 export const CategoriesTab: React.FC<CategoriesTabProps> = ({
@@ -21,11 +22,20 @@ export const CategoriesTab: React.FC<CategoriesTabProps> = ({
   locale,
   onSaveCategory,
   onDeleteCategory,
+  onBeforeAdd,
 }) => {
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
   const [editingCategory, setEditingCategory] = useState<CategoryWithItems | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingCat, setDeletingCat] = useState<CategoryWithItems | null>(null);
+
+  const handleOpenAdd = () => {
+    if (onBeforeAdd && !onBeforeAdd()) {
+      return;
+    }
+    setEditingCategory(null);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="space-y-4">
@@ -34,7 +44,7 @@ export const CategoriesTab: React.FC<CategoriesTabProps> = ({
         <button
           type="button"
           data-testid="add-category-btn"
-          onClick={() => { setEditingCategory(null); setIsModalOpen(true); }}
+          onClick={handleOpenAdd}
           className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 transition-colors shadow-xs"
         >
           <Plus className="w-4 h-4" />

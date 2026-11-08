@@ -16,6 +16,7 @@ interface ItemsTabProps {
   onToggleStock: (itemId: string, currentStatus: boolean) => void;
   onSaveItem: (itemData: Partial<MenuItem> & { name_ar: string; name_en: string; price: number; category_id: string }) => Promise<boolean>;
   onDeleteItem: (itemId: string) => Promise<boolean>;
+  onBeforeAdd?: () => boolean;
 }
 
 export const ItemsTab: React.FC<ItemsTabProps> = ({
@@ -24,6 +25,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
   onToggleStock,
   onSaveItem,
   onDeleteItem,
+  onBeforeAdd,
 }) => {
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
   const [selectedCatId, setSelectedCatId] = useState<string>("all");
@@ -54,6 +56,9 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
   }, [allItemsWithCat, selectedCatId, searchQuery]);
 
   const handleOpenAdd = () => {
+    if (onBeforeAdd && !onBeforeAdd()) {
+      return;
+    }
     setEditingItem(null);
     setIsModalOpen(true);
   };
