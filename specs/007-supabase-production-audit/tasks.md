@@ -32,10 +32,10 @@
 
 **Goal**: Verify complete compliance of Features 001, 002, 003, and 004 against their specs.
 
-- [ ] T047 [P] Audit Feature 001 (Customer Menu): Dynamic categories, search, RTL/LTR layout, and supermarket units (`unit_ar`/`unit_en`).
-- [ ] T048 [P] Audit Feature 002 (Cart & WhatsApp Ordering): Dynamic store phone, currency, order types (`dine_in`, `takeaway`, `delivery`), and WhatsApp message formatting.
-- [ ] T049 [P] Audit Feature 003 (Merchant Admin & Dashboard): Catalog management at `/dashboard`, item/category modals, and stock availability toggles.
-- [ ] T050 [P] Audit Feature 004 (Marketing Landing Page): Unified header, pilot stores showcase, pricing links, and responsive layout.
+- [x] T047 [P] Audit Feature 001 (Customer Menu): Dynamic categories, search, RTL/LTR layout, and supermarket units (`unit_ar`/`unit_en`).
+- [x] T048 [P] Audit Feature 002 (Cart & WhatsApp Ordering): Dynamic store phone, currency, order types (`dine_in`, `takeaway`, `delivery`), and WhatsApp message formatting.
+- [x] T049 [P] Audit Feature 003 (Merchant Admin & Dashboard): Catalog management at `/dashboard`, item/category modals, and stock availability toggles.
+- [x] T050 [P] Audit Feature 004 (Marketing Landing Page): Unified header, pilot stores showcase, pricing links, and responsive layout.
 
 ---
 
