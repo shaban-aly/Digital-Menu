@@ -147,6 +147,50 @@
       "scanInstructions": "Scan with your phone camera to view menu & order via WhatsApp"
     },
     "switchStore": "Switch Store",
-    "viewCustomerMenu": "View Customer Menu"
+    "viewCustomerMenu": "View Customer Menu",
+    "schedule": {
+      "title": "Operating Hours & Weekly Schedule",
+      "subtitle": "Configure daily open/close hours and manage pre-orders",
+      "allowPreorders": "Allow customer pre-orders when closed",
+      "allowPreordersHint": "When enabled, customers can send WhatsApp orders as pre-orders for the next opening shift",
+      "emergencyPauseTitle": "Emergency Rush Pause",
+      "emergencyPauseDesc": "Instantly halt new incoming customer orders during kitchen rush without changing the weekly schedule",
+      "pauseActive": "Store orders are currently paused",
+      "pauseInactive": "Store operates according to regular weekly schedule",
+      "pauseNoteLabel": "Pause reason (displayed to customers on menu)",
+      "pauseNotePlaceholder": "e.g. Temporary 1-hour pause due to kitchen rush...",
+      "dayEnabled": "Open on this day",
+      "dayDisabled": "Closed / Day Off",
+      "openTime": "From",
+      "closeTime": "To"
+    }
+  },
+  "schedule": {
+    "openNow": "Open Now",
+    "closedNow": "Closed Now",
+    "pausedNow": "Orders Paused",
+    "onBreak": "On Break",
+    "opensAt": "Opens at",
+    "todayAt": "Today at",
+    "tomorrowAt": "Tomorrow at",
+    "dayAt": "{day} at",
+    "scheduleTitle": "Operating Hours",
+    "scheduleSubtitle": "Weekly store schedule",
+    "preOrderBanner": "Store is currently closed. Your order will be placed as a pre-order for next opening.",
+    "closedNotice": "Store is currently closed and not accepting new orders at this time.",
+    "preOrderButton": "Send Pre-Order via WhatsApp",
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "closedDay": "Closed",
+    "am": "AM",
+    "pm": "PM",
+    "viewSchedule": "View Hours"
   }
 }

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { StoreScheduleConfigSchema, StoreScheduleConfig } from "@/features/schedule/types";
 
 export const BusinessTypeSchema = z.enum(["restaurant", "cafe", "supermarket"]);
 export type BusinessType = z.infer<typeof BusinessTypeSchema>;
@@ -39,6 +40,7 @@ export const RestaurantSchema = z.object({
     "delivery",
   ]),
   delivery_fee: z.number().nonnegative().default(20),
+  schedule: StoreScheduleConfigSchema.optional(),
 });
 export type Restaurant = z.infer<typeof RestaurantSchema>;
 export type Store = Restaurant;

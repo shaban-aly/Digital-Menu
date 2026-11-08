@@ -81,5 +81,26 @@ describe("StoreRepository", () => {
     expect(store?.restaurant.phone_number).toBe("201999999999");
     expect(store?.restaurant.delivery_fee).toBe(45);
   });
+
+  it("should update store schedule settings and emergency pause", async () => {
+    const storeBefore = await StoreRepository.getStore("oriental-grill");
+    expect(storeBefore?.restaurant.schedule?.is_manually_paused).toBe(false);
+
+    await StoreRepository.updateSettings("oriental-grill", {
+      schedule: {
+        timezone: "Africa/Cairo",
+        allow_preorders: false,
+        is_manually_paused: true,
+        pause_note_ar: "إيقاف مؤقت",
+        pause_note_en: "Paused",
+        weekly_schedule: storeBefore!.restaurant.schedule!.weekly_schedule,
+      },
+    });
+
+    const storeAfter = await StoreRepository.getStore("oriental-grill");
+    expect(storeAfter?.restaurant.schedule?.is_manually_paused).toBe(true);
+    expect(storeAfter?.restaurant.schedule?.allow_preorders).toBe(false);
+    expect(storeAfter?.restaurant.schedule?.pause_note_ar).toBe("إيقاف مؤقت");
+  });
 });
 

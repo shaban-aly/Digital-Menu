@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useCart } from "../hooks/use-cart";
+import { useCartCheckout } from "../hooks/use-cart-checkout";
 import { CartDrawerItems } from "./cart-drawer-items";
-import { OrderTypeSelector, OrderValidationErrors } from "./order-type-selector";
+import { OrderTypeSelector } from "./order-type-selector";
 import { CartDrawerHeader } from "./cart-drawer-header";
 import { CartDrawerEmpty } from "./cart-drawer-empty";
 import { CartDrawerFooter } from "./cart-drawer-footer";
-import { buildWhatsAppOrderUrl } from "../services/whatsapp-service";
 import { Locale } from "@/types";
+import { StoreScheduleConfig } from "@/features/schedule/types";
+import { useStoreSchedule } from "@/features/schedule/hooks/use-store-schedule";
+import { ClosedGuardBanner } from "@/features/schedule/components/closed-guard-banner";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -16,6 +19,7 @@ interface CartDrawerProps {
   restaurantName: string;
   restaurantPhone: string;
   locale: Locale;
+  scheduleConfig?: StoreScheduleConfig;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -24,7 +28,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   restaurantName,
   restaurantPhone,
   locale,
+  scheduleConfig,
 }) => {
+  const { operatingStatus } = useStoreSchedule(scheduleConfig);
   const {
     items,
     orderType,
@@ -48,7 +54,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     clearCart,
   } = useCart();
 
-  const [errors, setErrors] = useState<OrderValidationErrors>({});
+  const { errors, setErrors, submitOrder } = useCartCheckout({
+    restaurantName,
+    restaurantPhone,
+    locale,
+    operatingStatus,
+    onSuccess: onClose,
+  });
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -59,39 +71,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-
-  const handleSubmitWhatsApp = () => {
-    const errs: OrderValidationErrors = {};
-    if (orderType === "takeaway" || orderType === "delivery") {
-      if (!customerName.trim()) errs.name = true;
-      if (!customerPhone.trim()) errs.phone = true;
-    }
-    if (orderType === "delivery" && !deliveryAddress.trim()) errs.address = true;
-
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-
-    const url = buildWhatsAppOrderUrl({
-      restaurantName,
-      restaurantPhone,
-      orderType,
-      customerName: customerName.trim(),
-      customerPhone: customerPhone.trim(),
-      deliveryAddress: orderType === "delivery" ? deliveryAddress.trim() : "",
-      generalNote: generalNote.trim(),
-      items,
-      itemsTotal,
-      deliveryFee: orderType === "delivery" ? deliveryFee : 0,
-      totalPrice,
-      locale,
-    });
-    window.open(url, "_blank", "noopener,noreferrer");
-    clearCart();
-    onClose();
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
@@ -120,6 +99,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <CartDrawerEmpty locale={locale} onClose={onClose} />
           ) : (
             <>
+              <ClosedGuardBanner
+                operatingStatus={operatingStatus}
+                locale={locale}
+              />
+
               <CartDrawerItems
                 items={items}
                 generalNote={generalNote}
@@ -164,7 +148,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             orderType={orderType}
             totalPrice={totalPrice}
             locale={locale}
-            onSubmitWhatsApp={handleSubmitWhatsApp}
+            canPlaceOrder={operatingStatus.canPlaceOrder}
+            isPreOrder={operatingStatus.isPreOrder}
+            onSubmitWhatsApp={submitOrder}
           />
         )}
       </div>

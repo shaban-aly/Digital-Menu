@@ -75,4 +75,14 @@ describe("whatsapp-service", () => {
     expect(message).toContain("Takeaway");
     expect(message).toContain("110 EGP");
   });
+
+  it("should prepend pre-order banner when isPreOrder is true", () => {
+    const preOrderPayload: WhatsAppOrderPayload = {
+      ...samplePayload,
+      isPreOrder: true,
+      preOrderOpeningText: "اليوم الساعة 1:00 م",
+    };
+    const message = formatWhatsAppMessage(preOrderPayload);
+    expect(message).toContain("🔔 *[طلب مسبق لموعد الفتح: اليوم الساعة 1:00 م]*");
+  });
 });

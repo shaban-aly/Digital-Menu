@@ -14,6 +14,8 @@ interface CartDrawerFooterProps {
   orderType: OrderType;
   totalPrice: number;
   locale: Locale;
+  canPlaceOrder?: boolean;
+  isPreOrder?: boolean;
   onSubmitWhatsApp: () => void;
 }
 
@@ -23,10 +25,19 @@ export const CartDrawerFooter: React.FC<CartDrawerFooterProps> = ({
   orderType,
   totalPrice,
   locale,
+  canPlaceOrder = true,
+  isPreOrder = false,
   onSubmitWhatsApp,
 }) => {
   const t = locale === "ar" ? arTranslations : enTranslations;
   const isDelivery = orderType === "delivery";
+
+  let buttonText = t.cart.sendWhatsApp;
+  if (!canPlaceOrder) {
+    buttonText = t.schedule.closedNow;
+  } else if (isPreOrder) {
+    buttonText = t.schedule.preOrderButton;
+  }
 
   return (
     <div className="p-4 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900 space-y-3">
@@ -57,15 +68,20 @@ export const CartDrawerFooter: React.FC<CartDrawerFooterProps> = ({
 
       <button
         type="button"
+        disabled={!canPlaceOrder}
         data-testid="whatsapp-submit-btn"
         onClick={onSubmitWhatsApp}
         className={cn(
           "w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl font-bold text-sm text-white shadow-lg transition-all min-h-[44px]",
-          "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-emerald-700/25 cursor-pointer"
+          canPlaceOrder
+            ? isPreOrder
+              ? "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-blue-700/25 cursor-pointer"
+              : "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-emerald-700/25 cursor-pointer"
+            : "bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 cursor-not-allowed shadow-none"
         )}
       >
         <Send className="w-4 h-4 rtl:rotate-180" />
-        <span>{t.cart.sendWhatsApp}</span>
+        <span>{buttonText}</span>
       </button>
     </div>
   );
