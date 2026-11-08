@@ -15,6 +15,7 @@ import { useLanguage } from "../hooks/use-language";
 import { CartProvider } from "@/features/cart/hooks/use-cart";
 import { CartBar } from "@/features/cart/components/cart-bar";
 import { CartDrawer } from "@/features/cart/components/cart-drawer";
+import { StoreRepository, STORE_UPDATED_EVENT } from "@/features/admin/services/store-repository";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -47,20 +48,13 @@ const MenuContent: React.FC<MenuPageProps> = ({
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash;
-      if (hash && hash.startsWith("#item-")) {
-        const itemId = hash.replace("#item-", "");
-        for (const cat of initialData.categories) {
-          const found = cat.items.find((it) => it.id === itemId);
-          if (found) {
-            setSelectedItem(found);
-            return;
-          }
-        }
-      } else {
-        setSelectedItem(null);
+      if (hash?.startsWith("#item-")) {
+        const id = hash.replace("#item-", "");
+        const found = initialData.categories.flatMap((c) => c.items).find((it) => it.id === id);
+        if (found) { setSelectedItem(found); return; }
       }
+      setSelectedItem(null);
     };
-
     handleHash();
     window.addEventListener("hashchange", handleHash);
     return () => window.removeEventListener("hashchange", handleHash);
@@ -74,11 +68,7 @@ const MenuContent: React.FC<MenuPageProps> = ({
   const handleCloseModal = () => {
     setSelectedItem(null);
     if (window.location.hash) {
-      history.pushState(
-        "",
-        document.title,
-        window.location.pathname + window.location.search
-      );
+      history.pushState("", document.title, window.location.pathname + window.location.search);
     }
   };
 
@@ -155,13 +145,30 @@ const MenuContent: React.FC<MenuPageProps> = ({
 };
 
 export const MenuPage: React.FC<MenuPageProps> = (props) => {
+  const [storeData, setStoreData] = useState<MenuData>(props.initialData);
+
+  useEffect(() => {
+    const sync = async () => {
+      const updated = await StoreRepository.getStore(props.initialData.restaurant.slug);
+      if (updated) setStoreData(updated);
+    };
+    sync();
+
+    const handleUpdate = (e: Event) => {
+      const ce = e as CustomEvent<{ slug: string }>;
+      if (!ce.detail || ce.detail.slug === props.initialData.restaurant.slug) sync();
+    };
+    window.addEventListener(STORE_UPDATED_EVENT, handleUpdate);
+    return () => window.removeEventListener(STORE_UPDATED_EVENT, handleUpdate);
+  }, [props.initialData.restaurant.slug]);
+
   return (
     <CartProvider
-      storeSlug={props.initialData.restaurant.slug}
-      supportedOrderTypes={props.initialData.restaurant.supported_order_types}
-      deliveryFee={props.initialData.restaurant.delivery_fee}
+      storeSlug={storeData.restaurant.slug}
+      supportedOrderTypes={storeData.restaurant.supported_order_types}
+      deliveryFee={storeData.restaurant.delivery_fee}
     >
-      <MenuContent {...props} />
+      <MenuContent {...props} initialData={storeData} />
     </CartProvider>
   );
 };

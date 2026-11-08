@@ -75,5 +75,79 @@
       "supermarket": "Supermarket & Groceries"
     },
     "orderTypesLabel": "Supported Order Types:"
+  },
+  "admin": {
+    "title": "Merchant Dashboard",
+    "subtitle": "Manage menu items, prices, availability, and store settings",
+    "tabs": {
+      "items": "Items & Prices",
+      "categories": "Categories",
+      "settings": "Store Settings",
+      "qr": "QR & Print"
+    },
+    "items": {
+      "title": "Menu Items Management",
+      "searchPlaceholder": "Search in Arabic or English...",
+      "allCategories": "All Categories",
+      "addItem": "Add New Item",
+      "editItem": "Edit Item",
+      "deleteItem": "Delete Item",
+      "confirmDelete": "Are you sure you want to permanently delete this item?",
+      "confirmDeleteBtn": "Yes, Delete Item",
+      "cancelBtn": "Cancel",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "toggleStock": "Toggle Stock Availability",
+      "nameAr": "Name in Arabic",
+      "nameEn": "Name in English",
+      "category": "Category",
+      "selectCategory": "Select Category",
+      "price": "Price (EGP)",
+      "unitAr": "Unit in Arabic (optional, e.g. كجم)",
+      "unitEn": "Unit in English (optional, e.g. kg)",
+      "imageUrl": "Image URL",
+      "descAr": "Description in Arabic (optional)",
+      "descEn": "Description in English (optional)",
+      "save": "Save Item",
+      "emptyTitle": "No Items Found",
+      "emptyDesc": "No items match your search query or selected category."
+    },
+    "categories": {
+      "title": "Menu Categories Management",
+      "addCategory": "Add New Category",
+      "editCategory": "Edit Category",
+      "deleteCategory": "Delete Category",
+      "confirmDelete": "Are you sure you want to delete this category?",
+      "categoryInUse": "This category contains items. Please reassign or delete them first.",
+      "nameAr": "Category Name in Arabic",
+      "nameEn": "Category Name in English",
+      "itemsCount": "Items Count",
+      "save": "Save Category"
+    },
+    "settings": {
+      "title": "Store Profile & Fulfillment Settings",
+      "storeNameAr": "Store Name in Arabic",
+      "storeNameEn": "Store Name in English",
+      "phone": "WhatsApp Receiving Phone Number",
+      "phoneHint": "Enter full international format, e.g. +201012345678",
+      "deliveryFee": "Delivery Fee (EGP)",
+      "supportedOrders": "Supported Customer Fulfillment Types",
+      "save": "Save Changes",
+      "savedSuccess": "Store settings saved successfully!",
+      "resetDefaults": "Reset to Defaults",
+      "confirmReset": "Are you sure you want to revert all local modifications back to initial mock data?"
+    },
+    "qr": {
+      "title": "Store QR Code & Printable Tent Card",
+      "desc": "Download your store's high-resolution QR code or print branded table tent cards.",
+      "menuUrl": "Direct Digital Menu URL",
+      "wifiSsid": "Customer Wi-Fi Name (optional)",
+      "wifiPassword": "Wi-Fi Password (optional)",
+      "printTentCard": "Print Tent Card",
+      "downloadQr": "Download QR Image",
+      "scanInstructions": "Scan with your phone camera to view menu & order via WhatsApp"
+    },
+    "switchStore": "Switch Store",
+    "viewCustomerMenu": "View Customer Menu"
   }
 }
