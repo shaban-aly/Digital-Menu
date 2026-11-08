@@ -32,7 +32,7 @@ describe("Phase 1: Supabase Migrations & Schema Audit", () => {
       path.join(migrationsDir, "20261108000001_clean_reset_and_enums.sql"),
       "utf-8"
     );
-    expect(m1).toContain("DROP TABLE IF EXISTS public.products, public.categories, public.stores, public.subscriptions, public.profiles CASCADE;");
+    expect(m1).toContain("DROP TABLE IF EXISTS public.products, public.categories, public.stores, public.subscriptions, public.profiles, public.businesses, public.plans, public.platform_settings, public.product_option_groups, public.product_options CASCADE;");
     expect(m1).toContain("DROP TYPE IF EXISTS public.business_type CASCADE;");
     expect(m1).toContain("DROP TYPE IF EXISTS public.plan_tier CASCADE;");
     expect(m1).toContain("DROP TYPE IF EXISTS public.billing_cycle CASCADE;");
