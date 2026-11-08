@@ -1,0 +1,31 @@
+{
+  "menu": {
+    "title": "Menu",
+    "searchPlaceholder": "Search for food or drink...",
+    "noResults": "No matching items found.",
+    "clearSearch": "Clear Search",
+    "unavailable": "Currently Unavailable",
+    "currency": "EGP",
+    "errorTitle": "Failed to load the menu",
+    "errorDesc": "Please check your internet connection and try again.",
+    "retry": "Try Again",
+    "close": "Close",
+    "calories": "Calories",
+    "allergens": "Allergens",
+    "badges": {
+      "spicy": "Spicy",
+      "vegetarian": "Vegetarian",
+      "best_seller": "Best Seller"
+    },
+    "allergenNames": {
+      "nuts": "Nuts",
+      "dairy": "Dairy",
+      "gluten": "Gluten",
+      "eggs": "Eggs",
+      "soy": "Soy",
+      "shellfish": "Shellfish",
+      "wheat": "Wheat"
+    }
+  }
+}
+

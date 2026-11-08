@@ -1,0 +1,31 @@
+{
+  "menu": {
+    "title": "قائمة الطعام",
+    "searchPlaceholder": "ابحث عن صنف أو مشروب...",
+    "noResults": "لم نتمكن من العثور على أي نتائج مطابقة.",
+    "clearSearch": "مسح البحث",
+    "unavailable": "غير متاح حالياً",
+    "currency": "ج.م",
+    "errorTitle": "حدث خطأ أثناء تحميل المنيو",
+    "errorDesc": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "calories": "سعرة حرارية",
+    "allergens": "مسببات الحساسية",
+    "badges": {
+      "spicy": "حار",
+      "vegetarian": "نباتي",
+      "best_seller": "الأكثر مبيعاً"
+    },
+    "allergenNames": {
+      "nuts": "مكسرات",
+      "dairy": "منتجات ألبان",
+      "gluten": "جلوتين",
+      "eggs": "بيض",
+      "soy": "صويا",
+      "shellfish": "قشريات",
+      "wheat": "قمح"
+    }
+  }
+}
+
