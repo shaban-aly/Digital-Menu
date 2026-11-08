@@ -56,42 +56,42 @@ ON CONFLICT (id) DO UPDATE SET name_ar = EXCLUDED.name_ar, name_en = EXCLUDED.na
 
 -- 6. Upsert Products with Full Bilingual Details and Custom Units
 INSERT INTO public.products (id, store_id, category_id, name_ar, name_en, short_desc_ar, short_desc_en, full_desc_ar, full_desc_en, price, unit_ar, unit_en, image_url, display_order, is_available, badges, allergens) VALUES
-  ('p1111111-0000-0000-0000-000000000001', '11111111-0000-0000-0000-000000000001', 'c1111111-0000-0000-0000-000000000001',
+  ('d1111111-0000-0000-0000-000000000001', '11111111-0000-0000-0000-000000000001', 'c1111111-0000-0000-0000-000000000001',
    'شوربة لسان عصفور بالمستكة', 'Orzo Soup with Mastic',
    'شوربة لسان عصفور غنية بمرقة اللحم والمستكة الطبيعية', 'Rich orzo soup with meat broth and natural mastic',
    'شوربة لسان عصفور بلدي محضرة بعناية مع مرق اللحم الطازج ونكهة المستكة والحبهان وقطع لحم ناعمة، تقدم مع ليمون طازج.',
    'Traditional orzo soup prepared with fresh meat broth, mastic, cardamom, and tender meat bites. Served with fresh lemon.',
    55.00, 'طبق', 'Bowl', 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&fit=crop', 1, true, ARRAY['best_seller'], ARRAY['gluten']),
 
-  ('p1111111-0000-0000-0000-000000000002', '11111111-0000-0000-0000-000000000001', 'c1111111-0000-0000-0000-000000000002',
+  ('d1111111-0000-0000-0000-000000000002', '11111111-0000-0000-0000-000000000001', 'c1111111-0000-0000-0000-000000000002',
    'مشكل كباب وكفتة ضاني', 'Mixed Lamb Kebab & Kofta',
    'قطع لحم ضاني بلدي مشوية على الفحم مع كفتة متبلة', 'Tender lamb chunks and spiced kofta grilled over hot charcoal',
    'طبق مشويات ملكي يحتوي على سيخ كباب ضاني وسيخين كفتة بلدي مشوية على الفحم الطبيعي، يقدم مع أرز بسمتي بالمكسرات وطحينة وسلطة خضراء وخبز صاج.',
    'Charcoal-grilled tender lamb chunks and two skewers of seasoned lamb kofta. Served with basmati rice, tahini, and salad.',
    290.00, 'وجبة', 'Meal', 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&fit=crop', 1, true, ARRAY['best_seller'], ARRAY['gluten']),
 
-  ('p2222222-0000-0000-0000-000000000001', '22222222-0000-0000-0000-000000000002', 'c2222222-0000-0000-0000-000000000001',
+  ('d2222222-0000-0000-0000-000000000001', '22222222-0000-0000-0000-000000000002', 'c2222222-0000-0000-0000-000000000001',
    'سبانش لاتيه مثلج', 'Iced Spanish Latte',
    'إسبريسو غني مع حليب مكثف محلى وحليب بارد ومكعبات ثلج', 'Double espresso with condensed milk, fresh milk and ice',
    'مزيج فاخر من الإسبريسو الإثيوبي الفاخر مع حليب مكثف وحليب طازج بارد، توازن مثالي بين حلاوة الحليب وقوة القهوة.',
    'Double shot of single-origin espresso blended with sweetened milk and cold whole milk over ice.',
    85.00, 'كوب 350 مل', '350 ml Cup', 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&fit=crop', 1, true, ARRAY['best_seller'], ARRAY['dairy']),
 
-  ('p2222222-0000-0000-0000-000000000002', '22222222-0000-0000-0000-000000000002', 'c2222222-0000-0000-0000-000000000002',
+  ('d2222222-0000-0000-0000-000000000002', '22222222-0000-0000-0000-000000000002', 'c2222222-0000-0000-0000-000000000002',
    'كرواسون زبدة فرنسي فاخر', 'French Butter Croissant',
    'مخبوز طازج يومياً بطبقات هشة من زبدة بريتاني الفرنسية', 'Flaky golden layers made with French churned butter',
    'كرواسون كلاسيكي مقرمش من الخارج وطري مورق من الداخل، مخبوز يومياً باستخدام زبدة فرنسية طبيعية 100%.',
    'Traditional French croissant with flaky crust and honeycomb interior, freshly baked each morning.',
    60.00, 'قطعة', 'Piece', 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&fit=crop', 1, true, ARRAY['best_seller', 'vegetarian'], ARRAY['gluten', 'dairy']),
 
-  ('p3333333-0000-0000-0000-000000000001', '33333333-0000-0000-0000-000000000003', 'c3333333-0000-0000-0000-000000000001',
+  ('d3333333-0000-0000-0000-000000000001', '33333333-0000-0000-0000-000000000003', 'c3333333-0000-0000-0000-000000000001',
    'طماطم بلدي فرز أول طازجة', 'Fresh Local Tomatoes (Grade A)',
    'طماطم بلدي حمراء متماسكة من المزرعة مباشرة للمطبخ', 'Ripe and firm local vine tomatoes delivered fresh',
    'طماطم طازجة منتقاة بعناية فائقة، خالية من العيوب ومثالية للسلطات والصلصات المنزلية اليومية.',
    'Hand-picked ripe red tomatoes directly from Egyptian farms, perfect for everyday salads and cooking.',
    22.00, '1 كجم', '1 kg', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&fit=crop', 1, true, ARRAY['vegetarian'], ARRAY[]::text[]),
 
-  ('p3333333-0000-0000-0000-000000000002', '33333333-0000-0000-0000-000000000003', 'c3333333-0000-0000-0000-000000000002',
+  ('d3333333-0000-0000-0000-000000000002', '33333333-0000-0000-0000-000000000003', 'c3333333-0000-0000-0000-000000000002',
    'حليب بقري كامل الدسم', 'Full Cream Cow Milk',
    'حليب طبيعي مبستر 100% بدون أي مواد حافظة', '100% pasteurized fresh whole milk bottle',
    'حليب بقري نقي مبستر ومغلف بطريقة صحية للحفاظ على القيمة الغذائية ونكهة الحليب الطبيعي الغنية.',

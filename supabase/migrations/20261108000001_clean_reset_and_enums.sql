@@ -17,8 +17,8 @@ DROP FUNCTION IF EXISTS public.check_category_quota() CASCADE;
 DROP FUNCTION IF EXISTS public.check_product_quota() CASCADE;
 DROP FUNCTION IF EXISTS public.is_superadmin() CASCADE;
 
--- 3. Drop existing tables if any
-DROP TABLE IF EXISTS public.products, public.categories, public.stores, public.subscriptions, public.profiles CASCADE;
+-- 3. Drop existing and legacy tables if any
+DROP TABLE IF EXISTS public.products, public.categories, public.stores, public.subscriptions, public.profiles, public.businesses, public.plans, public.platform_settings, public.product_option_groups, public.product_options CASCADE;
 
 -- 4. Drop legacy enum types if any
 DROP TYPE IF EXISTS public.business_type CASCADE;

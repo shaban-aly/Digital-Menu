@@ -69,10 +69,10 @@ const ORIENTAL_GRILL_DATA: MenuData = {
   },
   categories: [
     makeCat("c1111111-0000-0000-0000-000000000001", "المقبلات والشوربة", "Appetizers & Soups", 1, [
-      makeItem("p1111111-0000-0000-0000-000000000001", "c1111111-0000-0000-0000-000000000001", "شوربة لسان عصفور بالمستكة", "Orzo Soup with Mastic", 55, "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&fit=crop&q=80", { unit_ar: "طبق", unit_en: "Bowl", badges: ["best_seller"], allergens: ["gluten"] }),
+      makeItem("d1111111-0000-0000-0000-000000000001", "c1111111-0000-0000-0000-000000000001", "شوربة لسان عصفور بالمستكة", "Orzo Soup with Mastic", 55, "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&fit=crop&q=80", { unit_ar: "طبق", unit_en: "Bowl", badges: ["best_seller"], allergens: ["gluten"] }),
     ]),
     makeCat("c1111111-0000-0000-0000-000000000002", "مشويات على الفحم", "Charcoal Grills", 2, [
-      makeItem("p1111111-0000-0000-0000-000000000002", "c1111111-0000-0000-0000-000000000002", "كباب وكفتة مشكل", "Mixed Kebab & Kofta", 280, "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&fit=crop&q=80", { unit_ar: "طبق", unit_en: "Platter", badges: ["best_seller"] }),
+      makeItem("d1111111-0000-0000-0000-000000000002", "c1111111-0000-0000-0000-000000000002", "كباب وكفتة مشكل", "Mixed Kebab & Kofta", 280, "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&fit=crop&q=80", { unit_ar: "طبق", unit_en: "Platter", badges: ["best_seller"] }),
     ]),
   ],
 };
@@ -96,10 +96,10 @@ const SPECIALTY_CAFE_DATA: MenuData = {
   },
   categories: [
     makeCat("c2222222-0000-0000-0000-000000000001", "القهوة المختصة", "Specialty Coffee", 1, [
-      makeItem("p2222222-0000-0000-0000-000000000001", "c2222222-0000-0000-0000-000000000001", "فلات وايت", "Flat White", 75, "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&fit=crop&q=80", { unit_ar: "كوب 250 مل", unit_en: "Cup 250ml", allergens: ["dairy"] }),
+      makeItem("d2222222-0000-0000-0000-000000000001", "c2222222-0000-0000-0000-000000000001", "فلات وايت", "Flat White", 75, "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&fit=crop&q=80", { unit_ar: "كوب 250 مل", unit_en: "Cup 250ml", allergens: ["dairy"] }),
     ]),
     makeCat("c2222222-0000-0000-0000-000000000002", "مخبوزات طازجة", "Fresh Pastries", 2, [
-      makeItem("p2222222-0000-0000-0000-000000000002", "c2222222-0000-0000-0000-000000000002", "كرواسون زبدة فرنسي", "French Butter Croissant", 60, "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&fit=crop&q=80", { unit_ar: "قطعة", unit_en: "Piece", allergens: ["gluten", "dairy"] }),
+      makeItem("d2222222-0000-0000-0000-000000000002", "c2222222-0000-0000-0000-000000000002", "كرواسون زبدة فرنسي", "French Butter Croissant", 60, "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&fit=crop&q=80", { unit_ar: "قطعة", unit_en: "Piece", allergens: ["gluten", "dairy"] }),
     ]),
   ],
 };
@@ -123,10 +123,10 @@ const FRESH_MARKET_DATA: MenuData = {
   },
   categories: [
     makeCat("c3333333-0000-0000-0000-000000000001", "الخضروات والفواكه", "Fresh Produce", 1, [
-      makeItem("p3333333-0000-0000-0000-000000000001", "c3333333-0000-0000-0000-000000000001", "طماطم بلدي فرز أول طازجة", "Fresh Local Tomatoes (Grade A)", 22, "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&fit=crop&q=80", { unit_ar: "1 كجم", unit_en: "1 kg", badges: ["vegetarian"] }),
+      makeItem("d3333333-0000-0000-0000-000000000001", "c3333333-0000-0000-0000-000000000001", "طماطم بلدي فرز أول طازجة", "Fresh Local Tomatoes (Grade A)", 22, "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&fit=crop&q=80", { unit_ar: "1 كجم", unit_en: "1 kg", badges: ["vegetarian"] }),
     ]),
     makeCat("c3333333-0000-0000-0000-000000000002", "الألبان والأجبان", "Dairy & Cheese", 2, [
-      makeItem("p3333333-0000-0000-0000-000000000002", "c3333333-0000-0000-0000-000000000002", "جبنة فيتا طبيعية (500 جم)", "Fresh Feta Cheese (500g)", 85, "https://images.unsplash.com/photo-1559561853-08451507cbe7?w=600&fit=crop&q=80", { unit_ar: "500 جم", unit_en: "500g", allergens: ["dairy"] }),
+      makeItem("d3333333-0000-0000-0000-000000000002", "c3333333-0000-0000-0000-000000000002", "جبنة فيتا طبيعية (500 جم)", "Fresh Feta Cheese (500g)", 85, "https://images.unsplash.com/photo-1559561853-08451507cbe7?w=600&fit=crop&q=80", { unit_ar: "500 جم", unit_en: "500g", allergens: ["dairy"] }),
     ]),
   ],
 };
