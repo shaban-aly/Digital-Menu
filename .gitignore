@@ -48,3 +48,5 @@ supabase/.temp/
 
 # Supabase
 supabase/.temp/
+
+test-results/
