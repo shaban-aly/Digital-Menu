@@ -20,10 +20,10 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
   const targetLanguageLabel = locale === "ar" ? "English" : "العربية";
 
   return (
-    <header className="relative w-full bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-4 py-4 sm:py-6">
-      <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shrink-0 border border-neutral-100 dark:border-neutral-800 shadow-sm bg-neutral-100">
+    <header className="relative w-full bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-3 sm:px-4 py-3 sm:py-5">
+      <div className="max-w-4xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shrink-0 border border-neutral-100 dark:border-neutral-800 shadow-sm bg-neutral-100">
             {restaurant.logo_url ? (
               <Image
                 src={restaurant.logo_url}
@@ -34,17 +34,17 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
                 priority
               />
             ) : (
-              <div className="w-full h-full bg-brand-500 text-white flex items-center justify-center font-bold text-lg">
+              <div className="w-full h-full bg-brand-500 text-white flex items-center justify-center font-bold text-base sm:text-lg">
                 {name.charAt(0)}
               </div>
             )}
           </div>
 
-          <div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-neutral-900 dark:text-neutral-100 tracking-tight">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-base sm:text-xl font-extrabold text-neutral-900 dark:text-neutral-100 tracking-tight truncate">
               {name}
             </h1>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">
               {locale === "ar" ? "قائمة طعام رقمية" : "Digital Menu"}
             </p>
           </div>
@@ -55,7 +55,7 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
           variant="outline"
           size="sm"
           onClick={onToggleLanguage}
-          className="flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold min-h-[44px]"
+          className="shrink-0 flex items-center gap-1.5 rounded-full px-3 sm:px-3.5 text-xs font-semibold min-h-[44px]"
           aria-label={
             locale === "ar"
               ? "التحويل إلى اللغة الإنجليزية"

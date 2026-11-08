@@ -73,14 +73,14 @@ const MenuContent: React.FC<MenuPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pb-28 sm:pb-32">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-50 dark:bg-neutral-950 pb-28 sm:pb-32">
       <RestaurantHeader
         restaurant={initialData.restaurant}
         locale={locale}
         onToggleLanguage={toggleLanguage}
       />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto w-full">
         <MenuSearch
           value={searchQuery}
           onChange={setSearchQuery}

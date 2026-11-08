@@ -23,7 +23,7 @@ export const CategoryBar: React.FC<CategoryBarProps> = ({
       className="sticky top-0 z-30 w-full bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border-b border-neutral-100 dark:border-neutral-800 shadow-sm"
       aria-label="Menu Categories"
     >
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5">
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scrollbar-none px-4 py-2.5 max-w-full">
         {categories.map((cat) => {
           const isActive = cat.id === activeCategoryId;
           const name = locale === "ar" ? cat.name_ar : cat.name_en;
