@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { StoreOrderTypeSchema, MenuItem, CategoryWithItems, Restaurant } from "@/features/menu/types";
-import { StoreScheduleConfigSchema, StoreScheduleConfig } from "@/features/schedule/types";
+import { StoreScheduleConfigSchema } from "@/features/schedule/types";
 
 export const StoreSettingsSchema = z.object({
   id: z.string().min(1),
@@ -68,3 +68,29 @@ export interface StoreOverrideState {
 }
 
 export type AdminActiveTab = "items" | "categories" | "settings" | "qr";
+
+export type SuperAdminPlanKey = "free" | "pro_monthly" | "pro_yearly" | "enterprise";
+
+export interface SuperAdminStoreSummary {
+  id: string;
+  slug: string;
+  name_ar: string;
+  name_en: string;
+  business_type: string;
+  phone_number: string;
+  plan: SuperAdminPlanKey;
+  is_active: boolean;
+  productsCount: number;
+  categoriesCount: number;
+}
+
+export interface PlatformKPIs {
+  totalStores: number;
+  activeStores: number;
+  planBreakdown: {
+    free: number;
+    pro: number;
+    enterprise: number;
+  };
+  totalProducts: number;
+}

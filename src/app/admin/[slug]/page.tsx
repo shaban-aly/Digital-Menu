@@ -1,5 +1,4 @@
-import React from "react";
-import { AdminDashboardPage } from "@/features/admin/components/admin-dashboard-page";
+import { redirect } from "next/navigation";
 
 interface AdminStorePageProps {
   params: Promise<{ slug: string }>;
@@ -7,6 +6,5 @@ interface AdminStorePageProps {
 
 export default async function AdminStorePage({ params }: AdminStorePageProps) {
   const { slug } = await params;
-  return <AdminDashboardPage slug={slug} />;
+  redirect(`/dashboard/${slug}`);
 }
-
