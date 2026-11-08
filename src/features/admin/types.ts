@@ -65,4 +65,4 @@ export interface StoreOverrideState {
   qrConfig?: Partial<StoreQRConfig>;
 }
 
-export type AdminActiveTab = "orders" | "items" | "categories" | "settings" | "qr";
+export type AdminActiveTab = "items" | "categories" | "settings" | "qr";

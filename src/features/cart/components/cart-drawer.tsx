@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useCart } from "../hooks/use-cart";
 import { CartDrawerItems } from "./cart-drawer-items";
 import { OrderTypeSelector, OrderValidationErrors } from "./order-type-selector";
 import { CartDrawerHeader } from "./cart-drawer-header";
 import { CartDrawerEmpty } from "./cart-drawer-empty";
 import { CartDrawerFooter } from "./cart-drawer-footer";
-import { submitCartOrder } from "../services/order-submission";
+import { buildWhatsAppOrderUrl } from "../services/whatsapp-service";
 import { Locale } from "@/types";
 
 interface CartDrawerProps {
@@ -26,9 +25,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   restaurantPhone,
   locale,
 }) => {
-  const router = useRouter();
   const {
-    storeSlug,
     items,
     orderType,
     customerName,
@@ -63,7 +60,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmitWhatsApp = async () => {
+  const handleSubmitWhatsApp = () => {
     const errs: OrderValidationErrors = {};
     if (orderType === "takeaway" || orderType === "delivery") {
       if (!customerName.trim()) errs.name = true;
@@ -77,35 +74,32 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     }
     setErrors({});
 
-    try {
-      const { orderId, whatsappUrl } = await submitCartOrder({
-        storeSlug,
-        restaurantName,
-        restaurantPhone,
-        customerName,
-        customerPhone,
-        orderType,
-        deliveryAddress,
-        deliveryFee,
-        generalNote,
-        items,
-        itemsTotal,
-        totalPrice,
-        locale,
-      });
-
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-      clearCart();
-      onClose();
-      router.push(`/order/${orderId}`);
-    } catch (e) {
-      console.error("Order creation failed", e);
-    }
+    const url = buildWhatsAppOrderUrl({
+      restaurantName,
+      restaurantPhone,
+      orderType,
+      customerName: customerName.trim(),
+      customerPhone: customerPhone.trim(),
+      deliveryAddress: orderType === "delivery" ? deliveryAddress.trim() : "",
+      generalNote: generalNote.trim(),
+      items,
+      itemsTotal,
+      deliveryFee: orderType === "delivery" ? deliveryFee : 0,
+      totalPrice,
+      locale,
+    });
+    window.open(url, "_blank", "noopener,noreferrer");
+    clearCart();
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in" onClick={onClose} aria-hidden="true" />
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
+        onClick={onClose}
+        aria-hidden="true"
+      />
       <div
         data-testid="cart-drawer"
         role="dialog"
@@ -113,10 +107,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         aria-labelledby="cart-drawer-title"
         className="relative z-10 w-full max-w-lg mx-auto bg-white dark:bg-neutral-900 rounded-t-3xl max-h-[90vh] flex flex-col shadow-2xl border-t border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-bottom duration-300"
       >
-        <CartDrawerHeader totalCount={totalCount} hasItems={items.length > 0} onClearCart={clearCart} onClose={onClose} locale={locale} />
+        <CartDrawerHeader
+          totalCount={totalCount}
+          hasItems={items.length > 0}
+          onClearCart={clearCart}
+          onClose={onClose}
+          locale={locale}
+        />
+
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {items.length === 0 ? (
-            <CartDrawerEmpty onClose={onClose} locale={locale} />
+            <CartDrawerEmpty locale={locale} onClose={onClose} />
           ) : (
             <>
               <CartDrawerItems
@@ -128,16 +129,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 onUpdateNote={updateItemNote}
                 locale={locale}
               />
+
               <OrderTypeSelector
                 orderType={orderType}
                 onOrderTypeChange={setOrderType}
                 supportedOrderTypes={supportedOrderTypes}
                 customerName={customerName}
-                onCustomerNameChange={setCustomerName}
+                onCustomerNameChange={(val) => {
+                  setCustomerName(val);
+                  if (val.trim()) setErrors((p) => ({ ...p, name: false }));
+                }}
                 customerPhone={customerPhone}
-                onCustomerPhoneChange={setCustomerPhone}
+                onCustomerPhoneChange={(val) => {
+                  setCustomerPhone(val);
+                  if (val.trim()) setErrors((p) => ({ ...p, phone: false }));
+                }}
                 deliveryAddress={deliveryAddress}
-                onDeliveryAddressChange={setDeliveryAddress}
+                onDeliveryAddressChange={(val) => {
+                  setDeliveryAddress(val);
+                  if (val.trim()) setErrors((p) => ({ ...p, address: false }));
+                }}
                 deliveryFee={deliveryFee}
                 errors={errors}
                 locale={locale}
@@ -145,14 +156,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </>
           )}
         </div>
+
         {items.length > 0 && (
           <CartDrawerFooter
             itemsTotal={itemsTotal}
             deliveryFee={deliveryFee}
-            totalPrice={totalPrice}
             orderType={orderType}
-            onSubmitWhatsApp={handleSubmitWhatsApp}
+            totalPrice={totalPrice}
             locale={locale}
+            onSubmitWhatsApp={handleSubmitWhatsApp}
           />
         )}
       </div>

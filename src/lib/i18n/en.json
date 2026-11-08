@@ -79,7 +79,6 @@
     "title": "Merchant Dashboard",
     "subtitle": "Manage menu items, prices, availability, and store settings",
     "tabs": {
-      "orders": "Orders",
       "items": "Items & Prices",
       "categories": "Categories",
       "settings": "Store Settings",
@@ -148,48 +147,6 @@
       "scanInstructions": "Scan with your phone camera to view menu & order via WhatsApp"
     },
     "switchStore": "Switch Store",
-    "viewCustomerMenu": "View Customer Menu",
-    "orders": {
-      "title": "Incoming Orders Management",
-      "filterAll": "All",
-      "filterPending": "Pending",
-      "filterPreparing": "Preparing",
-      "filterOutForDelivery": "Out for Delivery",
-      "filterReady": "Ready",
-      "filterCompleted": "Completed",
-      "filterCancelled": "Cancelled",
-      "changeStatus": "Update Status",
-      "noOrders": "No matching orders found",
-      "customerPhone": "Customer Phone",
-      "deliveryAddress": "Delivery Address",
-      "notes": "Notes",
-      "cancelOrder": "Cancel Order",
-      "confirmCancel": "Are you sure you want to cancel this order?"
-    }
-  },
-  "tracking": {
-    "title": "Order Details & Live Tracking",
-    "orderRef": "Order Reference",
-    "status": "Order Status",
-    "stepper": {
-      "received": "Order Received",
-      "receivedDesc": "Your order has been received by the branch",
-      "preparing": "Preparing",
-      "preparingDesc": "The kitchen is carefully preparing your order",
-      "outForDelivery": "Out for Delivery",
-      "outForDeliveryDesc": "Your order is on its way to your address",
-      "ready": "Ready for Pickup",
-      "readyDesc": "Your order is ready at the counter",
-      "completed": "Completed",
-      "completedDesc": "Enjoy your delicious meal!",
-      "cancelled": "Order Cancelled",
-      "cancelledDesc": "This order was cancelled. Please contact branch."
-    },
-    "reopenWhatsApp": "Open WhatsApp Chat",
-    "backToMenu": "Back to Menu",
-    "myOrders": "My Orders",
-    "emptyHistory": "No previous orders found on this device",
-    "notFoundTitle": "Order Not Found",
-    "notFoundDesc": "We could not find records for this order. Please verify the URL."
+    "viewCustomerMenu": "View Customer Menu"
   }
 }

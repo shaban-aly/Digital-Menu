@@ -33,7 +33,6 @@ export type CartState = z.infer<typeof CartStateSchema>;
 export const WhatsAppOrderPayloadSchema = z.object({
   restaurantName: z.string().min(1),
   restaurantPhone: z.string().min(7),
-  orderReference: z.string().optional(),
   orderType: OrderTypeSchema,
   customerName: z.string().max(50).optional(),
   customerPhone: z.string().max(20).optional(),

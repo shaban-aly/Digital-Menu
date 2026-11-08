@@ -1,14 +1,9 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Restaurant } from "@/features/menu/types";
 import { Locale } from "@/types";
-import { Globe, ClipboardList } from "lucide-react";
+import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CustomerOrdersModal } from "@/features/orders/components/customer-orders-modal";
-import arTranslations from "@/lib/i18n/ar.json";
-import enTranslations from "@/lib/i18n/en.json";
 
 interface RestaurantHeaderProps {
   restaurant: Restaurant;
@@ -21,10 +16,8 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
   locale,
   onToggleLanguage,
 }) => {
-  const [isOrdersOpen, setIsOrdersOpen] = useState(false);
   const name = locale === "ar" ? restaurant.name_ar : restaurant.name_en;
   const targetLanguageLabel = locale === "ar" ? "English" : "العربية";
-  const t = locale === "ar" ? arTranslations.tracking : enTranslations.tracking;
 
   return (
     <header className="relative w-full bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-4 py-4 sm:py-6">
@@ -57,43 +50,22 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Customer Past Orders Trigger */}
-          <Button
-            variant="outline"
-            size="sm"
-            data-testid="my-orders-btn"
-            onClick={() => setIsOrdersOpen(true)}
-            className="flex items-center gap-1.5 rounded-full px-3 text-xs font-semibold min-h-[44px]"
-            title={t.myOrders}
-          >
-            <ClipboardList className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-            <span className="hidden sm:inline">{t.myOrders}</span>
-          </Button>
-
-          {/* Language Switcher Button (Min 44x44px touch target) */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onToggleLanguage}
-            className="flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold min-h-[44px]"
-            aria-label={
-              locale === "ar"
-                ? "التحويل إلى اللغة الإنجليزية"
-                : "Switch to Arabic language"
-            }
-          >
-            <Globe className="w-4 h-4 text-brand-600" />
-            <span>{targetLanguageLabel}</span>
-          </Button>
-        </div>
+        {/* Language Switcher Button (Min 44x44px touch target) */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onToggleLanguage}
+          className="flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold min-h-[44px]"
+          aria-label={
+            locale === "ar"
+              ? "التحويل إلى اللغة الإنجليزية"
+              : "Switch to Arabic language"
+          }
+        >
+          <Globe className="w-4 h-4 text-brand-600" />
+          <span>{targetLanguageLabel}</span>
+        </Button>
       </div>
-
-      <CustomerOrdersModal
-        isOpen={isOrdersOpen}
-        onClose={() => setIsOrdersOpen(false)}
-        locale={locale}
-      />
     </header>
   );
 };

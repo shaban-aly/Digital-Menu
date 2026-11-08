@@ -79,7 +79,6 @@
     "title": "لوحة تحكم التاجر",
     "subtitle": "إدارة الأصناف، الأسعار، الإتاحة، وإعدادات المتجر",
     "tabs": {
-      "orders": "الطلبات الواردة",
       "items": "الأصناف والأسعار",
       "categories": "الأقسام",
       "settings": "إعدادات المتجر",
@@ -148,48 +147,6 @@
       "scanInstructions": "امسح الرمز بكاميرا هاتفك لتصفح المنيو والطلب مباشرة عبر واتساب"
     },
     "switchStore": "تبديل المتجر",
-    "viewCustomerMenu": "معاينة منيو الزبون",
-    "orders": {
-      "title": "إدارة الطلبات الواردة",
-      "filterAll": "الكل",
-      "filterPending": "قيد المراجعة",
-      "filterPreparing": "جاري التجهيز",
-      "filterOutForDelivery": "مع المندوب",
-      "filterReady": "جاهز للاستلام",
-      "filterCompleted": "مكتمل",
-      "filterCancelled": "ملغي",
-      "changeStatus": "تحديث الحالة",
-      "noOrders": "لا توجد طلبات مطابقة",
-      "customerPhone": "هاتف العميل",
-      "deliveryAddress": "عنوان التوصيل",
-      "notes": "ملاحظات",
-      "cancelOrder": "إلغاء الطلب",
-      "confirmCancel": "هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟"
-    }
-  },
-  "tracking": {
-    "title": "تفاصيل ومتابعة الطلب",
-    "orderRef": "رقم الطلب",
-    "status": "حالة الطلب",
-    "stepper": {
-      "received": "تم استلام الطلب",
-      "receivedDesc": "تم إرسال طلبك للفرع بنجاح",
-      "preparing": "جاري التجهيز",
-      "preparingDesc": "المطبخ يقوم بتجهيز طلبك بعناية",
-      "outForDelivery": "مع المندوب",
-      "outForDeliveryDesc": "الطلب في الطريق إلى عنوانك",
-      "ready": "جاهز للاستلام",
-      "readyDesc": "طلبك جاهز للتسليم في الفرع",
-      "completed": "تم التسليم",
-      "completedDesc": "نتمنى لك وجبة شهية!",
-      "cancelled": "تم إلغاء الطلب",
-      "cancelledDesc": "تم إلغاء الطلب، يرجى التواصل مع الفرع"
-    },
-    "reopenWhatsApp": "فتح محادثة واتساب",
-    "backToMenu": "العودة للمنيو",
-    "myOrders": "طلباتي السابقة",
-    "emptyHistory": "لا توجد طلبات سابقة على هذا الجهاز",
-    "notFoundTitle": "الطلب غير موجود",
-    "notFoundDesc": "لم نتمكن من العثور على بيانات هذا الطلب، يرجى التحقق من الرابط."
+    "viewCustomerMenu": "معاينة منيو الزبون"
   }
 }

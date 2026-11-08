@@ -6,11 +6,10 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   const lines: string[] = [];
 
   // 1. Header & Order Info
-  const refText = payload.orderReference ? `[${payload.orderReference}] ` : "";
   lines.push(
     isAr
-      ? `🍽️ *طلب جديد ${refText}من منيو ${payload.restaurantName}*`
-      : `🍽️ *New Order ${refText}from ${payload.restaurantName}*`
+      ? `🍽️ *طلب جديد من منيو ${payload.restaurantName}*`
+      : `🍽️ *New Order from ${payload.restaurantName}*`
   );
   lines.push("------------------------------");
 
