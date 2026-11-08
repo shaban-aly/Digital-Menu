@@ -29,6 +29,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   const t = locale === "ar" ? arTranslations : enTranslations;
   const name = locale === "ar" ? item.name_ar : item.name_en;
   const fullDesc = locale === "ar" ? item.full_desc_ar : item.full_desc_en;
+  const unit = locale === "ar" ? item.unit_ar : item.unit_en;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={name}>
@@ -57,6 +58,11 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             </h3>
             <span className="text-lg font-black text-brand-700 dark:text-brand-400 whitespace-nowrap">
               {formatCurrency(item.price, locale)}
+              {unit && (
+                <span className="text-xs font-normal ms-1 text-neutral-500 dark:text-neutral-400">
+                  / {unit}
+                </span>
+              )}
             </span>
           </div>
 

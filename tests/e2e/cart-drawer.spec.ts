@@ -78,4 +78,35 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
     const tableInput = page.locator('[data-testid="table-number-input"]');
     await expect(tableInput).toHaveValue("12");
   });
+
+  test("supermarket model hides dine-in and validates delivery fields with fee", async ({ page }) => {
+    await page.goto("/ar/fresh-market");
+
+    // Add produce item to cart
+    const addButtons = page.locator('[data-testid^="add-to-cart-"]');
+    await addButtons.first().click();
+    await page.locator('[data-testid="cart-bar"] button').click();
+
+    // Verify dine-in is NOT present
+    await expect(page.locator('[data-testid="order-type-dine_in"]')).toBeHidden();
+    await expect(page.locator('[data-testid="order-type-delivery"]')).toBeVisible();
+
+    // Select delivery
+    await page.locator('[data-testid="order-type-delivery"]').click();
+
+    // Click submit without filling fields -> verify validation errors
+    const whatsappBtn = page.locator('[data-testid="whatsapp-submit-btn"]');
+    await whatsappBtn.click();
+    await expect(page.locator('[data-testid="customer-name-error"]')).toBeVisible();
+    await expect(page.locator('[data-testid="customer-phone-error"]')).toBeVisible();
+    await expect(page.locator('[data-testid="delivery-address-error"]')).toBeVisible();
+
+    // Fill delivery fields
+    await page.locator('[data-testid="customer-name-input"]').fill("سارة محمود");
+    await page.locator('[data-testid="customer-phone-input"]').fill("01012345678");
+    await page.locator('[data-testid="delivery-address-input"]').fill("الدقي، شارع مصدق، عمارة 5");
+
+    await expect(page.locator('[data-testid="delivery-address-error"]')).toBeHidden();
+  });
 });
+

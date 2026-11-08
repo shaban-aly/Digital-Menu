@@ -39,11 +39,21 @@
     "orderType": "Order Type",
     "dineIn": "Dine-in",
     "takeaway": "Takeaway",
+    "delivery": "Home Delivery",
     "tableNumber": "Table Number",
     "tablePlaceholder": "Enter table number (e.g. 4)",
     "tableRequired": "Please enter your table number for dine-in orders",
-    "customerName": "Customer Name (optional)",
+    "customerName": "Customer Name",
+    "customerNameOptional": "Customer Name (optional)",
     "namePlaceholder": "Enter your name",
+    "nameRequired": "Please enter customer name to proceed",
+    "customerPhone": "Mobile Phone Number",
+    "phonePlaceholder": "e.g. 01012345678",
+    "phoneRequired": "Please enter your mobile phone number",
+    "deliveryAddress": "Detailed Delivery Address",
+    "addressPlaceholder": "Area, street name, building number, apartment",
+    "addressRequired": "Please enter your detailed delivery address",
+    "deliveryFee": "Delivery Fee",
     "generalNotes": "General Order Notes",
     "generalNotesPlaceholder": "Any extra instructions for the kitchen?",
     "addNote": "Add Note",
@@ -55,5 +65,16 @@
     "itemUnavailableWarning": "Some items in your cart are currently unavailable. Please remove them to proceed.",
     "addToCart": "Add to Cart",
     "added": "Added"
+  },
+  "home": {
+    "title": "Pilot Business Models",
+    "subtitle": "Unified digital platform for restaurants, cafes, and supermarkets",
+    "viewStore": "Browse Store",
+    "businessTypes": {
+      "restaurant": "Grill Restaurant",
+      "cafe": "Café & Bakery",
+      "supermarket": "Supermarket & Groceries"
+    },
+    "orderTypesLabel": "Supported Order Types:"
   }
 }

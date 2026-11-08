@@ -16,7 +16,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/ar/menu",
+        destination: "/ar",
         permanent: false,
       },
     ];

@@ -75,3 +75,4 @@
 - **Decision**: Enforce CSS logical properties (`ms-*`, `me-*`, `ps-*`, `pe-*`, `text-start`, `text-end`) across all cart components and format all prices in Egyptian Pounds (`ج.م` / `EGP`) via the shared `formatCurrency` utility.
 - **Rationale**:
   - 100% compliant with Constitution Principle IV (Mobile-First & RTL).
+

@@ -157,7 +157,11 @@ const MenuContent: React.FC<MenuPageProps> = ({
 
 export const MenuPage: React.FC<MenuPageProps> = (props) => {
   return (
-    <CartProvider>
+    <CartProvider
+      storeSlug={props.initialData.restaurant.slug}
+      supportedOrderTypes={props.initialData.restaurant.supported_order_types}
+      deliveryFee={props.initialData.restaurant.delivery_fee}
+    >
       <MenuContent {...props} />
     </CartProvider>
   );

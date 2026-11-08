@@ -5,49 +5,75 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   const isAr = payload.locale === "ar";
   const lines: string[] = [];
 
-  // 1. Header
-  if (isAr) {
-    lines.push(`🍽️ *طلب جديد من منيو ${payload.restaurantName}*`);
-    lines.push("------------------------------");
-    const orderTypeLabel =
-      payload.orderType === "dine_in" ? "داخل المطعم" : "استلام من الفرع (سفري)";
-    lines.push(`📍 *نوع الطلب:* ${orderTypeLabel}`);
+  // 1. Header & Order Info
+  lines.push(
+    isAr
+      ? `🍽️ *طلب جديد من منيو ${payload.restaurantName}*`
+      : `🍽️ *New Order from ${payload.restaurantName}*`
+  );
+  lines.push("------------------------------");
 
-    if (payload.orderType === "dine_in" && payload.tableNumber) {
-      lines.push(`🪑 *رقم الطاولة:* طاولة ${payload.tableNumber}`);
-    }
-    if (payload.customerName && payload.customerName.trim()) {
-      lines.push(`👤 *اسم العميل:* ${payload.customerName.trim()}`);
-    }
+  const orderTypeLabels: Record<string, { ar: string; en: string }> = {
+    dine_in: { ar: "داخل المطعم", en: "Dine-in" },
+    takeaway: { ar: "استلام من الفرع (سفري)", en: "Takeaway" },
+    delivery: { ar: "توصيل للمنزل", en: "Home Delivery" },
+  };
 
-    lines.push("");
-    lines.push("📋 *تفاصيل الأصناف المطلوبة:*");
-  } else {
-    lines.push(`🍽️ *New Order from ${payload.restaurantName}*`);
-    lines.push("------------------------------");
-    const orderTypeLabel =
-      payload.orderType === "dine_in" ? "Dine-in" : "Takeaway";
-    lines.push(`📍 *Order Type:* ${orderTypeLabel}`);
+  const currentLabel =
+    orderTypeLabels[payload.orderType] || orderTypeLabels.dine_in;
+  lines.push(
+    isAr
+      ? `📍 *نوع الطلب:* ${currentLabel.ar}`
+      : `📍 *Order Type:* ${currentLabel.en}`
+  );
 
-    if (payload.orderType === "dine_in" && payload.tableNumber) {
-      lines.push(`🪑 *Table Number:* Table ${payload.tableNumber}`);
-    }
-    if (payload.customerName && payload.customerName.trim()) {
-      lines.push(`👤 *Customer Name:* ${payload.customerName.trim()}`);
-    }
-
-    lines.push("");
-    lines.push("📋 *Ordered Items:*");
+  if (payload.orderType === "dine_in" && payload.tableNumber) {
+    lines.push(
+      isAr
+        ? `🪑 *رقم الطاولة:* طاولة ${payload.tableNumber}`
+        : `🪑 *Table Number:* Table ${payload.tableNumber}`
+    );
   }
+
+  if (payload.customerName?.trim()) {
+    lines.push(
+      isAr
+        ? `👤 *اسم العميل:* ${payload.customerName.trim()}`
+        : `👤 *Customer Name:* ${payload.customerName.trim()}`
+    );
+  }
+
+  if (payload.customerPhone?.trim()) {
+    lines.push(
+      isAr
+        ? `📱 *رقم الموبايل:* ${payload.customerPhone.trim()}`
+        : `📱 *Phone Number:* ${payload.customerPhone.trim()}`
+    );
+  }
+
+  if (payload.orderType === "delivery" && payload.deliveryAddress?.trim()) {
+    lines.push(
+      isAr
+        ? `🏠 *عنوان التوصيل:* ${payload.deliveryAddress.trim()}`
+        : `🏠 *Delivery Address:* ${payload.deliveryAddress.trim()}`
+    );
+  }
+
+  lines.push("");
+  lines.push(
+    isAr ? "📋 *تفاصيل الأصناف المطلوبة:*" : "📋 *Ordered Items:*"
+  );
 
   // 2. Items List
   payload.items.forEach((item) => {
     const itemName = isAr ? item.name_ar : item.name_en;
+    const unit = isAr ? item.unit_ar : item.unit_en;
     const subtotal = item.price * item.quantity;
     const formattedSubtotal = formatCurrency(subtotal, payload.locale);
+    const unitText = unit ? ` (${unit})` : "";
 
-    lines.push(`• ${item.quantity}x ${itemName} (${formattedSubtotal})`);
-    if (item.itemNote && item.itemNote.trim()) {
+    lines.push(`• ${item.quantity}x ${itemName}${unitText} (${formattedSubtotal})`);
+    if (item.itemNote?.trim()) {
       lines.push(
         isAr
           ? `  _ملاحظة: ${item.itemNote.trim()}_`
@@ -57,20 +83,33 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   });
 
   // 3. General Notes
-  if (payload.generalNote && payload.generalNote.trim()) {
+  if (payload.generalNote?.trim()) {
     lines.push("");
     lines.push(
       isAr
-        ? `📝 *ملاحظات عامة على الطلب:*\n${payload.generalNote.trim()}`
-        : `📝 *General Order Notes:*\n${payload.generalNote.trim()}`
+        ? `📝 *ملاحظات عامة:*\n${payload.generalNote.trim()}`
+        : `📝 *General Notes:*\n${payload.generalNote.trim()}`
     );
   }
 
-  // 4. Grand Total
+  // 4. Financial Breakdown
   lines.push("------------------------------");
+  if (payload.orderType === "delivery" && (payload.deliveryFee || 0) > 0) {
+    const sub = formatCurrency(payload.itemsTotal, payload.locale);
+    const fee = formatCurrency(payload.deliveryFee, payload.locale);
+    lines.push(
+      isAr ? `💵 *المجموع الفرعي:* ${sub}` : `💵 *Subtotal:* ${sub}`
+    );
+    lines.push(
+      isAr ? `🛵 *رسوم التوصيل:* ${fee}` : `🛵 *Delivery Fee:* ${fee}`
+    );
+  }
+
   const formattedTotal = formatCurrency(payload.totalPrice, payload.locale);
   lines.push(
-    isAr ? `💰 *الإجمالي النهائي: ${formattedTotal}*` : `💰 *Grand Total: ${formattedTotal}*`
+    isAr
+      ? `💰 *الإجمالي النهائي: ${formattedTotal}*`
+      : `💰 *Grand Total: ${formattedTotal}*`
   );
 
   return lines.join("\n");

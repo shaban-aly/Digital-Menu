@@ -59,21 +59,26 @@ The customer taps "View Cart" on the floating bar. A slide-up drawer (or modal o
 
 ---
 
-### User Story 4 - Order Type Selection (Dine-in vs. Takeaway) (Priority: P1)
+### User Story 4 - Order Type Selection (Dine-in, Takeaway, Delivery) (Priority: P1)
 
-Before submitting the order, the customer chooses their order fulfillment type:
-1. **داخل المطعم (Dine-in)**: Requires entering a Table Number (إجباري). If opened via QR code with `?table=N`, the table number is automatically pre-filled.
-2. **استلام من الفرع (Takeaway)**: Table number is not required; customer enters their name/phone for pickup identification.
+Before submitting the order, the customer chooses their order fulfillment type according to the business capabilities:
+1. **داخل المطعم (Dine-in)**: Requires entering a Table Number (إجباري). If opened via QR code with `?table=N`, the table number is automatically pre-filled. Automatically hidden for Supermarket/Groceries businesses.
+2. **استلام من الفرع (Takeaway)**: Table number is not required; customer enters their name and phone number for pickup.
+3. **توصيل للمنزل (Delivery)**: Requires customer name, mobile phone number, and detailed delivery address. Adds delivery fee (`deliveryFee`) to the order subtotal.
 
-**Why this priority**: Restaurants must know where to deliver the food (which table or pickup counter). Table number validation prevents lost orders.
+**Why this priority**: Supports the platform's multi-tenant business model covering dine-in restaurants, takeaway cafes, and delivery-centric supermarkets.
 
-**Independent Test**: Select "Dine-in" and attempt to submit without table number -> verify error message. Fill table number -> verify validation passes. Switch to "Takeaway" -> verify table number is optional.
+**Independent Test**:
+- On `oriental-grill` or `specialty-cafe`, select "Dine-in" and attempt to submit without table number -> verify error.
+- On `fresh-market`, verify "Dine-in" is hidden, select "Delivery", submit without address -> verify address error; fill address and phone -> verify delivery fee is calculated and included in WhatsApp link.
 
 **Acceptance Scenarios**:
 
 1. **Given** the customer selects "داخل المطعم (Dine-in)", **When** they attempt to submit without entering a table number, **Then** the system prevents submission and highlights the table number input as required.
 2. **Given** the customer opens the menu with a URL parameter `?table=5`, **When** the cart opens, **Then** "Dine-in" is selected and Table 5 is pre-filled automatically.
-3. **Given** the customer selects "استلام من الفرع (Takeaway)", **When** they submit, **Then** table number validation is bypassed and the order is marked as Takeaway.
+3. **Given** the customer selects "استلام من الفرع (Takeaway)", **When** they submit, **Then** customer name and mobile phone number are validated.
+4. **Given** the customer selects "توصيل للمنزل (Delivery)", **When** they submit, **Then** customer name, phone number, and detailed address are strictly validated, and the delivery fee is added to the grand total in the drawer and WhatsApp message.
+5. **Given** a business model of type "supermarket", **Then** the "Dine-in" option is automatically hidden from the order type selector.
 
 ---
 

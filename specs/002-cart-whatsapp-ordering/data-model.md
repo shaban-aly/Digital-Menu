@@ -116,3 +116,4 @@ Cart data is stored under the key `digital_menu_cart_v1`:
   - If `orderType === "dine_in"`: `tableNumber.trim().length > 0` is strictly enforced.
   - If `orderType === "takeaway"`: `tableNumber` is optional.
 - **Out of stock guard**: Items with `is_available === false` cannot be added to the cart, and existing items marked unavailable prevent checkout until removed.
+

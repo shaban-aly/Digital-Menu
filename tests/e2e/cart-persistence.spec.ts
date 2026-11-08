@@ -57,3 +57,4 @@ test.describe("Cart Persistence & Language Switching (US5)", () => {
     await expect(page.locator('[data-testid="cart-bar"]')).toBeHidden();
   });
 });
+

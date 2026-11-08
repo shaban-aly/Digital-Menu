@@ -38,3 +38,4 @@ export const CartDrawerEmpty: React.FC<CartDrawerEmptyProps> = ({
     </div>
   );
 };
+

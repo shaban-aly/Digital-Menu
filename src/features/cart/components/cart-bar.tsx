@@ -81,3 +81,4 @@ export const CartBar: React.FC<CartBarProps> = ({
     </div>
   );
 };
+

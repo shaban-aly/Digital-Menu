@@ -23,15 +23,19 @@
 ------------------------------
 📍 *نوع الطلب:* {orderTypeLabel}
 🪑 *رقم الطاولة:* {tableNumber}       <-- (Only if Dine-in)
-👤 *اسم العميل:* {customerName}      <-- (If provided)
+👤 *اسم العميل:* {customerName}      <-- (If provided or required)
+📱 *رقم الموبايل:* {customerPhone}    <-- (For Takeaway & Delivery)
+🏠 *عنوان التوصيل:* {deliveryAddress} <-- (For Delivery)
 
 📋 *الأصناف المطلوبة:*
-• {quantity}x {name_ar} ({subtotal} ج.م)
+• {quantity}x {name_ar} ({unit}) ({subtotal} ج.م)
   _ملاحظة: {itemNote}_             <-- (If item has note)
 
 📝 *ملاحظات عامة على الطلب:*
 {generalNote}                        <-- (If provided)
 ------------------------------
+💵 *المجموع الفرعي: {itemsTotal} ج.م*  <-- (If Delivery with fee)
+🛵 *رسوم التوصيل: {deliveryFee} ج.م*   <-- (If Delivery with fee)
 💰 *الإجمالي النهائي: {totalPrice} ج.م*
 ```
 
@@ -75,3 +79,4 @@ export interface BuildWhatsAppUrlParams {
 
 export function buildWhatsAppOrderUrl(params: BuildWhatsAppUrlParams): string;
 ```
+

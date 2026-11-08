@@ -39,11 +39,21 @@
     "orderType": "نوع الطلب",
     "dineIn": "داخل المطعم",
     "takeaway": "استلام من الفرع",
+    "delivery": "توصيل للمنزل",
     "tableNumber": "رقم الطاولة",
     "tablePlaceholder": "أدخل رقم الطاولة (مثلاً: 4)",
     "tableRequired": "برجاء إدخال رقم الطاولة لإتمام الطلب داخل المطعم",
-    "customerName": "اسم العميل (اختياري)",
+    "customerName": "اسم العميل",
+    "customerNameOptional": "اسم العميل (اختياري)",
     "namePlaceholder": "أدخل اسمك الكريم",
+    "nameRequired": "برجاء إدخال اسم العميل لإتمام الطلب",
+    "customerPhone": "رقم الموبايل للتواصل",
+    "phonePlaceholder": "مثال: 01012345678",
+    "phoneRequired": "برجاء إدخال رقم الموبايل للتواصل",
+    "deliveryAddress": "عنوان التوصيل بالتفصيل",
+    "addressPlaceholder": "المنطقة، اسم الشارع، رقم العمارة، رقم الشقة",
+    "addressRequired": "برجاء إدخال عنوان التوصيل بالتفصيل",
+    "deliveryFee": "رسوم التوصيل",
     "generalNotes": "ملاحظات عامة على الطلب",
     "generalNotesPlaceholder": "أي تعليمات إضافية للمطبخ؟",
     "addNote": "إضافة ملاحظة",
@@ -55,5 +65,16 @@
     "itemUnavailableWarning": "بعض الأصناف في سلتك غير متاحة حالياً، يرجى حذفها لإتمام الطلب.",
     "addToCart": "إضافة للسلة",
     "added": "تمت الإضافة"
+  },
+  "home": {
+    "title": "نماذج الأنشطة التجريبية",
+    "subtitle": "نظام رقمي موحد لإدارة وطلب المنيو للمطاعم والكافيهات والسوبر ماركت",
+    "viewStore": "تصفح المتجر",
+    "businessTypes": {
+      "restaurant": "مطعم مشويات",
+      "cafe": "كافيه ومخبوزات",
+      "supermarket": "سوبر ماركت وبقالة"
+    },
+    "orderTypesLabel": "طرق الطلب المدعومة:"
   }
 }

@@ -25,6 +25,8 @@ describe("whatsapp-service", () => {
         is_available: true,
       },
     ],
+    itemsTotal: 110,
+    deliveryFee: 0,
     totalPrice: 110,
     locale: "ar",
   };
@@ -36,6 +38,24 @@ describe("whatsapp-service", () => {
     expect(message).toContain("2x شوربة لسان عصفور");
     expect(message).toContain("ملاحظة: ليمون زيادة");
     expect(message).toContain("ج.م");
+  });
+
+  it("should format Delivery order with address, customer phone, and delivery fee", () => {
+    const deliveryPayload: WhatsAppOrderPayload = {
+      ...samplePayload,
+      orderType: "delivery",
+      customerName: "أحمد علي",
+      customerPhone: "01099887766",
+      deliveryAddress: "المعادي، شارع 9، عمارة 12، شقة 4",
+      itemsTotal: 110,
+      deliveryFee: 25,
+      totalPrice: 135,
+    };
+    const message = formatWhatsAppMessage(deliveryPayload);
+    expect(message).toContain("توصيل للمنزل");
+    expect(message).toContain("01099887766");
+    expect(message).toContain("المعادي، شارع 9");
+    expect(message).toContain("رسوم التوصيل");
   });
 
   it("should generate valid https://wa.me/ URL with stripped phone and encoded text", () => {

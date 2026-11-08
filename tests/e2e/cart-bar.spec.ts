@@ -32,3 +32,4 @@ test.describe("Cart Bar & Quick Add (US1)", () => {
     await expect(totalPrice).toContainText("ج.م");
   });
 });
+

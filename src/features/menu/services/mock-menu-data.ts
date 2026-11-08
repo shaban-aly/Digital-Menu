@@ -1,154 +1,20 @@
-import { MenuData } from "@/features/menu/types";
+import { MenuData, Restaurant } from "@/features/menu/types";
+import { ORIENTAL_GRILL_DATA } from "./mock-data/oriental-grill";
+import { SPECIALTY_CAFE_DATA } from "./mock-data/specialty-cafe";
+import { FRESH_MARKET_DATA } from "./mock-data/fresh-market";
 
-export const MOCK_MENU_DATA: MenuData = {
-  restaurant: {
-    id: "550e8400-e29b-41d4-a716-446655440000",
-    name_ar: "مطعم ومطبخ البركة",
-    name_en: "Al-Baraka Restaurant",
-    logo_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop&q=80",
-    phone_number: "201012345678",
-    default_language: "ar",
-    currency: "EGP",
-  },
-  categories: [
-    {
-      id: "c1-appetizers",
-      name_ar: "المقبلات والشوربة",
-      name_en: "Appetizers & Soups",
-      display_order: 1,
-      is_active: true,
-      items: [
-        {
-          id: "item-101",
-          category_id: "c1-appetizers",
-          name_ar: "شوربة لسان عصفور بالمستكة",
-          name_en: "Orzo Soup with Mastic",
-          short_desc_ar: "شوربة لسان عصفور غنية بمرقة اللحم والمستكة الطبيعية",
-          short_desc_en: "Rich orzo soup with meat broth and natural mastic",
-          full_desc_ar: "شوربة لسان عصفور بلدي محضرة بعناية مع مرق اللحم الطازج ونكهة المستكة والحبهان وقطع لحم ناعمة، تقدم مع ليمون طازج.",
-          full_desc_en: "Traditional orzo soup prepared with fresh meat broth, mastic, cardamom, and tender meat bites. Served with fresh lemon.",
-          price: 55,
-          image_url: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format&fit=crop&q=80",
-          display_order: 1,
-          is_available: true,
-          calories: 180,
-          badges: ["best_seller"],
-          allergens: ["gluten"],
-        },
-        {
-          id: "item-102",
-          category_id: "c1-appetizers",
-          name_ar: "حمص بالطحينة وزيت الزيتون",
-          name_en: "Hummus with Tahini & Olive Oil",
-          short_desc_ar: "حمص مهروس ناعم مع طحينة سمسم فاخرة",
-          short_desc_en: "Velvety mashed chickpeas with premium sesame tahini",
-          full_desc_ar: "حمص شامي بلدي ناعم متبل بالكمون والليمون وزيت الزيتون البكر الممتاز، يقدم مع خبز بلدي ساخن ومخلل مشكل.",
-          full_desc_en: "Creamy chickpeas blended with cumin, lemon, and extra virgin olive oil. Served with warm pita and pickles.",
-          price: 45,
-          image_url: "https://images.unsplash.com/photo-1577906096429-f73c2c312435?w=600&auto=format&fit=crop&q=80",
-          display_order: 2,
-          is_available: true,
-          calories: 260,
-          badges: ["vegetarian"],
-          allergens: ["soy"],
-        },
-      ],
-    },
-    {
-      id: "c2-mains",
-      name_ar: "الأطباق الرئيسية والمشويات",
-      name_en: "Main Courses & Grills",
-      display_order: 2,
-      is_active: true,
-      items: [
-        {
-          id: "item-201",
-          category_id: "c2-mains",
-          name_ar: "كباب وكفتة مشوية على الفحم",
-          name_en: "Charcoal Grilled Kebab & Kofta",
-          short_desc_ar: "قطع لحم ضأن بلدي وكفتة متبلة بخلطة التوابل السرية",
-          short_desc_en: "Tender lamb cuts and seasoned kofta grilled over charcoal",
-          full_desc_ar: "تشكيلة من الكباب البلدي والكفتة المشوية على الفحم مع طماطم وبصل مشوي، تقدم مع أرز بسمتي بالخلطة وسلطة خضراء وطحينة.",
-          full_desc_en: "Selection of local grilled kebab and kofta served with spiced basmati rice, grilled vegetables, tahini, and green salad.",
-          price: 290,
-          image_url: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop&q=80",
-          display_order: 1,
-          is_available: true,
-          calories: 680,
-          badges: ["best_seller"],
-          allergens: [],
-        },
-        {
-          id: "item-202",
-          category_id: "c2-mains",
-          name_ar: "طاجن موزة بالبامية",
-          name_en: "Lamb Shank Okra Tagine",
-          short_desc_ar: "موزة ضأن متبلة مطهوة ببطء في الفرن مع بامية بلدي",
-          short_desc_en: "Slow-roasted lamb shank with tender okra in rich tomato sauce",
-          full_desc_ar: "طاجن فخار تقليدي يحتوي على موزة ضأن طرية تذوب في الفم مع بامية طازجة وصوص الطماطم والكزبرة والثوم.",
-          full_desc_en: "Traditional clay pot featuring mouth-watering slow-braised lamb shank with fresh okra in garlic coriander tomato sauce.",
-          price: 320,
-          image_url: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop&q=80",
-          display_order: 2,
-          is_available: false,
-          calories: 740,
-          badges: [],
-          allergens: [],
-        },
-      ],
-    },
-    {
-      id: "c3-desserts",
-      name_ar: "الحلويات الشرقية",
-      name_en: "Oriental Desserts",
-      display_order: 3,
-      is_active: true,
-      items: [
-        {
-          id: "item-301",
-          category_id: "c3-desserts",
-          name_ar: "أم علي بالمكسرات والقشطة",
-          name_en: "Om Ali with Cream & Nuts",
-          short_desc_ar: "حلوى أم علي الساخنة برقائق الميلفيه والقشطة البلدي",
-          short_desc_en: "Hot traditional bread pudding with puff pastry and cream",
-          full_desc_ar: "حلوى أم علي التقليدية مخبوزة في الفرن برقائق الميلفيه والحليب الساخن والمكسرات المحمصة (فستق وبندق ولوز) مع طبقة قشطة بلدي ذهبية.",
-          full_desc_en: "Classic Egyptian baked pastry with warm sweetened milk, rich clotted cream, and roasted nuts (pistachios, hazelnuts, almonds).",
-          price: 85,
-          image_url: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=600&auto=format&fit=crop&q=80",
-          display_order: 1,
-          is_available: true,
-          calories: 450,
-          badges: ["best_seller", "vegetarian"],
-          allergens: ["dairy", "nuts", "gluten"],
-        },
-      ],
-    },
-    {
-      id: "c4-drinks",
-      name_ar: "المشروبات والعصائر",
-      name_en: "Beverages & Fresh Juices",
-      display_order: 4,
-      is_active: true,
-      items: [
-        {
-          id: "item-401",
-          category_id: "c4-drinks",
-          name_ar: "عصير مانجو فريش طبيعي",
-          name_en: "Fresh Natural Mango Juice",
-          short_desc_ar: "عصير مانجو إسمعلاوي طازج مثلج بدون إضافات",
-          short_desc_en: "Fresh chilled natural Ismailia mango juice",
-          full_desc_ar: "عصير مانجو طبيعي 100% غني ولذيذ ومحضر من ثمار المانجو الإسمعلاوية الفاخرة بدون مواد حافظة.",
-          full_desc_en: "100% natural, refreshing cold mango juice prepared from premium local mangoes without preservatives.",
-          price: 50,
-          image_url: "https://images.unsplash.com/photo-1546173159-315724a31696?w=600&auto=format&fit=crop&q=80",
-          display_order: 1,
-          is_available: true,
-          calories: 140,
-          badges: ["vegetarian"],
-          allergens: [],
-        },
-      ],
-    },
-  ],
+export const STORES_MAP: Record<string, MenuData> = {
+  "oriental-grill": ORIENTAL_GRILL_DATA,
+  "specialty-cafe": SPECIALTY_CAFE_DATA,
+  "fresh-market": FRESH_MARKET_DATA,
 };
 
+export const MOCK_MENU_DATA: MenuData = ORIENTAL_GRILL_DATA;
+
+export function getMockStoreBySlug(slug: string): MenuData {
+  return STORES_MAP[slug] || ORIENTAL_GRILL_DATA;
+}
+
+export function getAllMockStores(): Restaurant[] {
+  return Object.values(STORES_MAP).map((data) => data.restaurant);
+}

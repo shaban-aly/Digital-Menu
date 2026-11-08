@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { AlertTriangle } from "lucide-react";
 import { useCart } from "../hooks/use-cart";
-import { CartItemRow } from "./cart-item-row";
-import { OrderTypeSelector } from "./order-type-selector";
+import { CartDrawerItems } from "./cart-drawer-items";
+import { OrderTypeSelector, OrderValidationErrors } from "./order-type-selector";
 import { CartDrawerHeader } from "./cart-drawer-header";
 import { CartDrawerEmpty } from "./cart-drawer-empty";
 import { CartDrawerFooter } from "./cart-drawer-footer";
 import { buildWhatsAppOrderUrl } from "../services/whatsapp-service";
 import { Locale } from "@/types";
-import arTranslations from "@/lib/i18n/ar.json";
-import enTranslations from "@/lib/i18n/en.json";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -33,21 +30,27 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     orderType,
     tableNumber,
     customerName,
+    customerPhone,
+    deliveryAddress,
     generalNote,
     totalCount,
+    itemsTotal,
     totalPrice,
+    supportedOrderTypes,
+    deliveryFee,
     updateQuantity,
     removeItem,
     updateItemNote,
     setOrderType,
     setTableNumber,
     setCustomerName,
+    setCustomerPhone,
+    setDeliveryAddress,
     setGeneralNote,
     clearCart,
   } = useCart();
 
-  const [hasTableError, setHasTableError] = useState(false);
-  const t = locale === "ar" ? arTranslations : enTranslations;
+  const [errors, setErrors] = useState<OrderValidationErrors>({});
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -60,11 +63,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   if (!isOpen) return null;
 
   const handleSubmitWhatsApp = () => {
-    if (orderType === "dine_in" && !tableNumber.trim()) {
-      setHasTableError(true);
+    const errs: OrderValidationErrors = {};
+    if (orderType === "dine_in" && !tableNumber.trim()) errs.table = true;
+    if (orderType === "takeaway" || orderType === "delivery") {
+      if (!customerName.trim()) errs.name = true;
+      if (!customerPhone.trim()) errs.phone = true;
+    }
+    if (orderType === "delivery" && !deliveryAddress.trim()) errs.address = true;
+
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
       return;
     }
-    setHasTableError(false);
+    setErrors({});
 
     const url = buildWhatsAppOrderUrl({
       restaurantName,
@@ -72,8 +83,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       orderType,
       tableNumber: orderType === "dine_in" ? tableNumber.trim() : "",
       customerName: customerName.trim(),
+      customerPhone: customerPhone.trim(),
+      deliveryAddress: orderType === "delivery" ? deliveryAddress.trim() : "",
       generalNote: generalNote.trim(),
       items,
+      itemsTotal,
+      deliveryFee: orderType === "delivery" ? deliveryFee : 0,
       totalPrice,
       locale,
     });
@@ -87,7 +102,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         onClick={onClose}
         aria-hidden="true"
       />
-
       <div
         data-testid="cart-drawer"
         role="dialog"
@@ -108,52 +122,30 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <CartDrawerEmpty locale={locale} onClose={onClose} />
           ) : (
             <>
-              {items.some((i) => !i.is_available) && (
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 text-xs text-amber-800 dark:text-amber-300">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>{t.cart.itemUnavailableWarning}</span>
-                </div>
-              )}
-
-              <div className="space-y-2.5">
-                {items.map((item) => (
-                  <CartItemRow
-                    key={item.id}
-                    item={item}
-                    locale={locale}
-                    onUpdateQuantity={updateQuantity}
-                    onRemove={removeItem}
-                    onUpdateNote={updateItemNote}
-                  />
-                ))}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  {t.cart.generalNotes}
-                </label>
-                <textarea
-                  data-testid="general-notes-input"
-                  value={generalNote}
-                  onChange={(e) => setGeneralNote(e.target.value)}
-                  placeholder={t.cart.generalNotesPlaceholder}
-                  maxLength={200}
-                  rows={2}
-                  className="w-full text-xs p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
-                />
-              </div>
+              <CartDrawerItems
+                items={items}
+                generalNote={generalNote}
+                onGeneralNoteChange={setGeneralNote}
+                onUpdateQuantity={updateQuantity}
+                onRemove={removeItem}
+                onUpdateNote={updateItemNote}
+                locale={locale}
+              />
 
               <OrderTypeSelector
                 orderType={orderType}
                 onOrderTypeChange={setOrderType}
+                supportedOrderTypes={supportedOrderTypes}
                 tableNumber={tableNumber}
-                onTableNumberChange={(val) => {
-                  setTableNumber(val);
-                  if (val.trim()) setHasTableError(false);
-                }}
+                onTableNumberChange={(val) => { setTableNumber(val); if (val.trim()) setErrors((p) => ({ ...p, table: false })); }}
                 customerName={customerName}
-                onCustomerNameChange={setCustomerName}
-                hasTableError={hasTableError}
+                onCustomerNameChange={(val) => { setCustomerName(val); if (val.trim()) setErrors((p) => ({ ...p, name: false })); }}
+                customerPhone={customerPhone}
+                onCustomerPhoneChange={(val) => { setCustomerPhone(val); if (val.trim()) setErrors((p) => ({ ...p, phone: false })); }}
+                deliveryAddress={deliveryAddress}
+                onDeliveryAddressChange={(val) => { setDeliveryAddress(val); if (val.trim()) setErrors((p) => ({ ...p, address: false })); }}
+                deliveryFee={deliveryFee}
+                errors={errors}
                 locale={locale}
               />
             </>
@@ -162,6 +154,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
         {items.length > 0 && (
           <CartDrawerFooter
+            itemsTotal={itemsTotal}
+            deliveryFee={deliveryFee}
+            orderType={orderType}
             totalPrice={totalPrice}
             locale={locale}
             onSubmitWhatsApp={handleSubmitWhatsApp}
