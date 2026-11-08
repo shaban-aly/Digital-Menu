@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StoreOrderTypeSchema, MenuItem, CategoryWithItems, Restaurant } from "@/features/menu/types";
+import { StoreScheduleConfigSchema, StoreScheduleConfig } from "@/features/schedule/types";
 
 export const StoreSettingsSchema = z.object({
   id: z.string().min(1),
@@ -14,6 +15,7 @@ export const StoreSettingsSchema = z.object({
   currency: z.literal("EGP").default("EGP"),
   logo_url: z.string().url().optional(),
   cover_url: z.string().url().optional(),
+  schedule: StoreScheduleConfigSchema.optional(),
 });
 export type StoreSettings = z.infer<typeof StoreSettingsSchema>;
 

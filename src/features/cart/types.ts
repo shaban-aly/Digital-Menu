@@ -43,6 +43,8 @@ export const WhatsAppOrderPayloadSchema = z.object({
   deliveryFee: z.number().nonnegative().default(0),
   totalPrice: z.number().nonnegative(),
   locale: z.enum(["ar", "en"]),
+  isPreOrder: z.boolean().optional(),
+  preOrderOpeningText: z.string().optional(),
 });
 export type WhatsAppOrderPayload = z.infer<typeof WhatsAppOrderPayloadSchema>;
 

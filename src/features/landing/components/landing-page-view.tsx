@@ -9,6 +9,7 @@ import { RoiCalculator } from "./roi-calculator";
 import { PricingSection } from "./pricing-section";
 import { FaqSection } from "./faq-section";
 import { LandingFooter } from "./landing-footer";
+import { FloatingWhatsAppButton } from "./floating-whatsapp-button";
 
 export const LandingPageView: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ export const LandingPageView: React.FC = () => {
         <FaqSection />
       </main>
       <LandingFooter />
+      <FloatingWhatsAppButton />
     </div>
   );
 };

@@ -15,6 +15,19 @@ export const ORIENTAL_GRILL_DATA: MenuData = {
     currency: "EGP",
     supported_order_types: ["dine_in", "takeaway", "delivery"],
     delivery_fee: 25,
+    schedule: {
+      timezone: "Africa/Cairo",
+      allow_preorders: true,
+      is_manually_paused: false,
+      pause_note_ar: "",
+      pause_note_en: "",
+      weekly_schedule: [0, 1, 2, 3, 4, 5, 6].map((day) => ({
+        day,
+        is_enabled: true,
+        open_time: "12:00",
+        close_time: "01:00",
+      })),
+    },
   },
   categories: [
     {

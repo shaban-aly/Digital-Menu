@@ -139,6 +139,7 @@ const MenuContent: React.FC<MenuPageProps> = ({
         }
         restaurantPhone={initialData.restaurant.phone_number}
         locale={locale}
+        scheduleConfig={initialData.restaurant.schedule}
       />
     </div>
   );

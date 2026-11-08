@@ -48,21 +48,21 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
       <div className="max-w-5xl mx-auto px-4 py-3.5 space-y-3">
         {/* Top bar: Store title, switcher, external preview link, and language toggle */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
+          <div className="min-w-0 w-full sm:w-auto">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
                 {t.title}
               </span>
-              <h1 className="text-base font-extrabold text-neutral-900 dark:text-neutral-100 truncate">
+              <h1 className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100 truncate">
                 {storeName}
               </h1>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">
               {t.subtitle}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end flex-wrap">
             {/* Store switcher */}
             <select
               value={currentSlug}
@@ -77,32 +77,34 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               ))}
             </select>
 
-            {/* Language switch */}
-            <button
-              type="button"
-              data-testid="admin-lang-toggle"
-              onClick={onToggleLanguage}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{locale === "ar" ? "English" : "العربية"}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Language switch */}
+              <button
+                type="button"
+                data-testid="admin-lang-toggle"
+                onClick={onToggleLanguage}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors min-h-[36px]"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>{locale === "ar" ? "English" : "العربية"}</span>
+              </button>
 
-            {/* View Customer Menu link */}
-            <Link
-              href={`/menu/${currentSlug}`}
-              target="_blank"
-              data-testid="admin-view-customer-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{t.viewCustomerMenu}</span>
-            </Link>
+              {/* View Customer Menu link */}
+              <Link
+                href={`/menu/${currentSlug}`}
+                target="_blank"
+                data-testid="admin-view-customer-menu"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors min-h-[36px]"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t.viewCustomerMenu}</span>
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Tab navigation */}
-        <nav className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <nav className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar scrollbar-none">
           {tabs.map((tab) => (
             <button
               key={tab.id}

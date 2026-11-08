@@ -6,6 +6,17 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   const lines: string[] = [];
 
   // 1. Header & Order Info
+  if (payload.isPreOrder) {
+    const openingInfo = payload.preOrderOpeningText
+      ? `: ${payload.preOrderOpeningText}`
+      : "";
+    lines.push(
+      isAr
+        ? `🔔 *[طلب مسبق لموعد الفتح${openingInfo}]*`
+        : `🔔 *[Pre-Order for Next Opening${openingInfo}]*`
+    );
+  }
+
   lines.push(
     isAr
       ? `🍽️ *طلب جديد من منيو ${payload.restaurantName}*`
