@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/types";
 import { AdminActiveTab } from "../types";
-import { Utensils, FolderTree, Settings, QrCode, ExternalLink, Globe } from "lucide-react";
+import { Utensils, FolderTree, Settings, QrCode, ExternalLink, Globe, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
@@ -37,6 +37,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
 
   const tabs: { id: AdminActiveTab; label: string; icon: React.ReactNode }[] = [
+    { id: "orders", label: t.tabs.orders, icon: <ClipboardList className="w-4 h-4" /> },
     { id: "items", label: t.tabs.items, icon: <Utensils className="w-4 h-4" /> },
     { id: "categories", label: t.tabs.categories, icon: <FolderTree className="w-4 h-4" /> },
     { id: "settings", label: t.tabs.settings, icon: <Settings className="w-4 h-4" /> },

@@ -4,6 +4,7 @@ import React from "react";
 import { useStoreAdmin } from "../hooks/use-store-admin";
 import { useLanguage } from "@/features/menu/hooks/use-language";
 import { AdminHeader } from "./admin-header";
+import { AdminOrdersTab } from "./admin-orders-tab";
 import { ItemsTab } from "./items-tab";
 import { CategoriesTab } from "./categories-tab";
 import { SettingsTab } from "./settings-tab";
@@ -90,6 +91,10 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
       )}
 
       <main className="max-w-5xl mx-auto px-4 py-6">
+        {activeTab === "orders" && (
+          <AdminOrdersTab slug={slug} locale={locale} />
+        )}
+
         {activeTab === "items" && (
           <ItemsTab
             categories={store.categories}
