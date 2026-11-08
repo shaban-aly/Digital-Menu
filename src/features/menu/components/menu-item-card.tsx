@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { MenuItem } from "@/features/menu/types";
 import { Locale } from "@/types";
@@ -22,6 +22,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
   locale,
   onSelect,
 }) => {
+  const [imgError, setImgError] = useState(false);
   const t = locale === "ar" ? arTranslations : enTranslations;
   const name = locale === "ar" ? item.name_ar : item.name_en;
   const shortDesc = locale === "ar" ? item.short_desc_ar : item.short_desc_en;
@@ -64,13 +65,14 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
         {/* Thumbnail Image */}
         <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 bg-neutral-100 dark:bg-neutral-800">
-          {item.image_url ? (
+          {item.image_url && !imgError ? (
             <Image
               src={item.image_url}
               alt={name}
               fill
               sizes="(max-width: 640px) 80px, 96px"
               loading="lazy"
+              onError={() => setImgError(true)}
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (

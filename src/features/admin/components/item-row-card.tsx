@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { MenuItem } from "@/features/menu/types";
 import { Locale } from "@/types";
@@ -26,6 +26,7 @@ export const ItemRowCard: React.FC<ItemRowCardProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const [imgError, setImgError] = useState(false);
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
   const itemName = locale === "ar" ? item.name_ar : item.name_en;
   const secondaryName = locale === "ar" ? item.name_en : item.name_ar;
@@ -44,12 +45,13 @@ export const ItemRowCard: React.FC<ItemRowCardProps> = ({
       {/* Item info */}
       <div className="flex items-center gap-3 w-full sm:w-auto">
         <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0">
-          {item.image_url ? (
+          {item.image_url && !imgError ? (
             <Image
               src={item.image_url}
               alt={itemName}
               fill
               sizes="56px"
+              onError={() => setImgError(true)}
               className={cn("object-cover", !item.is_available && "grayscale")}
             />
           ) : (

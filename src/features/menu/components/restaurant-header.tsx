@@ -28,6 +28,7 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
   onToggleLanguage,
 }) => {
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   const { operatingStatus, scheduleConfig } = useStoreSchedule(
     restaurant.schedule
   );
@@ -45,7 +46,7 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shrink-0 border border-neutral-100 dark:border-neutral-800 shadow-sm bg-neutral-100">
-              {restaurant.logo_url ? (
+              {restaurant.logo_url && !logoError ? (
                 <Image
                   src={restaurant.logo_url}
                   alt={name}
@@ -53,6 +54,7 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
                   sizes="56px"
                   className="object-cover"
                   priority
+                  onError={() => setLogoError(true)}
                 />
               ) : (
                 <div className="w-full h-full bg-brand-500 text-white flex items-center justify-center font-bold text-base sm:text-lg">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { MenuItem } from "@/features/menu/types";
 import { Locale } from "@/types";
@@ -26,6 +26,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 }) => {
   if (!item) return null;
 
+  const [imgError, setImgError] = useState(false);
   const t = locale === "ar" ? arTranslations : enTranslations;
   const name = locale === "ar" ? item.name_ar : item.name_en;
   const fullDesc = locale === "ar" ? item.full_desc_ar : item.full_desc_en;
@@ -36,13 +37,14 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       <div className="space-y-4">
         {/* Large Image Header */}
         <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-          {item.image_url ? (
+          {item.image_url && !imgError ? (
             <Image
               src={item.image_url}
               alt={name}
               fill
               sizes="(max-width: 640px) 100vw, 480px"
               priority
+              onError={() => setImgError(true)}
               className="object-cover"
             />
           ) : (
