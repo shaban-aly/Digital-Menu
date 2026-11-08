@@ -29,7 +29,7 @@ export const LoginForm: React.FC = () => {
     try {
       const user = await login(email, password);
       if (user.storeSlug) {
-        router.push(`/dashboard/${user.storeSlug}`);
+        router.push("/dashboard");
       } else {
         router.push("/onboarding");
       }

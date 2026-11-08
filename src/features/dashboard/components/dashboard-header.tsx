@@ -6,7 +6,16 @@ import { useRouter } from "next/navigation";
 import { Locale } from "@/types";
 import { DashboardTab } from "../types";
 import { SubscriptionPlanKey } from "@/features/subscription/types";
-import { Utensils, FolderTree, Settings, QrCode, ExternalLink, Globe, Sparkles } from "lucide-react";
+import {
+  Utensils,
+  FolderTree,
+  Settings,
+  QrCode,
+  ExternalLink,
+  Globe,
+  Sparkles,
+  PlusCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
@@ -88,7 +97,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               value={currentSlug}
               data-testid="dashboard-store-switcher"
               onChange={(e) => router.push(`/dashboard/${e.target.value}`)}
-              className="text-xs px-2.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium"
+              className="text-xs px-2.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium min-h-[36px]"
             >
               {STORES.map((s) => (
                 <option key={s.slug} value={s.slug}>
@@ -97,7 +106,16 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               ))}
             </select>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Link
+                href="/onboarding"
+                data-testid="dashboard-create-store-btn"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors min-h-[36px]"
+              >
+                <PlusCircle className="w-3.5 h-3.5 text-brand-600" />
+                <span>{isArabic ? "إنشاء نشاط جديد" : "New Activity"}</span>
+              </Link>
+
               <button
                 type="button"
                 data-testid="dashboard-lang-toggle"
@@ -111,11 +129,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               <Link
                 href={`/menu/${currentSlug}`}
                 target="_blank"
+                rel="noopener noreferrer"
                 data-testid="dashboard-view-customer-menu"
                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors min-h-[36px]"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{t.viewCustomerMenu}</span>
+                <span>{t.viewCustomerMenu}</span>
               </Link>
             </div>
           </div>

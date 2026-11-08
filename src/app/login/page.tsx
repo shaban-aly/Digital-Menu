@@ -16,7 +16,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!isLoading && user) {
       if (user.storeSlug) {
-        router.push(`/dashboard/${user.storeSlug}`);
+        router.push("/dashboard");
       } else {
         router.push("/onboarding");
       }

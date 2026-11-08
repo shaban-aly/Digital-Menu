@@ -14,12 +14,8 @@ export default function OnboardingPage() {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        router.push("/login");
-      } else if (user.storeSlug) {
-        router.push(`/dashboard/${user.storeSlug}`);
-      }
+    if (!isLoading && !user) {
+      router.push("/login");
     }
   }, [user, isLoading, router]);
 

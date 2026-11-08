@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { LandingNavbar } from "./landing-navbar";
+import { PlatformHeader } from "@/components/layout/platform-header";
 import { HeroSection } from "./hero-section";
 import { PhoneSimulator } from "./phone-simulator";
 import { SolutionsSection } from "./solutions-section";
@@ -14,7 +14,7 @@ import { FloatingWhatsAppButton } from "./floating-whatsapp-button";
 export const LandingPageView: React.FC = () => {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 flex flex-col selection:bg-brand-500 selection:text-white">
-      <LandingNavbar />
+      <PlatformHeader />
       <main className="flex-1 w-full max-w-full overflow-x-hidden">
         <HeroSection />
         <PhoneSimulator />

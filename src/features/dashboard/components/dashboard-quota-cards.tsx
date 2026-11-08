@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Locale } from "@/types";
 import { QuotaUsage, SubscriptionPlanKey } from "@/features/subscription/types";
 import { QuotaProgressBar } from "@/features/subscription/components/quota-progress-bar";
-import { Sparkles, MessageCircle, ShieldCheck } from "lucide-react";
+import { Sparkles, ShieldCheck } from "lucide-react";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -24,7 +25,6 @@ export const DashboardQuotaCards: React.FC<DashboardQuotaCardsProps> = ({
   const tSub =
     locale === "ar" ? arTranslations.subscription : enTranslations.subscription;
   const isArabic = locale === "ar";
-
   const isFree = planKey === "free";
 
   return (
@@ -54,15 +54,24 @@ export const DashboardQuotaCards: React.FC<DashboardQuotaCardsProps> = ({
         </div>
 
         {isFree && (
-          <button
-            type="button"
-            data-testid="dashboard-upgrade-plan-btn"
-            onClick={onUpgradeClick}
-            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-xs"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{tSub.upgradeWhatsApp}</span>
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/pricing"
+              data-testid="dashboard-pricing-link-btn"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-100 dark:hover:bg-brand-900/60 border border-brand-200/60 dark:border-brand-800/60 transition-colors min-h-[36px]"
+            >
+              <span>{isArabic ? "ترقية الخطة" : "Upgrade Plan"}</span>
+            </Link>
+            <button
+              type="button"
+              data-testid="dashboard-upgrade-plan-btn"
+              onClick={onUpgradeClick}
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-xs min-h-[36px]"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{tSub.upgradeWhatsApp}</span>
+            </button>
+          </div>
         )}
       </div>
 
