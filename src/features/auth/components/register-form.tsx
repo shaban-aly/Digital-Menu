@@ -28,8 +28,12 @@ export const RegisterForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await register(email, fullName, password);
-      router.push("/onboarding");
+      const user = await register(email, fullName, password);
+      if (user.storeSlug) {
+        router.push("/dashboard");
+      } else {
+        router.push("/onboarding");
+      }
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "حدث خطأ أثناء إنشاء الحساب";
