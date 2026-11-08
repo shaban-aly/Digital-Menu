@@ -93,13 +93,13 @@
 - [X] T030 [P] Write integration unit tests verifying instant reflection of merchant modifications in `/menu/[slug]`.
 
 ### Sub-Agent 3: Unified Header, Flow Transitions & Pricing Page
-- [ ] T031 [P] Build unified responsive Navbar/Header component (`src/components/layout/platform-header.tsx`) with dynamic auth state, store links, and language switcher.
-- [ ] T032 [P] Wire all navigation links and router transitions across landing page `/`, `/login`, `/register`, and `/onboarding`.
-- [ ] T033 [P] Implement dedicated pricing page `/pricing` (`src/app/pricing/page.tsx`) with monthly/yearly toggle and WhatsApp CTA.
-- [ ] T034 [P] Add direct "معاينة المنيو" and "إضافة نشاط جديد" action buttons and upgrade links inside `/dashboard`.
+- [X] T031 [P] Build unified responsive Navbar/Header component (`src/components/layout/platform-header.tsx`) with dynamic auth state, store links, and language switcher.
+- [X] T032 [P] Wire all navigation links and router transitions across landing page `/`, `/login`, `/register`, and `/onboarding`.
+- [X] T033 [P] Implement dedicated pricing page `/pricing` (`src/app/pricing/page.tsx`) with monthly/yearly toggle and WhatsApp CTA.
+- [X] T034 [P] Add direct "معاينة المنيو" and "إضافة نشاط جديد" action buttons and upgrade links inside `/dashboard`.
 
 ### Sub-Agent 4: Smart AI Translation Integration & Super Admin Live Sync
-- [ ] T035 [P] Integrate `/api/translate` automatic Arabic-to-English translation into catalog modals in `/dashboard`.
-- [ ] T036 [P] Integrate `/api/translate` into store creation form in `/onboarding`.
-- [ ] T037 [P] Connect `/admin` to live database/repository so Super Admin tier updates immediately sync quotas to `/dashboard`.
-- [ ] T038 [P] Unit tests for live Super Admin plan updates and translation triggers.
+- [X] T035 [P] Integrate `/api/translate` automatic Arabic-to-English translation into catalog modals in `/dashboard`.
+- [X] T036 [P] Integrate `/api/translate` into store creation form in `/onboarding`.
+- [X] T037 [P] Connect `/admin` to live database/repository so Super Admin tier updates immediately sync quotas to `/dashboard`.
+- [X] T038 [P] Unit tests for live Super Admin plan updates and translation triggers.
