@@ -6,7 +6,7 @@ import { Modal } from "@/components/ui/modal";
 import { formatCurrency } from "@/lib/utils";
 import { BadgeList } from "./badge-list";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
-import { Flame, ShieldAlert } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
 import { AddToCartButton } from "@/features/cart/components/add-to-cart-button";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
@@ -74,42 +74,30 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           {fullDesc}
         </p>
 
-        {/* Nutritional & Allergen Information */}
-        <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-3">
-          {typeof item.calories === "number" && item.calories > 0 && (
-            <div className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-              <Flame className="w-4 h-4 text-amber-500" />
-              <span className="font-semibold">{item.calories}</span>
-              <span className="text-neutral-500 dark:text-neutral-400">
-                {t.menu.calories}
-              </span>
+        {/* Allergen Information */}
+        {item.allergens && item.allergens.length > 0 && (
+          <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">
+              <ShieldAlert className="w-4 h-4" />
+              <span>{t.menu.allergens}:</span>
             </div>
-          )}
-
-          {item.allergens && item.allergens.length > 0 && (
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">
-                <ShieldAlert className="w-4 h-4" />
-                <span>{t.menu.allergens}:</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {item.allergens.map((allergen) => {
-                  const allergenName =
-                    t.menu.allergenNames[allergen as keyof typeof t.menu.allergenNames] ||
-                    allergen;
-                  return (
-                    <span
-                      key={allergen}
-                      className="px-2.5 py-1 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50"
-                    >
-                      {allergenName}
-                    </span>
-                  );
-                })}
-              </div>
+            <div className="flex flex-wrap gap-1.5">
+              {item.allergens.map((allergen) => {
+                const allergenName =
+                  t.menu.allergenNames[allergen as keyof typeof t.menu.allergenNames] ||
+                  allergen;
+                return (
+                  <span
+                    key={allergen}
+                    className="px-2.5 py-1 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50"
+                  >
+                    {allergenName}
+                  </span>
+                );
+              })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Modal Action Footer */}
         <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-3">

@@ -58,7 +58,6 @@ export const MenuItemSchema = z.object({
   image_url: z.string().url().nullable().optional(),
   display_order: z.number().int().default(0),
   is_available: z.boolean().default(true),
-  calories: z.number().int().nonnegative().nullable().optional(),
   badges: z.array(BadgeTypeSchema).default([]),
   allergens: z.array(AllergenTypeSchema).default([]),
 });

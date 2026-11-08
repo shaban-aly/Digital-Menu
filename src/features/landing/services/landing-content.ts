@@ -145,12 +145,12 @@ export const BUSINESS_SOLUTIONS: BusinessSolution[] = [
     highlights_ar: [
       "توضيح أحجام الأكواب (350 مل، 500 مل) وقطع الحلوى",
       "تقليل طوابير الكاشير عبر طلب العميل المسبق للاستلام السريع",
-      "عرض السعرات الحرارية ومكونات القهوة المختصة",
+      "عرض إيحاءات القهوة المختصة والتحميص والتفاصيل الكاملة",
     ],
     highlights_en: [
       "Clear cup sizes (350ml, 500ml) and pastry portions",
       "Cut counter wait times with rapid takeaway ordering",
-      "Display calorie info and specialty roast details",
+      "Display roast origins and specialty coffee taste notes",
     ],
   },
   {
