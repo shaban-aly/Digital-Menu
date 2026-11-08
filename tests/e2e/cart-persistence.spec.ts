@@ -44,10 +44,12 @@ test.describe("Cart Persistence & Language Switching (US5)", () => {
     const drawer = page.locator('[data-testid="cart-drawer"]');
     await expect(drawer).toBeVisible();
 
-    // Mock confirm dialog
-    page.on("dialog", (dialog) => dialog.accept());
+    // Trigger custom confirm dialog and confirm
     const clearBtn = page.locator('[data-testid="cart-clear-btn"]');
     await clearBtn.click();
+    const confirmBtn = page.locator('[data-testid="confirm-dialog-confirm"]');
+    await expect(confirmBtn).toBeVisible();
+    await confirmBtn.click();
 
     // Cart is now empty in drawer
     await expect(page.locator("text=/Your cart is empty|سلتك فارغة/")).toBeVisible();

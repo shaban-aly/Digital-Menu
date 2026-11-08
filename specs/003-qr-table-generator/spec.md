@@ -1,131 +1,101 @@
-# Feature Specification: [FEATURE NAME]
+# Feature Specification: QR Code Table Generator & Printable Cards
 
-**Feature Branch**: `[###-feature-name]`
-
-**Created**: [DATE]
-
-**Status**: Draft
-
-**Input**: User description: "$ARGUMENTS"
-
-## User Scenarios & Testing *(mandatory)*
-
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
-
-### User Story 1 - [Brief Title] (Priority: P1)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+**Feature Branch**: `003-qr-table-generator`  
+**Created**: 2026-11-08  
+**Status**: Ready for Planning  
+**Input**: System capability expansion for merchants to generate, preview, customize, and print high-resolution QR code table cards and storefront QR codes linking directly to `/menu/[slug]?table=N`.
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+## User Scenarios & Testing
 
-[Describe this user journey in plain language]
+### User Story 1 - Batch Table QR Code Generation (Priority: P1) 🎯 MVP
 
-**Why this priority**: [Explain the value and why it has this priority level]
+A restaurant or café owner (e.g., `oriental-grill` or `specialty-cafe`) wants to generate QR codes for all their dining tables at once. They open the QR Generator at `/menu/[slug]/qr`, specify the number of tables (e.g., 10 or 20 tables), and the system immediately generates high-contrast QR codes for each table with the exact URL: `${origin}/menu/[slug]?table=[number]`.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Why this priority**: Essential for dine-in operations. Manual generation of 20-50 table links is tedious and error-prone. Automatic batch creation eliminates setup friction.
+
+**Independent Test**: Navigate to `/menu/oriental-grill/qr`, enter 5 tables, verify that 5 distinct QR code cards are generated with URLs `.../menu/oriental-grill?table=1` through `table=5`.
 
 **Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** a restaurant store slug, **When** the merchant enters table count `10`, **Then** the system renders 10 table QR cards numbered 1 to 10 with direct table URLs.
+2. **Given** a customer scans any generated table QR code with their mobile camera, **When** the page opens, **Then** they land on `/menu/[slug]?table=N` and the cart automatically pre-fills that table number.
+3. **Given** custom table ranges or alphanumeric names (e.g., "T1", "VIP-1"), **When** configured, **Then** the generator accurately encodes the custom identifier.
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+### User Story 2 - Storefront / Retail QR Code for Supermarkets & Takeaway (Priority: P1)
 
-[Describe this user journey in plain language]
+A supermarket or takeaway-centric store manager (e.g., `fresh-market`) needs a prominent QR code for their storefront, flyers, or delivery bags without any table parameters. The system automatically detects when a business does not use dine-in, or provides a dedicated "Storefront / Home Delivery QR" mode generating `${origin}/menu/[slug]`.
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: Non-restaurant businesses (supermarkets, cloud kitchens) do not have tables but need QR codes for packaging, social media, and storefront banners.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: Navigate to `/menu/fresh-market/qr`, verify the system defaults to "Storefront QR" mode generating a high-res code for `/menu/fresh-market` with promotional copy ("Scan to order delivery / اطلب للتوصيل للمنزل").
 
 **Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** a store with `business_type: "supermarket"`, **Then** the generator presents the Storefront / Delivery QR card by default.
+2. **Given** any store, **When** the merchant switches to "Storefront / All Orders", **Then** a general QR code is generated without table parameters.
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### User Story 3 - Elegant Print-Ready Table Stand Cards (Priority: P1)
 
-### Edge Cases
+The merchant needs the generated QR codes formatted into professional, ready-to-print Table Tent Cards (بطاقات طاولات) without needing graphic design software. Each card contains:
+- Restaurant logo & brand name.
+- Prominent table number badge (e.g., "طاولة رقم 5" / "Table #5").
+- Clear high-contrast QR code.
+- Helpful call-to-action ("امسح الكود لتصفح المنيو والطلب مباشرة").
+- Optional WiFi network and password instructions.
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+**Why this priority**: Raw QR codes look unprofessional. Providing ready-to-print, beautifully designed table cards saves the merchant hundreds of pounds in design costs and enables same-day deployment.
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+**Independent Test**: Preview table cards in the browser, verify layout includes store logo, table badge, and legible QR code with bilingual RTL/LTR support.
 
-## Requirements *(mandatory)*
+**Acceptance Scenarios**:
+1. **Given** generated table cards, **When** viewed on screen or print preview, **Then** each card has a balanced vertical tent format (card size suitable for table stands: 10×15 cm or 2 cards per A4 page).
+2. **Given** dark mode is active on screen, **When** printing or previewing printable cards, **Then** cards always render with crisp white backgrounds and pure black QR codes for 100% printer readability and ink savings.
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
+---
+
+### User Story 4 - One-Click Print & High-Res Image Downloads (Priority: P2)
+
+The merchant wants to either print all table cards directly via their printer or export them as image files (SVG / PNG) to send to a professional printing shop.
+
+**Why this priority**: Gives the merchant complete flexibility between immediate in-house printing and professional print shop production.
+
+**Independent Test**: Click "Print All Cards" -> verify browser print dialog is invoked with page breaks separating cards cleanly; click "Download PNG" on a card -> verify clean image file is downloaded.
+
+**Acceptance Scenarios**:
+1. **Given** the table cards view, **When** the merchant clicks "طباعة بطاقات الطاولات (Print Cards)", **Then** the native print dialog opens with `@media print` styling (clean page layout, zero navigation clutter).
+2. **Given** any individual QR card, **When** the merchant clicks "تحميل (Download)", **Then** the QR code is downloaded as a crisp PNG file named `qr-table-[number].png`.
+
+---
+
+## Requirements
 
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: Route MUST be accessible at `/menu/[slug]/qr` for any valid store slug.
+- **FR-002**: System MUST generate pure client-side QR codes using `qrcode` library with error correction level 'M' or 'H' for fast scanning in low restaurant lighting.
+- **FR-003**: For dine-in businesses, system MUST provide a Table Count input (1 to 100) and generate sequential table cards.
+- **FR-004**: Each table QR code MUST encode the URL `${origin}/menu/${storeSlug}?table=${tableNumber}`.
+- **FR-005**: For supermarket/retail businesses, system MUST generate storefront QR codes encoding `${origin}/menu/${storeSlug}` with delivery CTA text.
+- **FR-006**: System MUST provide customizable card options: toggle WiFi info (Network SSID & Password), toggle restaurant logo, toggle card instructions.
+- **FR-007**: System MUST provide a "Print All Cards" action with `@media print` rules ensuring cards fit 2 per A4 sheet with proper margin spacing and no browser headers/footers.
+- **FR-008**: System MUST provide individual QR PNG download buttons with minimum 44×44px touch targets.
+- **FR-009**: QR generator page MUST support in-place Arabic (RTL) and English (LTR) language switching via `LanguageContext`.
+- **FR-010**: All feature files MUST reside in `src/features/qr/` with max 180 lines per file and 100% logical CSS properties (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`).
 
-*Example of marking unclear requirements:*
+### Key Entities
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **TableQRItem**: `{ tableNumber: string | number; url: string; qrDataUrl: string }`.
+- **QRGeneratorConfig**: `{ tableCount: number; showLogo: boolean; showWifi: boolean; wifiSsid: string; wifiPassword: string; customTitle: string }`.
 
-### Key Entities *(include if feature involves data)*
+---
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+## Success Criteria
 
-## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
-
-## Assumptions
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right assumptions based on reasonable defaults
-  chosen when the feature description did not specify certain details.
--->
-
-- [Assumption about target users, e.g., "Users have stable internet connectivity"]
-- [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
-- [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
-- [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+- **SC-001**: 20 table QR codes generate client-side in under 500ms without server roundtrips.
+- **SC-002**: 100% of generated QR codes scan reliably on iOS Camera and Android Google Lens.
+- **SC-003**: Print preview outputs cleanly without overlapping elements or broken page breaks.
+- **SC-004**: Zero files exceeding the 180-line limit; strict TypeScript and ESLint compliance.

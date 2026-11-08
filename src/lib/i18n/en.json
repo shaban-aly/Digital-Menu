@@ -36,6 +36,8 @@
     "browseMenu": "Browse Menu",
     "clearCart": "Empty Cart",
     "confirmClear": "Are you sure you want to remove all items from your cart?",
+    "confirm": "Yes, Clear Cart",
+    "cancel": "Cancel",
     "orderType": "Order Type",
     "dineIn": "Dine-in",
     "takeaway": "Takeaway",

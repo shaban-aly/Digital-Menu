@@ -1,8 +1,11 @@
 <!--
 ## Sync Impact Report
-- Version change: 2.0.0 → 2.1.0
+- Version change: 2.1.0 → 2.2.0
 - Modified principles:
-  - I. Locked Technology Stack (Explicit version locking: Next.js 16+, React 19, Tailwind CSS v4, Zod v4, @supabase/ssr, ESLint v9)
+  - III. Code & Component Rules:
+    - Added: Strict Prohibition on Native Browser Dialogs (window.confirm, window.alert, window.prompt)
+    - Added: Mandatory Shared UI Primitives (src/components/ui/) & Pre-Creation Component Audit
+    - Added: Logical Component Decomposition (extract subcomponents early)
 - Added sections: (none)
 - Removed sections: (none)
 - Follow-up TODOs: (none)
@@ -62,6 +65,27 @@ prohibited. The following directory layout is mandatory:
 - **File size limit**: No single component file may exceed 180 lines.
   If a component grows beyond this limit, it MUST be decomposed into
   smaller sub-components.
+- **Strict Prohibition on Native Browser Dialogs & Defaults**:
+  Using native browser popups or dialogs (`window.confirm()`,
+  `window.alert()`, `window.prompt()`, or unstyled native prompts) is
+  STRICTLY PROHIBITED across the entire project. All confirmation
+  dialogs, user prompts, error alerts, and feedback popovers MUST be
+  custom, accessible, branded UI components (such as `ConfirmDialog` or
+  `Modal`) with full dark mode and RTL/LTR bilingual support.
+- **Mandatory Shared Primitives & Pre-Creation Component Audit**:
+  Inlining ad-hoc buttons, modals, cards, or dialogs directly inside
+  feature code is prohibited. Before building ANY new component, dialog,
+  button, or UI element, developers/agents MUST inspect
+  `src/components/ui/` to review, reuse, or extend existing primitives.
+  If a reusable primitive does not exist, it MUST be built in
+  `src/components/ui/` first before being consumed by feature components.
+- **Logical Component Decomposition**:
+  Any component that logically encompasses separate concerns (e.g.,
+  headers, footers, row items, item lists, order selectors,
+  confirmation dialogs) MUST be decomposed into dedicated, standalone
+  component files in its respective directory. Do not wait to hit the
+  180-line limit; if a piece of UI represents a distinct logical unit,
+  extract it immediately.
 - **Separation of concerns**: Data fetching and business logic MUST
   reside in `services/` or `hooks/`. UI components MUST be
   presentational only — they receive data via props or hooks and

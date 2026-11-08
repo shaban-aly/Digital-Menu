@@ -19,3 +19,4 @@ test.describe("Clean Dynamic Routing", () => {
     await expect(page.locator('a[href="/menu/fresh-market"]')).toBeVisible();
   });
 });
+
