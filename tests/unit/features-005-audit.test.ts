@@ -72,3 +72,4 @@ describe("Feature 005: Smart Operating Hours & Availability Engine", () => {
     expect(msg).toContain("🔔 *[طلب مسبق لموعد الفتح");
   });
 });
+

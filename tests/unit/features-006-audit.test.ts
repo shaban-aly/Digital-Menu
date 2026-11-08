@@ -123,3 +123,4 @@ describe("Feature 006: SaaS Platform, Multi-Tenant Quotas & Super Admin", () => 
     expect(QuotaService.getQuotaUsage(store!).planKey).toBe("enterprise");
   });
 });
+
