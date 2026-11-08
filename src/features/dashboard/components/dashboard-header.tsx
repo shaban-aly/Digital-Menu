@@ -8,6 +8,7 @@ import { DashboardTab } from "../types";
 import { SubscriptionPlanKey } from "@/features/subscription/types";
 import { StoreStatusBadge } from "@/features/schedule/components/store-status-badge";
 import { StoreOperatingStatus } from "@/features/schedule/types";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import {
   Utensils,
   FolderTree,
@@ -16,7 +17,7 @@ import {
   ExternalLink,
   Globe,
   Sparkles,
-  PlusCircle,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import arTranslations from "@/lib/i18n/ar.json";
@@ -32,13 +33,8 @@ interface DashboardHeaderProps {
   planKey?: SubscriptionPlanKey;
   operatingStatus?: StoreOperatingStatus;
   onClickSchedule?: () => void;
+  onLogout?: () => void;
 }
-
-const STORES = [
-  { slug: "oriental-grill", name_ar: "مطعم مشويات البركة", name_en: "Oriental Grill" },
-  { slug: "specialty-cafe", name_ar: "كافيه ومخبوزات أروما", name_en: "Aroma Cafe" },
-  { slug: "fresh-market", name_ar: "سوبر ماركت فريش ماركت", name_en: "Fresh Market" },
-];
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   currentSlug,
@@ -50,10 +46,21 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   planKey = "free",
   operatingStatus,
   onClickSchedule,
+  onLogout,
 }) => {
   const router = useRouter();
+  const { logout } = useAuth();
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
   const isArabic = locale === "ar";
+
+  const handleLogout = async () => {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+    await logout();
+    router.replace("/login");
+  };
 
   const tabs: { id: DashboardTab; label: string; icon: React.ReactNode }[] = [
     { id: "items", label: t.tabs.items, icon: <Utensils className="w-4 h-4" /> },
@@ -90,66 +97,50 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               </span>
               {planBadge}
               {operatingStatus && (
-                <StoreStatusBadge
-                  operatingStatus={operatingStatus}
-                  locale={locale}
-                  onClickSchedule={onClickSchedule}
-                />
+                <StoreStatusBadge operatingStatus={operatingStatus} locale={locale} onClickSchedule={onClickSchedule} />
               )}
               <h1 className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100 truncate">
                 {storeName}
               </h1>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate text-start">
               {t.subtitle}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end flex-wrap">
-            <select
-              value={currentSlug}
-              data-testid="dashboard-store-switcher"
-              onChange={(e) => router.push(`/dashboard/${e.target.value}`)}
-              className="text-xs px-2.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium min-h-[36px]"
+          <div className="flex items-center gap-1.5 w-full sm:w-auto justify-end flex-wrap ms-auto">
+            <button
+              type="button"
+              data-testid="dashboard-lang-toggle"
+              onClick={onToggleLanguage}
+              aria-label={isArabic ? "Switch to English" : "التبديل إلى العربية"}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors min-h-[36px]"
             >
-              {STORES.map((s) => (
-                <option key={s.slug} value={s.slug}>
-                  {isArabic ? s.name_ar : s.name_en}
-                </option>
-              ))}
-            </select>
+              <Globe className="w-3.5 h-3.5" />
+              <span>{isArabic ? "English" : "العربية"}</span>
+            </button>
 
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <Link
-                href="/onboarding"
-                data-testid="dashboard-create-store-btn"
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors min-h-[36px]"
-              >
-                <PlusCircle className="w-3.5 h-3.5 text-brand-600" />
-                <span>{isArabic ? "إنشاء نشاط جديد" : "New Activity"}</span>
-              </Link>
+            <Link
+              href={`/menu/${currentSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="dashboard-view-customer-menu"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors min-h-[36px]"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>{t.viewCustomerMenu}</span>
+            </Link>
 
-              <button
-                type="button"
-                data-testid="dashboard-lang-toggle"
-                onClick={onToggleLanguage}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors min-h-[36px]"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{isArabic ? "English" : "العربية"}</span>
-              </button>
-
-              <Link
-                href={`/menu/${currentSlug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="dashboard-view-customer-menu"
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors min-h-[36px]"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>{t.viewCustomerMenu}</span>
-              </Link>
-            </div>
+            <button
+              type="button"
+              data-testid="dashboard-logout-btn"
+              onClick={handleLogout}
+              aria-label={isArabic ? "تسجيل الخروج" : "Logout"}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-colors min-h-[36px]"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>{isArabic ? "تسجيل الخروج" : "Logout"}</span>
+            </button>
           </div>
         </div>
 

@@ -1,31 +1,10 @@
-import { Restaurant } from "@/features/menu/types";
-import { CUSTOM_STORES_STORAGE_KEY } from "../types";
+import { StoreScheduleConfig } from "@/features/schedule/types";
 
-export function safeLocalStorage(): Storage | null {
-  if (typeof window === "undefined") return null;
-  try { return window.localStorage; } catch { return null; }
-}
-
-export function getCustomStores(): Restaurant[] {
-  const storage = safeLocalStorage();
-  if (!storage) return [];
-  try {
-    const raw = storage.getItem(CUSTOM_STORES_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
-}
-
-export function saveCustomStores(stores: Restaurant[]) {
-  const storage = safeLocalStorage();
-  if (!storage) return;
-  try {
-    storage.setItem(CUSTOM_STORES_STORAGE_KEY, JSON.stringify(stores));
-  } catch (e) {
-    console.error("Failed to save custom stores", e);
-  }
-}
-
-export function buildDefaultSchedule() {
+/**
+ * Builds the default operating schedule for newly onboarded stores.
+ * Cairo timezone, standard 10:00 - 23:00 (Friday 13:00 - 23:00) shifts.
+ */
+export function buildDefaultSchedule(): StoreScheduleConfig {
   const times = [
     { day: 0, is_enabled: true, open_time: "10:00", close_time: "23:00" },
     { day: 1, is_enabled: true, open_time: "10:00", close_time: "23:00" },

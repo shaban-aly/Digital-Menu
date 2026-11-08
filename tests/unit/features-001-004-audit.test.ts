@@ -9,8 +9,29 @@ import { getPricingPlans, buildWhatsAppInquiryUrl } from "@/features/landing/ser
 import DashboardRootPage from "@/app/dashboard/page";
 import { redirect } from "next/navigation";
 
+const mockReplace = vi.fn();
+
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react")>();
+  return {
+    ...actual,
+    useEffect: (fn: () => void) => {
+      fn();
+    },
+  };
+});
+
+vi.mock("@/features/auth/hooks/use-auth", () => ({
+  useAuth: () => ({
+    user: { id: "1", storeSlug: "oriental-grill", role: "merchant" },
+    isLoading: false,
+    isAuthenticated: true,
+  }),
+}));
+
 vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
+  useRouter: () => ({ replace: mockReplace, push: vi.fn() }),
 }));
 
 describe("Audit Suite: Features 001 to 004 Specifications", () => {
@@ -113,7 +134,7 @@ describe("Audit Suite: Features 001 to 004 Specifications", () => {
   describe("Feature 003: Merchant Admin & Dashboard", () => {
     it("redirects root dashboard to default merchant slug", () => {
       DashboardRootPage();
-      expect(redirect).toHaveBeenCalledWith("/dashboard/oriental-grill");
+      expect(mockReplace).toHaveBeenCalledWith("/dashboard/oriental-grill");
     });
 
     it("enforces tier limits via QuotaService and monitors stock availability", async () => {

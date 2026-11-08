@@ -79,6 +79,14 @@ export const StoresTable: React.FC<StoresTableProps> = ({
                       <span className="font-mono">/{s.slug}</span>
                       <span>•</span>
                       <span>{s.productsCount} items</span>
+                      {s.owner_name && (
+                        <>
+                          <span>•</span>
+                          <span className="truncate max-w-[120px]">
+                            {s.owner_name}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </td>
                   <td className="py-3 px-4 text-start">
@@ -101,7 +109,7 @@ export const StoresTable: React.FC<StoresTableProps> = ({
                   </td>
                   <td className="py-3 px-4 text-start">
                     <select
-                      value={s.plan}
+                      value={s.plan === "pro" ? "pro_monthly" : s.plan}
                       onChange={(e) =>
                         onPlanChange(
                           s.slug,

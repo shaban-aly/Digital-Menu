@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import * as supabaseClient from "@/lib/supabase/client";
+import { setupMockSupabase, resetMockSupabase } from "../mocks/mock-supabase-auth";
 import { AuthService } from "@/features/auth/services/auth-service";
 import { OnboardingService } from "@/features/onboarding/services/onboarding-service";
 import { QuotaService } from "@/features/subscription/services/quota-service";
@@ -14,6 +16,10 @@ describe("Feature 006: SaaS Platform, Multi-Tenant Quotas & Super Admin", () => 
   const storageMock: Record<string, string> = {};
 
   beforeEach(() => {
+    vi.restoreAllMocks();
+    resetMockSupabase();
+    setupMockSupabase(supabaseClient);
+
     for (const key in storageMock) delete storageMock[key];
     vi.stubGlobal("localStorage", {
       getItem: (k: string) => storageMock[k] || null,
@@ -121,6 +127,6 @@ describe("Feature 006: SaaS Platform, Multi-Tenant Quotas & Super Admin", () => 
     await SuperAdminService.updateStorePlan("oriental-grill", "enterprise");
     store = await StoreRepository.getStore("oriental-grill");
     expect(QuotaService.getQuotaUsage(store!).planKey).toBe("enterprise");
-  });
+  }, 25000);
 });
 

@@ -1,10 +1,28 @@
 import { Database } from "@/lib/supabase/types";
-import { Restaurant, MenuItem, CategoryWithItems, BadgeType, AllergenType } from "@/features/menu/types";
+import {
+  Restaurant,
+  MenuItem,
+  CategoryWithItems,
+  BadgeType,
+  AllergenType,
+  StoreOrderType,
+} from "@/features/menu/types";
 
 export const FALLBACK_LOGO =
   "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop";
 
 export function mapStoreToRestaurant(store: Database["public"]["Tables"]["stores"]["Row"]): Restaurant {
+  const rawTypes = Array.isArray(store.supported_order_types) ? store.supported_order_types : [];
+  const validTypes = rawTypes.filter(
+    (t): t is StoreOrderType => t === "dine_in" || t === "takeaway" || t === "delivery"
+  );
+  const supportedOrderTypes: StoreOrderType[] =
+    validTypes.length > 0
+      ? validTypes
+      : store.business_type === "supermarket"
+        ? ["delivery", "takeaway"]
+        : ["dine_in", "takeaway", "delivery"];
+
   return {
     id: store.id,
     slug: store.slug,
@@ -18,11 +36,9 @@ export function mapStoreToRestaurant(store: Database["public"]["Tables"]["stores
     phone_number: store.phone_number || "201012345678",
     default_language: store.default_language,
     currency: store.currency || "EGP",
-    supported_order_types:
-      store.business_type === "supermarket"
-        ? ["delivery", "takeaway"]
-        : ["dine_in", "takeaway", "delivery"],
+    supported_order_types: supportedOrderTypes,
     delivery_fee: Number(store.delivery_fee) || 0,
+    schedule: (store.schedule as Restaurant["schedule"]) || undefined,
     plan: store.plan,
     is_active: store.is_active,
   };

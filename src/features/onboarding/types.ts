@@ -8,15 +8,15 @@ import { Restaurant } from "@/features/menu/types";
 export const RESERVED_SLUGS = [
   "admin",
   "dashboard",
+  "menu",
   "login",
   "register",
   "onboarding",
-  "menu",
+  "pricing",
   "api",
   "auth",
   "settings",
   "superadmin",
-  "pricing",
 ] as const;
 
 export const StoreOnboardingInputSchema = z.object({
@@ -44,6 +44,5 @@ export interface IOnboardingService {
     ownerId: string
   ): Promise<Restaurant>;
   checkSlugAvailability(slug: string): Promise<boolean>;
+  getUserStore(ownerId: string): Promise<string | null>;
 }
-
-export const CUSTOM_STORES_STORAGE_KEY = "digital_menu_custom_stores";

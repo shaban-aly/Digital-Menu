@@ -1,9 +1,15 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { SuperAdminService } from "@/features/admin/services/superadmin-service";
+import * as supabaseClient from "@/lib/supabase/client";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
+import { setupMockSupabase, resetMockSupabase } from "../mocks/mock-supabase-auth";
 
 describe("SuperAdminService & Supabase Fallback", () => {
   beforeEach(async () => {
+    vi.restoreAllMocks();
+    resetMockSupabase();
+    setupMockSupabase(supabaseClient);
+
     await SuperAdminService.updateStorePlan("oriental-grill", "pro_monthly");
     await SuperAdminService.updateStorePlan("specialty-cafe", "free");
     await SuperAdminService.updateStorePlan("fresh-market", "enterprise");

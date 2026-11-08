@@ -65,6 +65,7 @@ const ORIENTAL_GRILL_DATA: MenuData = {
     currency: "EGP",
     supported_order_types: ["dine_in", "takeaway", "delivery"],
     delivery_fee: 25,
+    plan: "pro",
     schedule: defaultSchedule(),
   },
   categories: [
@@ -92,6 +93,7 @@ const SPECIALTY_CAFE_DATA: MenuData = {
     currency: "EGP",
     supported_order_types: ["dine_in", "takeaway"],
     delivery_fee: 15,
+    plan: "free",
     schedule: defaultSchedule(),
   },
   categories: [
@@ -119,6 +121,7 @@ const FRESH_MARKET_DATA: MenuData = {
     currency: "EGP",
     supported_order_types: ["takeaway", "delivery"],
     delivery_fee: 20,
+    plan: "enterprise",
     schedule: defaultSchedule(),
   },
   categories: [

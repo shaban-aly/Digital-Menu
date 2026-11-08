@@ -27,7 +27,7 @@ export interface Database {
           logo_url: string | null; cover_url: string | null; phone_number: string;
           delivery_fee: number; currency: string; default_language: "ar" | "en";
           supported_order_types: string[]; plan: PlanTier; is_active: boolean;
-          created_at: string; updated_at: string;
+          schedule: Json | null; created_at: string; updated_at: string;
         };
         Insert: {
           id?: string; owner_id?: string | null; slug: string; name_ar: string; name_en: string;
@@ -35,7 +35,7 @@ export interface Database {
           logo_url?: string | null; cover_url?: string | null; phone_number?: string;
           delivery_fee?: number; currency?: string; default_language?: "ar" | "en";
           supported_order_types?: string[]; plan?: PlanTier; is_active?: boolean;
-          created_at?: string; updated_at?: string;
+          schedule?: Json | null; created_at?: string; updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["stores"]["Insert"]>;
         Relationships: [];

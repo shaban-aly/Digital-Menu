@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import * as supabaseClient from "@/lib/supabase/client";
+import { setupMockSupabase, resetMockSupabase } from "../mocks/mock-supabase-auth";
 import {
   translateArabicToEnglish,
   TranslationService,
@@ -12,6 +14,10 @@ describe("Admin Live Sync and AI Translation Suite", () => {
   const memoryStorage: Record<string, string> = {};
 
   beforeEach(async () => {
+    vi.restoreAllMocks();
+    resetMockSupabase();
+    setupMockSupabase(supabaseClient);
+
     for (const key of Object.keys(memoryStorage)) {
       delete memoryStorage[key];
     }

@@ -30,11 +30,16 @@ export const OnboardingWizard: React.FC = () => {
   const [deliveryFee, setDeliveryFee] = useState<number>(20);
   const [plan, setPlan] = useState<SubscriptionPlanKey>("free");
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
-
   const [slugStatus, setSlugStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdStore, setCreatedStore] = useState<Restaurant | null>(null);
+
+  useEffect(() => {
+    if (user?.storeSlug) {
+      router.replace(`/dashboard/${user.storeSlug}`);
+    }
+  }, [user, router]);
 
   const checkSlug = useCallback(async (candidate: string) => {
     if (!candidate || candidate.length < 3) {
@@ -57,6 +62,10 @@ export const OnboardingWizard: React.FC = () => {
     e.preventDefault();
     if (!user) {
       setError(locale === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please sign in first");
+      return;
+    }
+    if (user.storeSlug) {
+      router.replace(`/dashboard/${user.storeSlug}`);
       return;
     }
     setError(null);
@@ -86,9 +95,7 @@ export const OnboardingWizard: React.FC = () => {
           <Sparkles className="w-3.5 h-3.5" />
           <span>{t.onboarding.title}</span>
         </span>
-        <h1 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-neutral-100">
-          {t.onboarding.subtitle}
-        </h1>
+        <h1 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-neutral-100">{t.onboarding.subtitle}</h1>
       </div>
 
       {error && (
@@ -102,13 +109,9 @@ export const OnboardingWizard: React.FC = () => {
         <BusinessTypeSelector value={businessType} onChange={setBusinessType} />
 
         <StoreIdentityFields
-          nameAr={nameAr}
-          setNameAr={setNameAr}
-          nameEn={nameEn}
-          setNameEn={setNameEn}
-          slug={slug}
-          setSlug={setSlug}
-          slugStatus={slugStatus}
+          nameAr={nameAr} setNameAr={setNameAr}
+          nameEn={nameEn} setNameEn={setNameEn}
+          slug={slug} setSlug={setSlug} slugStatus={slugStatus}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

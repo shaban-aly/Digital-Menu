@@ -1,25 +1,49 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UtensilsCrossed, Globe } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { useAuth } from "@/features/auth/hooks/use-auth";
+import { OnboardingService } from "@/features/onboarding/services/onboarding-service";
 import { OnboardingWizard } from "@/features/onboarding/components/onboarding-wizard";
 
 export default function OnboardingPage() {
   const { locale, toggleLanguage } = useLanguage();
   const router = useRouter();
   const { user, isLoading } = useAuth();
+  const [checkingOwnership, setCheckingOwnership] = useState(true);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
+    if (isLoading) return;
+
+    if (!user) {
+      router.replace("/login");
+      return;
     }
+
+    if (user.storeSlug) {
+      router.replace(`/dashboard/${user.storeSlug}`);
+      return;
+    }
+
+    let isMounted = true;
+    OnboardingService.getUserStore(user.id).then((slug) => {
+      if (!isMounted) return;
+      if (slug) {
+        router.replace(`/dashboard/${slug}`);
+      } else {
+        setCheckingOwnership(false);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [user, isLoading, router]);
 
-  if (isLoading || !user) {
+  if (isLoading || !user || checkingOwnership) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
         <div className="w-8 h-8 rounded-full border-2 border-brand-600 border-t-transparent animate-spin" />

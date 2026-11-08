@@ -1,12 +1,39 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { QuotaService } from "@/features/subscription/services/quota-service";
 import { SubscriptionService } from "@/features/subscription/services/subscription-service";
-import { MenuData, CategoryWithItems, MenuItem } from "@/features/menu/types";
+import { MenuData, CategoryWithItems } from "@/features/menu/types";
 import DashboardRootPage from "@/app/dashboard/page";
 import MenuIndexPage from "@/app/menu/page";
+import { UserProfile } from "@/features/auth/types";
+import { OnboardingService } from "@/features/onboarding/services/onboarding-service";
+
+const mockReplace = vi.fn();
+const mockRedirect = vi.fn();
+
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react")>();
+  return {
+    ...actual,
+    useEffect: (fn: () => void) => {
+      fn();
+    },
+  };
+});
 
 vi.mock("next/navigation", () => ({
-  redirect: vi.fn(),
+  useRouter: () => ({ replace: mockReplace, push: vi.fn() }),
+  redirect: (url: string) => mockRedirect(url),
+}));
+
+let mockUser: UserProfile | null = null;
+let mockIsLoading = false;
+
+vi.mock("@/features/auth/hooks/use-auth", () => ({
+  useAuth: () => ({
+    user: mockUser,
+    isLoading: mockIsLoading,
+    isAuthenticated: !!mockUser,
+  }),
 }));
 
 function createMockStore(categoryCount: number, productsPerCategory: number): MenuData {
@@ -56,23 +83,58 @@ function createMockStore(categoryCount: number, productsPerCategory: number): Me
   };
 }
 
-describe("Dashboard Routing & Menu Redirects", () => {
-  it("should redirect /dashboard to /dashboard/oriental-grill", async () => {
-    const { redirect } = await import("next/navigation");
-    DashboardRootPage();
-    expect(redirect).toHaveBeenCalledWith("/dashboard/oriental-grill");
+describe("Dashboard Routing & 1-Account-1-Store Protection", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it("should redirect /menu without slug to /", async () => {
-    const { redirect } = await import("next/navigation");
+  it("should redirect unauthenticated visitor to /login", () => {
+    mockUser = null;
+    mockIsLoading = false;
+    DashboardRootPage();
+    expect(mockReplace).toHaveBeenCalledWith("/login");
+  });
+
+  it("should redirect authenticated merchant to their own store /dashboard/[storeSlug]", () => {
+    mockUser = {
+      id: "merchant-1",
+      email: "merchant@test.com",
+      fullName: "Ahmed Merchant",
+      role: "merchant",
+      storeSlug: "oriental-grill",
+      createdAt: new Date().toISOString(),
+    };
+    mockIsLoading = false;
+    DashboardRootPage();
+    expect(mockReplace).toHaveBeenCalledWith("/dashboard/oriental-grill");
+  });
+
+  it("should redirect merchant without store to /onboarding", async () => {
+    mockUser = {
+      id: "merchant-new",
+      email: "new@test.com",
+      fullName: "New Merchant",
+      role: "merchant",
+      storeSlug: undefined,
+      createdAt: new Date().toISOString(),
+    };
+    mockIsLoading = false;
+    vi.spyOn(OnboardingService, "getUserStore").mockResolvedValue(null);
+
+    DashboardRootPage();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(mockReplace).toHaveBeenCalledWith("/onboarding");
+  });
+
+  it("should redirect /menu without slug to /", () => {
     MenuIndexPage();
-    expect(redirect).toHaveBeenCalledWith("/");
+    expect(mockRedirect).toHaveBeenCalledWith("/");
   });
 });
 
 describe("QuotaService Calculations & Limits", () => {
   it("should enforce Free plan limits (max 7 categories, 50 products)", () => {
-    const store = createMockStore(6, 5); // 6 categories, 30 products
+    const store = createMockStore(6, 5);
     const usage = QuotaService.getQuotaUsage(store, "free");
 
     expect(usage.categoriesCount).toBe(6);
@@ -98,7 +160,7 @@ describe("QuotaService Calculations & Limits", () => {
   });
 
   it("should block adding products when Free plan reaches 50 products", () => {
-    const storeAtLimit = createMockStore(5, 10); // 5 * 10 = 50 products
+    const storeAtLimit = createMockStore(5, 10);
     const usage = QuotaService.getQuotaUsage(storeAtLimit, "free");
 
     expect(usage.productsCount).toBe(50);
@@ -109,7 +171,7 @@ describe("QuotaService Calculations & Limits", () => {
   });
 
   it("should allow higher capacities on Pro plan (50 categories, 500 products)", () => {
-    const storeWith10Cats = createMockStore(10, 8); // 10 cats, 80 products
+    const storeWith10Cats = createMockStore(10, 8);
     expect(QuotaService.canAddCategory(storeWith10Cats, "free")).toBe(false);
     expect(QuotaService.canAddCategory(storeWith10Cats, "pro")).toBe(true);
     expect(QuotaService.canAddProduct(storeWith10Cats, "pro")).toBe(true);
@@ -121,7 +183,7 @@ describe("QuotaService Calculations & Limits", () => {
   });
 
   it("should allow unlimited capacity on Enterprise plan", () => {
-    const hugeStore = createMockStore(60, 20); // 60 cats, 1200 products
+    const hugeStore = createMockStore(60, 20);
     expect(QuotaService.canAddCategory(hugeStore, "enterprise")).toBe(true);
     expect(QuotaService.canAddProduct(hugeStore, "enterprise")).toBe(true);
   });

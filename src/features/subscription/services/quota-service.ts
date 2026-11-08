@@ -52,7 +52,10 @@ export function getQuotaUsage(
     : 0;
 
   const isEnterprise =
-    resolvedPlan === "enterprise" || quota.maxCategories >= 999999;
+    resolvedPlan === "enterprise" ||
+    quota.maxCategories >= 999999 ||
+    quota.maxCategories === -1 ||
+    quota.maxProducts === -1;
 
   const categoriesUsagePercent = isEnterprise
     ? 0
@@ -68,19 +71,23 @@ export function getQuotaUsage(
 
   const isCategoriesExceeded = isEnterprise
     ? false
-    : categoriesCount >= quota.maxCategories;
+    : quota.maxCategories > 0
+      ? categoriesCount >= quota.maxCategories
+      : false;
 
   const isProductsExceeded = isEnterprise
     ? false
-    : productsCount >= quota.maxProducts;
+    : quota.maxProducts > 0
+      ? productsCount >= quota.maxProducts
+      : false;
 
   return {
     categoriesCount,
-    maxCategories: quota.maxCategories,
+    maxCategories: isEnterprise ? 999999 : quota.maxCategories,
     categoriesUsagePercent,
     isCategoriesExceeded,
     productsCount,
-    maxProducts: quota.maxProducts,
+    maxProducts: isEnterprise ? 999999 : quota.maxProducts,
     productsUsagePercent,
     isProductsExceeded,
     planKey: resolvedPlan,

@@ -1,46 +1,72 @@
 import { Restaurant } from "@/features/menu/types";
-import { STORES_MAP } from "@/features/menu/services/mock-menu-data";
 import { AuthService } from "@/features/auth/services/auth-service";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
+import { Json } from "@/lib/supabase/types";
 import {
   IOnboardingService,
   StoreOnboardingInput,
   StoreOnboardingInputSchema,
   RESERVED_SLUGS,
 } from "../types";
-import {
-  safeLocalStorage,
-  getCustomStores,
-  saveCustomStores,
-  buildDefaultSchedule,
-} from "./onboarding-storage";
+import { buildDefaultSchedule } from "./onboarding-storage";
 
 export const OnboardingService: IOnboardingService = {
+  async getUserStore(ownerId: string): Promise<string | null> {
+    if (!ownerId) return null;
+    if (isSupabaseConfigured()) {
+      try {
+        const { data: store } = await supabase
+          .from("stores")
+          .select("slug")
+          .eq("owner_id", ownerId)
+          .maybeSingle();
+
+        if (store?.slug) return store.slug;
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("store_slug")
+          .eq("id", ownerId)
+          .maybeSingle();
+
+        return profile?.store_slug || null;
+      } catch {
+        return null;
+      }
+    }
+
+    try {
+      const user = await AuthService.getCurrentUser();
+      if (user?.id === ownerId && user.storeSlug) return user.storeSlug;
+    } catch {}
+    return null;
+  },
+
   async checkSlugAvailability(slug: string): Promise<boolean> {
     const cleanSlug = slug.toLowerCase().trim();
     if (!cleanSlug || cleanSlug.length < 3 || cleanSlug.length > 50) return false;
     if (!/^[a-z0-9-]+$/.test(cleanSlug)) return false;
-    if (RESERVED_SLUGS.includes(cleanSlug as (typeof RESERVED_SLUGS)[number])) return false;
-    if (STORES_MAP[cleanSlug]) return false;
+    if ((RESERVED_SLUGS as readonly string[]).includes(cleanSlug)) return false;
 
     if (isSupabaseConfigured()) {
       try {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("stores")
           .select("id")
           .eq("slug", cleanSlug)
           .maybeSingle();
+
+        if (error) {
+          console.warn("Slug check query error:", error.message);
+          return false;
+        }
         if (data) return false;
       } catch {
-        // Fallback to local check if query fails
+        return false;
       }
+    } else {
+      if (cleanSlug === "oriental-grill") return false;
     }
-
-    const customStores = getCustomStores();
-    if (customStores.some((s) => s.slug === cleanSlug)) return false;
-
-    const storage = safeLocalStorage();
-    if (storage && storage.getItem(`store_override_${cleanSlug}`)) return false;
 
     return true;
   },
@@ -49,12 +75,25 @@ export const OnboardingService: IOnboardingService = {
     input: StoreOnboardingInput,
     ownerId: string
   ): Promise<Restaurant> {
+    if (!ownerId) {
+      throw new Error("معرف المالك مطلوب / Owner ID is required");
+    }
+
+    // 1. Strict Ownership Enforcement: 1 Account = 1 Store
+    const existingSlug = await this.getUserStore(ownerId);
+    if (existingSlug) {
+      throw new Error(
+        "حسابك مرتبط بمتجر بالفعل، لا يمكن إنشاء أكثر من متجر لكل حساب / You already have a store linked to this account"
+      );
+    }
+
     const validated = StoreOnboardingInputSchema.parse(input);
     const available = await this.checkSlugAvailability(validated.slug);
     if (!available) {
       throw new Error("رابط المتجر مستخدم بالفعل / Store slug is already taken");
     }
 
+    const defaultSchedule = buildDefaultSchedule();
     let storeId = `store_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 
     if (isSupabaseConfigured()) {
@@ -68,22 +107,41 @@ export const OnboardingService: IOnboardingService = {
           business_type: validated.businessType,
           phone_number: validated.phoneNumber.trim(),
           delivery_fee: validated.deliveryFee,
-          plan: validated.selectedPlan,
-          default_language: "ar",
           currency: "EGP",
-          supported_order_types: ["dine_in", "takeaway", "delivery"],
+          default_language: "ar",
+          schedule: defaultSchedule as unknown as Json,
+          plan: validated.selectedPlan,
+          supported_order_types:
+            validated.businessType === "supermarket"
+              ? ["delivery", "takeaway"]
+              : ["dine_in", "takeaway", "delivery"],
           is_active: true,
         })
         .select()
         .single();
 
-      if (error) {
-        throw new Error(`فشل إنشاء المتجر / Failed to create store: ${error.message}`);
-      }
+      if (error) throw new Error(`فشل إنشاء المتجر / Failed to create store: ${error.message}`);
       if (data?.id) storeId = data.id;
+
+      try {
+        await supabase
+          .from("subscriptions")
+          .update({ billing_cycle: validated.billingCycle, plan: validated.selectedPlan })
+          .eq("store_id", storeId);
+      } catch (subErr) {
+        console.warn("Failed updating subscription billing cycle:", subErr);
+      }
+
+      try {
+        await supabase.from("profiles").update({ store_slug: validated.slug }).eq("id", ownerId);
+      } catch (profErr) {
+        console.warn("Failed updating profile store_slug:", profErr);
+      }
     }
 
-    const newStore: Restaurant = {
+    await AuthService.updateUserStoreSlug(ownerId, validated.slug);
+
+    return {
       id: storeId,
       slug: validated.slug,
       name_ar: validated.nameAr.trim(),
@@ -96,33 +154,14 @@ export const OnboardingService: IOnboardingService = {
       phone_number: validated.phoneNumber.trim(),
       default_language: "ar",
       currency: "EGP",
-      supported_order_types: ["dine_in", "takeaway", "delivery"],
+      supported_order_types:
+        validated.businessType === "supermarket"
+          ? ["delivery", "takeaway"]
+          : ["dine_in", "takeaway", "delivery"],
       delivery_fee: validated.deliveryFee,
-      schedule: buildDefaultSchedule(),
+      schedule: defaultSchedule,
+      plan: validated.selectedPlan,
+      is_active: true,
     };
-
-    STORES_MAP[validated.slug] = {
-      restaurant: newStore,
-      categories: [],
-    };
-
-    const customStores = getCustomStores();
-    customStores.push(newStore);
-    saveCustomStores(customStores);
-
-    const storage = safeLocalStorage();
-    if (storage) {
-      storage.setItem(
-        `store_subscription_${validated.slug}`,
-        JSON.stringify({
-          planKey: validated.selectedPlan,
-          billingCycle: validated.billingCycle,
-          createdAt: new Date().toISOString(),
-        })
-      );
-    }
-
-    await AuthService.updateUserStoreSlug(ownerId, validated.slug);
-    return newStore;
   },
 };

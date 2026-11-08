@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { AuthService } from "@/features/auth/services/auth-service";
 import { OnboardingService } from "@/features/onboarding/services/onboarding-service";
 import { AUTH_STORAGE_KEY } from "@/features/auth/types";
-import { STORES_MAP } from "@/features/menu/services/mock-menu-data";
 import * as supabaseClient from "@/lib/supabase/client";
 import { setupMockSupabase, resetMockSupabase } from "../mocks/mock-supabase-auth";
 
@@ -110,7 +109,13 @@ describe("Auth & Onboarding Workflows (Supabase Auth Integration)", () => {
       expect(newStore.id).toMatch(/^store-uuid-/);
       expect(newStore.slug).toBe("nile-cafe");
       expect(newStore.business_type).toBe("cafe");
-      expect(STORES_MAP["nile-cafe"]).toBeDefined();
+
+      const { data: storeInDb } = await supabaseClient.supabase
+        .from("stores")
+        .select("id, slug")
+        .eq("slug", "nile-cafe")
+        .maybeSingle();
+      expect(storeInDb?.id).toBe(newStore.id);
 
       expect(await OnboardingService.checkSlugAvailability("nile-cafe")).toBe(false);
 
@@ -136,6 +141,40 @@ describe("Auth & Onboarding Workflows (Supabase Auth Integration)", () => {
           user.id
         )
       ).rejects.toThrow();
+    });
+
+    it("should reject store creation if user already owns a store (1 Account = 1 Store)", async () => {
+      const user = await AuthService.register("owner3@store.com", "Third Owner", "pass123");
+
+      await OnboardingService.createStore(
+        {
+          businessType: "cafe",
+          nameAr: "متجر أول",
+          nameEn: "First Store",
+          slug: "first-store",
+          phoneNumber: "201012345678",
+          deliveryFee: 10,
+          selectedPlan: "free",
+          billingCycle: "monthly",
+        },
+        user.id
+      );
+
+      await expect(
+        OnboardingService.createStore(
+          {
+            businessType: "restaurant",
+            nameAr: "متجر ثاني",
+            nameEn: "Second Store",
+            slug: "second-store",
+            phoneNumber: "201012345678",
+            deliveryFee: 10,
+            selectedPlan: "free",
+            billingCycle: "monthly",
+          },
+          user.id
+        )
+      ).rejects.toThrow(/حسابك مرتبط بمتجر بالفعل|You already have a store/);
     });
   });
 });

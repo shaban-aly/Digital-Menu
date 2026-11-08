@@ -69,7 +69,12 @@ export interface StoreOverrideState {
 
 export type AdminActiveTab = "items" | "categories" | "settings" | "qr";
 
-export type SuperAdminPlanKey = "free" | "pro_monthly" | "pro_yearly" | "enterprise";
+export type SuperAdminPlanKey =
+  | "free"
+  | "pro"
+  | "pro_monthly"
+  | "pro_yearly"
+  | "enterprise";
 
 export interface SuperAdminStoreSummary {
   id: string;
@@ -82,11 +87,15 @@ export interface SuperAdminStoreSummary {
   is_active: boolean;
   productsCount: number;
   categoriesCount: number;
+  owner_name?: string;
+  owner_email?: string;
+  subscription_price?: number;
 }
 
 export interface PlatformKPIs {
   totalStores: number;
   activeStores: number;
+  monthlyRevenue: number;
   planBreakdown: {
     free: number;
     pro: number;

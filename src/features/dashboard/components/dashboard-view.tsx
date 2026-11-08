@@ -1,6 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useLanguage } from "@/features/menu/hooks/use-language";
 import { useStoreSchedule } from "@/features/schedule/hooks/use-store-schedule";
 import { useDashboardStore } from "../hooks/use-dashboard-store";
@@ -17,35 +19,46 @@ import { cn } from "@/lib/utils";
 import { DashboardViewProps } from "../types";
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
+  const router = useRouter();
+  const { user, isLoading: isAuthLoading, logout } = useAuth();
   const { locale, toggleLanguage } = useLanguage();
   const {
-    store,
-    isLoading,
-    error,
-    activeTab,
-    setActiveTab,
-    planKey,
-    quotaUsage,
-    isQuotaModalOpen,
-    quotaModalType,
-    setIsQuotaModalOpen,
-    setQuotaModalType,
-    checkCanAddCategory,
-    checkCanAddProduct,
-    notification,
-    toggleItemAvailability,
-    saveItem,
-    deleteItem,
-    saveCategory,
-    deleteCategory,
-    updateSettings,
-    resetToDefaults,
+    store, isLoading: isStoreLoading, error, activeTab, setActiveTab,
+    planKey, quotaUsage, isQuotaModalOpen, quotaModalType,
+    setIsQuotaModalOpen, setQuotaModalType, checkCanAddCategory,
+    checkCanAddProduct, notification, toggleItemAvailability,
+    saveItem, deleteItem, saveCategory, deleteCategory,
+    updateSettings, resetToDefaults,
   } = useDashboardStore(slug);
 
   const { operatingStatus } = useStoreSchedule(store?.restaurant?.schedule);
   const storeName = store ? (locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en) : "";
+  const isSuperAdmin = user?.role === "superadmin";
+  const isOwner = !!user?.storeSlug && user.storeSlug === slug;
+  const isAuthorized = !isAuthLoading && !!user && (isSuperAdmin || isOwner);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (isAuthLoading) return;
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+    if (user.role === "superadmin") return;
+    if (!user.storeSlug) {
+      router.replace("/onboarding");
+      return;
+    }
+    if (user.storeSlug !== slug) {
+      router.replace(`/dashboard/${user.storeSlug}`);
+    }
+  }, [isAuthLoading, user, slug, router]);
+
+  const handleLogout = useCallback(async () => {
+    await logout();
+    router.replace("/login");
+  }, [logout, router]);
+
+  if (isAuthLoading || !isAuthorized || isStoreLoading) {
     return (
       <div className="max-w-5xl mx-auto p-4 space-y-4">
         <Skeleton className="h-20 w-full rounded-2xl" />
@@ -61,8 +74,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
   if (error || !store) {
     return (
       <div className="max-w-md mx-auto my-12 p-6 text-center bg-white dark:bg-neutral-900 rounded-2xl border border-rose-200 dark:border-rose-900/40">
-        <h3 className="font-bold text-sm text-rose-600">خطأ في تحميل المتجر</h3>
-        <p className="text-xs text-neutral-500 mt-1">{error || "لم يتم العثور على بيانات المتجر"}</p>
+        <h3 className="font-bold text-sm text-rose-600">
+          {locale === "ar" ? "خطأ في تحميل المتجر" : "Error loading store"}
+        </h3>
+        <p className="text-xs text-neutral-500 mt-1">
+          {error || (locale === "ar" ? "لم يتم العثور على بيانات المتجر" : "Store data not found")}
+        </p>
       </div>
     );
   }
@@ -79,6 +96,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
         planKey={planKey}
         operatingStatus={operatingStatus}
         onClickSchedule={() => setActiveTab("settings")}
+        onLogout={handleLogout}
       />
 
       {notification && (
@@ -86,16 +104,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
           data-testid="dashboard-notification-toast"
           className={cn(
             "fixed bottom-6 start-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold animate-in fade-in slide-in-from-bottom-3 duration-200",
-            notification.type === "success"
-              ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-              : "bg-rose-600 text-white"
+            notification.type === "success" ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900" : "bg-rose-600 text-white"
           )}
         >
-          {notification.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          ) : (
-            <AlertCircle className="w-4 h-4 shrink-0" />
-          )}
+          {notification.type === "success" ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
           <span>{notification.message}</span>
         </div>
       )}
@@ -121,7 +133,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
             onBeforeAdd={checkCanAddProduct}
           />
         )}
-
         {activeTab === "categories" && (
           <CategoriesTab
             categories={store.categories}
@@ -131,7 +142,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
             onBeforeAdd={checkCanAddCategory}
           />
         )}
-
         {activeTab === "settings" && (
           <SettingsTab
             restaurant={store.restaurant}
@@ -140,13 +150,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
             onResetDefaults={resetToDefaults}
           />
         )}
-
         {activeTab === "qr" && (
-          <QRTab
-            restaurant={store.restaurant}
-            locale={locale}
-            printBasePath="/dashboard"
-          />
+          <QRTab restaurant={store.restaurant} locale={locale} printBasePath="/dashboard" />
         )}
       </main>
 
