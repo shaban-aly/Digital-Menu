@@ -58,3 +58,4 @@ So that operating hours guards, multi-tenant onboarding, subscription quotas, an
 - **Feature 006**: Auth (`/login`, `/register`), 1:1 onboarding wizard (`/onboarding`), `/pricing` page, quota meters, and `/admin` tier modification operate dynamically.
 - AI translation (`/api/translate`) works across all Arabic input fields.
 - 100% Constitution v2.2.0 compliance (all files <= 180 lines, 100% logical directional CSS, zero native dialogs, strict TS).
+

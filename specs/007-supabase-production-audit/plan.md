@@ -36,3 +36,4 @@ To eliminate race conditions and worktree collisions, the work is strictly parti
 4. **Sub-Agent 4 (Feature Audit 005–006: Operating Hours, SaaS Platform & Super Admin)**:
    - Scoped to: `src/features/schedule/`, `src/features/auth/`, `src/features/onboarding/`, `src/features/subscription/`, `src/features/admin/`, `src/features/dashboard/`.
    - Focus: Audit Features 005 and 006 against `specs/005-*` and `specs/006-*`. Verify 7-day schedule editor, pre-orders guard, quota blocking, AI translation (`/api/translate`), and Super Admin live tier synchronization.
+
