@@ -17,6 +17,7 @@ interface ItemsTabProps {
   onSaveItem: (itemData: Partial<MenuItem> & { name_ar: string; name_en: string; price: number; category_id: string }) => Promise<boolean>;
   onDeleteItem: (itemId: string) => Promise<boolean>;
   onBeforeAdd?: () => boolean;
+  storeSlug?: string;
 }
 
 export const ItemsTab: React.FC<ItemsTabProps> = ({
@@ -26,6 +27,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
   onSaveItem,
   onDeleteItem,
   onBeforeAdd,
+  storeSlug,
 }) => {
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
   const [selectedCatId, setSelectedCatId] = useState<string>("all");
@@ -144,6 +146,7 @@ export const ItemsTab: React.FC<ItemsTabProps> = ({
         item={editingItem}
         categories={categories}
         locale={locale}
+        storeSlug={storeSlug}
         onSave={onSaveItem}
       />
 

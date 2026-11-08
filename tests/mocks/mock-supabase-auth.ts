@@ -10,6 +10,7 @@ export interface MockStore {
 const mockUsers = new Map<string, { id: string; email: string; password?: string }>();
 const mockProfiles = new Map<string, { id: string; email: string; full_name: string; role: string; store_slug: string | null }>();
 const mockStores = new Map<string, MockStore>();
+export const mockStorageUploads = new Map<string, { bucket: string; path: string; file: unknown }>();
 let currentSessionUser: { id: string; email: string } | null = null;
 
 function makeQuery<T>(data: T, extras: Record<string, unknown> = {}) {
@@ -19,30 +20,34 @@ function makeQuery<T>(data: T, extras: Record<string, unknown> = {}) {
 }
 
 export function resetMockSupabase() {
-  mockUsers.clear(); mockProfiles.clear(); mockStores.clear(); currentSessionUser = null;
-  const s1: MockStore = {
-    id: "11111111-0000-0000-0000-000000000001", owner_id: "11111111-1111-1111-1111-111111111111",
-    slug: "oriental-grill", name_ar: "مطعم مشويات البركة", name_en: "Al-Baraka Oriental Grill",
-    business_type: "restaurant", phone_number: "201012345678", delivery_fee: 25, plan: "pro_monthly", is_active: true,
-    currency: "EGP", default_language: "ar", supported_order_types: ["dine_in", "takeaway", "delivery"],
-  };
-  const s2: MockStore = {
-    id: "22222222-0000-0000-0000-000000000002", owner_id: "22222222-2222-2222-2222-222222222222",
-    slug: "specialty-cafe", name_ar: "كافيه ومخبوزات أروما", name_en: "Aroma Cafe",
-    business_type: "cafe", phone_number: "201012345679", delivery_fee: 15, plan: "free", is_active: true,
-    currency: "EGP", default_language: "ar", supported_order_types: ["takeaway"],
-  };
-  const s3: MockStore = {
-    id: "33333333-0000-0000-0000-000000000003", owner_id: "33333333-3333-3333-3333-333333333333",
-    slug: "fresh-market", name_ar: "سوبر ماركت فريش ماركت", name_en: "Fresh Market",
-    business_type: "supermarket", phone_number: "201012345680", delivery_fee: 30, plan: "enterprise", is_active: true,
-    currency: "EGP", default_language: "ar", supported_order_types: ["delivery"],
-  };
-  mockStores.set(s1.id, s1); mockStores.set(s2.id, s2); mockStores.set(s3.id, s3);
+  mockUsers.clear(); mockProfiles.clear(); mockStores.clear(); mockStorageUploads.clear();
+  currentSessionUser = null;
+  const demoStores: MockStore[] = [
+    { id: "11111111-0000-0000-0000-000000000001", owner_id: "11111111-1111-1111-1111-111111111111", slug: "oriental-grill", name_ar: "مطعم مشويات البركة", name_en: "Al-Baraka Oriental Grill", business_type: "restaurant", phone_number: "201012345678", delivery_fee: 25, plan: "pro_monthly", is_active: true, currency: "EGP", default_language: "ar", supported_order_types: ["dine_in", "takeaway", "delivery"] },
+    { id: "22222222-0000-0000-0000-000000000002", owner_id: "22222222-2222-2222-2222-222222222222", slug: "specialty-cafe", name_ar: "كافيه ومخبوزات أروما", name_en: "Aroma Cafe", business_type: "cafe", phone_number: "201012345679", delivery_fee: 15, plan: "free", is_active: true, currency: "EGP", default_language: "ar", supported_order_types: ["takeaway"] },
+    { id: "33333333-0000-0000-0000-000000000003", owner_id: "33333333-3333-3333-3333-333333333333", slug: "fresh-market", name_ar: "سوبر ماركت فريش ماركت", name_en: "Fresh Market", business_type: "supermarket", phone_number: "201012345680", delivery_fee: 30, plan: "enterprise", is_active: true, currency: "EGP", default_language: "ar", supported_order_types: ["delivery"] },
+  ];
+  demoStores.forEach((s) => mockStores.set(s.id, s));
 }
 
 export function setupMockSupabase(clientMod: typeof SupabaseClientModule) {
   vi.spyOn(clientMod, "isSupabaseConfigured").mockReturnValue(true);
+
+  if (clientMod.supabase.storage) {
+    vi.spyOn(clientMod.supabase.storage, "from").mockImplementation((bucket: string) => ({
+      upload: vi.fn().mockImplementation(async (path: string, file: unknown) => {
+        mockStorageUploads.set(`${bucket}/${path}`, { bucket, path, file });
+        return { data: { path, id: `mock-${Date.now()}`, fullPath: `${bucket}/${path}` }, error: null };
+      }),
+      getPublicUrl: vi.fn().mockImplementation((path: string) => ({
+        data: { publicUrl: `https://mock.supabase.co/storage/v1/object/public/${bucket}/${path}` },
+      })),
+      remove: vi.fn().mockImplementation(async (paths: string[]) => {
+        paths.forEach((p) => mockStorageUploads.delete(`${bucket}/${p}`));
+        return { data: paths.map((p) => ({ name: p })), error: null };
+      }),
+    } as unknown as ReturnType<typeof clientMod.supabase.storage.from>));
+  }
 
   vi.spyOn(clientMod.supabase.auth, "signUp").mockImplementation(async (credentials) => {
     const email = ("email" in credentials ? credentials.email : "").toLowerCase();
@@ -137,9 +142,7 @@ export function setupMockSupabase(clientMod: typeof SupabaseClientModule) {
         { id: "cat-2", store_id: "11111111-0000-0000-0000-000000000001", name_ar: "مقبلات", name_en: "Appetizers", display_order: 2, is_active: true },
       ];
       return {
-        select: () => makeQuery(mockCats, {
-          eq: () => ({ order: () => Promise.resolve({ data: mockCats, error: null }) }),
-        }),
+        select: () => makeQuery(mockCats, { eq: () => ({ order: () => Promise.resolve({ data: mockCats, error: null }) }) }),
         upsert: () => Promise.resolve({ data: null, error: null }),
         delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
       } as unknown as ReturnType<typeof clientMod.supabase.from>;
@@ -153,9 +156,7 @@ export function setupMockSupabase(clientMod: typeof SupabaseClientModule) {
       return {
         select: (_cols?: string, opts?: { count?: string; head?: boolean }) => {
           if (opts?.count === "exact") return Promise.resolve({ count: 10, error: null });
-          return makeQuery(mockProds, {
-            eq: () => ({ order: () => Promise.resolve({ data: mockProds, error: null }) }),
-          });
+          return makeQuery(mockProds, { eq: () => ({ order: () => Promise.resolve({ data: mockProds, error: null }) }) });
         },
         upsert: () => Promise.resolve({ data: null, error: null }),
         update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),

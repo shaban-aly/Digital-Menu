@@ -3,6 +3,7 @@
 import React from "react";
 import { CategoryWithItems } from "@/features/menu/types";
 import { Locale } from "@/types";
+import { ImageUploadField } from "@/components/ui/image-upload-field";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -21,6 +22,7 @@ interface ItemPricingFieldsProps {
   errors: Record<string, string>;
   inputCls: (err?: string) => string;
   locale: Locale;
+  storeSlug?: string;
 }
 
 export const ItemPricingFields: React.FC<ItemPricingFieldsProps> = ({
@@ -38,6 +40,7 @@ export const ItemPricingFields: React.FC<ItemPricingFieldsProps> = ({
   errors,
   inputCls,
   locale,
+  storeSlug = "",
 }) => {
   const t = locale === "ar" ? arTranslations.admin.items : enTranslations.admin.items;
 
@@ -107,15 +110,12 @@ export const ItemPricingFields: React.FC<ItemPricingFieldsProps> = ({
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-          {t.imageUrl}
-        </label>
-        <input
-          type="url"
+        <ImageUploadField
           value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-          placeholder="https://..."
-          className={inputCls(errors.image_url)}
+          onChange={setImageUrl}
+          folder="products"
+          storeSlug={storeSlug}
+          label={t.imageUrl}
         />
         {errors.image_url && <p className="text-[10px] text-rose-600">{errors.image_url}</p>}
       </div>

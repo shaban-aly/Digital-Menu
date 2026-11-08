@@ -13,8 +13,8 @@ export const StoreSettingsSchema = z.object({
   supported_order_types: z.array(StoreOrderTypeSchema).min(1, "يجب تفعيل نوع طلب واحد على الأقل"),
   delivery_fee: z.number().nonnegative("رسوم التوصيل يجب أن تكون صفر أو أكثر").default(0),
   currency: z.string().default("EGP"),
-  logo_url: z.string().url().optional(),
-  cover_url: z.string().url().optional(),
+  logo_url: z.union([z.string().url(), z.literal("")]).optional(),
+  cover_url: z.union([z.string().url(), z.literal("")]).optional(),
   schedule: StoreScheduleConfigSchema.optional(),
 });
 export type StoreSettings = z.infer<typeof StoreSettingsSchema>;
@@ -40,7 +40,7 @@ export const AdminMenuItemSchema = z.object({
   price: z.number().positive("السعر يجب أن يكون أكبر من صفر"),
   unit_ar: z.string().nullable().optional(),
   unit_en: z.string().nullable().optional(),
-  image_url: z.string().url("رابط الصورة غير صالح").nullable().optional(),
+  image_url: z.union([z.string().url("رابط الصورة غير صالح"), z.literal("")]).nullable().optional(),
   is_available: z.boolean().default(true),
   display_order: z.number().int().default(0),
 });

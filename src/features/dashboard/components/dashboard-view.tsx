@@ -127,6 +127,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
           <ItemsTab
             categories={store.categories}
             locale={locale}
+            storeSlug={store.restaurant.slug}
             onToggleStock={toggleItemAvailability}
             onSaveItem={saveItem}
             onDeleteItem={deleteItem}

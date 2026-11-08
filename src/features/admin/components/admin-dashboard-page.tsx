@@ -98,6 +98,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
           <ItemsTab
             categories={store.categories}
             locale={locale}
+            storeSlug={store.restaurant.slug}
             onToggleStock={toggleItemAvailability}
             onSaveItem={saveItem}
             onDeleteItem={deleteItem}

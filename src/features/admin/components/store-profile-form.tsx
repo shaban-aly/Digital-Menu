@@ -3,6 +3,7 @@ import { Restaurant, StoreOrderType } from "@/features/menu/types";
 import { Locale } from "@/types";
 import { StoreSettings } from "../types";
 import { Save, RotateCcw } from "lucide-react";
+import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { cn } from "@/lib/utils";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
@@ -26,12 +27,16 @@ export const StoreProfileForm: React.FC<StoreProfileFormProps> = ({
   const [phone, setPhone] = useState(restaurant.phone_number);
   const [deliveryFee, setDeliveryFee] = useState(String(restaurant.delivery_fee));
   const [orderTypes, setOrderTypes] = useState<StoreOrderType[]>(restaurant.supported_order_types);
+  const [logoUrl, setLogoUrl] = useState(restaurant.logo_url || "");
+  const [coverUrl, setCoverUrl] = useState(restaurant.cover_url || "");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setPhone(restaurant.phone_number);
     setDeliveryFee(String(restaurant.delivery_fee));
     setOrderTypes(restaurant.supported_order_types);
+    setLogoUrl(restaurant.logo_url || "");
+    setCoverUrl(restaurant.cover_url || "");
   }, [restaurant]);
 
   const toggleOrderType = (type: StoreOrderType) => {
@@ -50,6 +55,8 @@ export const StoreProfileForm: React.FC<StoreProfileFormProps> = ({
       phone_number: phone.trim(),
       delivery_fee: Math.max(0, parseFloat(deliveryFee) || 0),
       supported_order_types: orderTypes,
+      logo_url: logoUrl,
+      cover_url: coverUrl,
     });
     setIsSaving(false);
   };
@@ -60,6 +67,33 @@ export const StoreProfileForm: React.FC<StoreProfileFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 shadow-xs space-y-4">
       <h3 className="font-bold text-sm text-neutral-900 dark:text-neutral-100">{t.settings.title}</h3>
+
+      <div className="space-y-3 pt-1 border-t border-neutral-100 dark:border-neutral-800">
+        <div className="text-start">
+          <h4 className="font-bold text-xs text-neutral-800 dark:text-neutral-200">{t.settings.branding}</h4>
+          <p className="text-[11px] text-neutral-400 mt-0.5">{t.settings.brandingDesc}</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <ImageUploadField
+            value={logoUrl}
+            onChange={setLogoUrl}
+            folder="logos"
+            storeSlug={restaurant.slug}
+            label={t.settings.logoLabel}
+            helperText={t.settings.logoHelper}
+            aspectRatio="square"
+          />
+          <ImageUploadField
+            value={coverUrl}
+            onChange={setCoverUrl}
+            folder="covers"
+            storeSlug={restaurant.slug}
+            label={t.settings.coverLabel}
+            helperText={t.settings.coverHelper}
+            aspectRatio="cover"
+          />
+        </div>
+      </div>
 
       <div className="space-y-1.5">
         <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{t.settings.phone} *</label>

@@ -17,6 +17,7 @@ interface ItemFormModalProps {
   item: MenuItem | null;
   categories: CategoryWithItems[];
   locale: Locale;
+  storeSlug?: string;
   onSave: (
     itemData: Partial<MenuItem> & {
       name_ar: string;
@@ -33,6 +34,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
   item,
   categories,
   locale,
+  storeSlug,
   onSave,
 }) => {
   const t = locale === "ar" ? arTranslations.admin.items : enTranslations.admin.items;
@@ -117,6 +119,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           errors={form.errors}
           inputCls={form.inputCls}
           locale={locale}
+          storeSlug={storeSlug}
         />
 
         <div className="flex justify-end gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
