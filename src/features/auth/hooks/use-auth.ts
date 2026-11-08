@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { UserProfile, AUTH_STATE_CHANGED_EVENT } from "../types";
 import { AuthService } from "../services/auth-service";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 
 export interface UseAuthReturn {
   user: UserProfile | null;
@@ -38,6 +39,27 @@ export function useAuth(): UseAuthReturn {
   useEffect(() => {
     refreshUser();
 
+    let authSubscription: { unsubscribe: () => void } | null = null;
+    if (isSupabaseConfigured()) {
+      try {
+        const { data } = supabase.auth.onAuthStateChange((event) => {
+          if (
+            event === "SIGNED_IN" ||
+            event === "USER_UPDATED" ||
+            event === "TOKEN_REFRESHED"
+          ) {
+            refreshUser();
+          } else if (event === "SIGNED_OUT") {
+            setUser(null);
+            setIsLoading(false);
+          }
+        });
+        authSubscription = data.subscription;
+      } catch (err) {
+        console.warn("Supabase auth state listener error:", err);
+      }
+    }
+
     const handleAuthEvent = (event: Event) => {
       const customEvent = event as CustomEvent<{ user: UserProfile | null }>;
       if (customEvent.detail && customEvent.detail.user !== undefined) {
@@ -62,6 +84,7 @@ export function useAuth(): UseAuthReturn {
     }
 
     return () => {
+      if (authSubscription) authSubscription.unsubscribe();
       if (typeof window !== "undefined") {
         window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthEvent);
         window.removeEventListener("storage", handleStorage);
@@ -69,27 +92,24 @@ export function useAuth(): UseAuthReturn {
     };
   }, [refreshUser]);
 
-  const login = useCallback(
-    async (email: string, password?: string) => {
-      setIsLoading(true);
-      try {
-        const loggedIn = await AuthService.login(email, password);
-        setUser(loggedIn);
-        return loggedIn;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
+  const login = useCallback(async (email: string, password?: string) => {
+    setIsLoading(true);
+    try {
+      const loggedIn = await AuthService.login(email, password);
+      setUser(loggedIn);
+      return loggedIn;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const register = useCallback(
     async (email: string, fullName: string, password?: string) => {
       setIsLoading(true);
       try {
-        const registered = await AuthService.register(email, fullName, password);
-        setUser(registered);
-        return registered;
+        const res = await AuthService.register(email, fullName, password);
+        setUser(res);
+        return res;
       } finally {
         setIsLoading(false);
       }

@@ -1,71 +1,78 @@
+import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import {
   UserProfile,
-  StoredUserAccount,
   IAuthService,
   AUTH_STORAGE_KEY,
   UserRegistrationInputSchema,
   UserLoginInputSchema,
-  UserProfileSchema,
 } from "../types";
 import {
   safeLocalStorage,
   notifyAuthChange,
-  getStoredUsers,
-  saveStoredUsers,
+  fallbackGetUser,
+  fallbackRegister,
+  fallbackLogin,
+  fallbackUpdateStoreSlug,
 } from "./auth-storage";
+import {
+  toUserProfile,
+  persistSession,
+  parseAuthError,
+} from "./auth-helpers";
 
 export const AuthService: IAuthService = {
   async getCurrentUser(): Promise<UserProfile | null> {
-    const storage = safeLocalStorage();
-    if (!storage) return null;
+    if (!isSupabaseConfigured()) return fallbackGetUser();
     try {
-      const raw = storage.getItem(AUTH_STORAGE_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw);
-      const validation = UserProfileSchema.safeParse(parsed);
-      return validation.success ? validation.data : null;
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) return fallbackGetUser();
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      const userProfile = toUserProfile(user, profile);
+      const storage = safeLocalStorage();
+      if (storage) storage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userProfile));
+      return userProfile;
     } catch {
-      return null;
+      return fallbackGetUser();
     }
   },
 
-  async register(
-    email: string,
-    fullName: string,
-    password = ""
-  ): Promise<UserProfile> {
+  async register(email: string, fullName: string, password = ""): Promise<UserProfile> {
     const validated = UserRegistrationInputSchema.parse({
       email: email.trim().toLowerCase(),
       fullName: fullName.trim(),
       password: password || "temp123",
     });
 
-    const users = getStoredUsers();
-    const existing = users.find((u) => u.email === validated.email);
-    if (existing) {
+    if (!isSupabaseConfigured()) {
+      return fallbackRegister(validated.email, validated.fullName, validated.password);
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email: validated.email,
+      password: validated.password,
+      options: { data: { full_name: validated.fullName, role: "merchant" } },
+    });
+
+    if (error) throw parseAuthError(error);
+    if (data.user && !data.session && data.user.identities?.length === 0) {
       throw new Error("البريد الإلكتروني مسجل بالفعل / Email already registered");
     }
+    if (!data.user) throw new Error("فشل إنشاء الحساب / Registration failed");
 
-    const newUser: StoredUserAccount = {
-      id: `usr_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-      email: validated.email,
-      fullName: validated.fullName,
-      role: "merchant",
-      storeSlug: null,
-      createdAt: new Date().toISOString(),
-      passwordHash: validated.password,
-    };
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", data.user.id)
+      .maybeSingle();
 
-    users.push(newUser);
-    saveStoredUsers(users);
-
-    const { passwordHash: _, ...userProfile } = newUser;
-    const storage = safeLocalStorage();
-    if (storage) {
-      storage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userProfile));
-    }
-
-    notifyAuthChange(userProfile);
+    const userProfile = toUserProfile(data.user, profile, validated.fullName);
+    persistSession(userProfile);
     return userProfile;
   },
 
@@ -75,82 +82,58 @@ export const AuthService: IAuthService = {
       password: password || "default",
     });
 
-    const users = getStoredUsers();
-    let account = users.find((u) => u.email === validated.email);
-
-    if (!account) {
-      if (validated.email === "admin@digitalmenu.eg") {
-        account = {
-          id: "usr_superadmin",
-          email: "admin@digitalmenu.eg",
-          fullName: "Platform Admin",
-          role: "superadmin",
-          storeSlug: null,
-          createdAt: new Date().toISOString(),
-          passwordHash: validated.password,
-        };
-        users.push(account);
-        saveStoredUsers(users);
-      } else {
-        throw new Error(
-          "الحساب غير موجود، يرجى التسجيل أولاً / Account not found, please register"
-        );
-      }
+    if (!isSupabaseConfigured()) {
+      return fallbackLogin(validated.email, validated.password);
     }
 
-    if (
-      account.passwordHash &&
-      validated.password !== "default" &&
-      account.passwordHash !== validated.password
-    ) {
-      throw new Error("كلمة المرور غير صحيحة / Incorrect password");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: validated.email,
+      password: validated.password,
+    });
+
+    if (error) throw parseAuthError(error);
+    if (!data.user) {
+      throw new Error("الحساب غير موجود، يرجى التسجيل أولاً / Account not found, please register");
     }
 
-    const { passwordHash: _, ...userProfile } = account;
-    const storage = safeLocalStorage();
-    if (storage) {
-      storage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userProfile));
-    }
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", data.user.id)
+      .maybeSingle();
 
-    notifyAuthChange(userProfile);
+    const userProfile = toUserProfile(data.user, profile);
+    persistSession(userProfile);
     return userProfile;
   },
 
   async logout(): Promise<void> {
-    const storage = safeLocalStorage();
-    if (storage) {
-      storage.removeItem(AUTH_STORAGE_KEY);
+    if (isSupabaseConfigured()) {
+      try { await supabase.auth.signOut(); } catch {}
     }
+    const storage = safeLocalStorage();
+    if (storage) storage.removeItem(AUTH_STORAGE_KEY);
     notifyAuthChange(null);
   },
 
-  async updateUserStoreSlug(
-    userId: string,
-    storeSlug: string
-  ): Promise<UserProfile> {
-    const users = getStoredUsers();
-    const idx = users.findIndex((u) => u.id === userId);
-    if (idx !== -1) {
-      users[idx] = { ...users[idx], storeSlug };
-      saveStoredUsers(users);
+  async updateUserStoreSlug(userId: string, storeSlug: string): Promise<UserProfile> {
+    if (isSupabaseConfigured()) {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ store_slug: storeSlug })
+        .eq("id", userId);
+      if (error) {
+        console.error("Failed to update store_slug in profiles table:", error);
+      }
     }
 
     let currentUser = await this.getCurrentUser();
     if (currentUser && currentUser.id === userId) {
       currentUser = { ...currentUser, storeSlug };
-      const storage = safeLocalStorage();
-      if (storage) {
-        storage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
-      }
-      notifyAuthChange(currentUser);
+      persistSession(currentUser);
       return currentUser;
     }
 
-    if (idx !== -1) {
-      const { passwordHash: _, ...profile } = users[idx];
-      return profile;
-    }
-
-    throw new Error("المستخدم غير موجود / User not found");
+    return fallbackUpdateStoreSlug(userId, storeSlug);
   },
 };
