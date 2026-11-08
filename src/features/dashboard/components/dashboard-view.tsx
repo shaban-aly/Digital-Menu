@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useLanguage } from "@/features/menu/hooks/use-language";
+import { useStoreSchedule } from "@/features/schedule/hooks/use-store-schedule";
 import { useDashboardStore } from "../hooks/use-dashboard-store";
 import { DashboardHeader } from "./dashboard-header";
 import { DashboardQuotaCards } from "./dashboard-quota-cards";
@@ -64,6 +65,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
   }
 
   const storeName = locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en;
+  const { operatingStatus } = useStoreSchedule(store.restaurant.schedule);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 pb-20">
@@ -75,6 +77,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
         locale={locale}
         onToggleLanguage={toggleLanguage}
         planKey={planKey}
+        operatingStatus={operatingStatus}
+        onClickSchedule={() => setActiveTab("settings")}
       />
 
       {notification && (
@@ -150,16 +154,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ slug }) => {
         isOpen={isQuotaModalOpen}
         onClose={() => setIsQuotaModalOpen(false)}
         type={quotaModalType}
-        currentCount={
-          quotaModalType === "category"
-            ? quotaUsage.categoriesCount
-            : quotaUsage.productsCount
-        }
-        maxCount={
-          quotaModalType === "category"
-            ? quotaUsage.maxCategories
-            : quotaUsage.maxProducts
-        }
+        currentCount={quotaModalType === "category" ? quotaUsage.categoriesCount : quotaUsage.productsCount}
+        maxCount={quotaModalType === "category" ? quotaUsage.maxCategories : quotaUsage.maxProducts}
         storeName={storeName}
         storeSlug={slug}
         locale={locale}

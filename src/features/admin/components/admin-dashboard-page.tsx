@@ -3,6 +3,7 @@
 import React from "react";
 import { useStoreAdmin } from "../hooks/use-store-admin";
 import { useLanguage } from "@/features/menu/hooks/use-language";
+import { useStoreSchedule } from "@/features/schedule/hooks/use-store-schedule";
 import { AdminHeader } from "./admin-header";
 import { ItemsTab } from "./items-tab";
 import { CategoriesTab } from "./categories-tab";
@@ -57,6 +58,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
   }
 
   const storeName = locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en;
+  const { operatingStatus } = useStoreSchedule(store.restaurant.schedule);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 pb-20">
@@ -67,6 +69,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
         onTabChange={setActiveTab}
         locale={locale}
         onToggleLanguage={toggleLanguage}
+        operatingStatus={operatingStatus}
+        onClickSchedule={() => setActiveTab("settings")}
       />
 
       {/* Floating notification toast */}
