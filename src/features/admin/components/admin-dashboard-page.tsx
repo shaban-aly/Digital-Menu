@@ -35,6 +35,9 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
     resetToDefaults,
   } = useStoreAdmin(slug);
 
+  const { operatingStatus } = useStoreSchedule(store?.restaurant?.schedule);
+  const storeName = store ? (locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en) : "";
+
   if (isLoading) {
     return (
       <div className="max-w-5xl mx-auto p-4 space-y-4">
@@ -56,9 +59,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
       </div>
     );
   }
-
-  const storeName = locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en;
-  const { operatingStatus } = useStoreSchedule(store.restaurant.schedule);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 pb-20">
