@@ -12,7 +12,7 @@ export const StoreSettingsSchema = z.object({
   phone_number: z.string().min(7, "رقم هاتف الواتساب يجب ألا يقل عن 7 أرقام"),
   supported_order_types: z.array(StoreOrderTypeSchema).min(1, "يجب تفعيل نوع طلب واحد على الأقل"),
   delivery_fee: z.number().nonnegative("رسوم التوصيل يجب أن تكون صفر أو أكثر").default(0),
-  currency: z.literal("EGP").default("EGP"),
+  currency: z.string().default("EGP"),
   logo_url: z.string().url().optional(),
   cover_url: z.string().url().optional(),
   schedule: StoreScheduleConfigSchema.optional(),

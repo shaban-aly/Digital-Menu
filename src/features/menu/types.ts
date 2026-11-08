@@ -33,7 +33,7 @@ export const RestaurantSchema = z.object({
   cover_url: z.string().url().optional(),
   phone_number: z.string().default("201012345678"),
   default_language: z.enum(["ar", "en"]).default("ar"),
-  currency: z.literal("EGP").default("EGP"),
+  currency: z.string().default("EGP"),
   supported_order_types: z.array(StoreOrderTypeSchema).default([
     "dine_in",
     "takeaway",

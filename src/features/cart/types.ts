@@ -43,6 +43,7 @@ export const WhatsAppOrderPayloadSchema = z.object({
   deliveryFee: z.number().nonnegative().default(0),
   totalPrice: z.number().nonnegative(),
   locale: z.enum(["ar", "en"]),
+  currency: z.string().optional(),
   isPreOrder: z.boolean().optional(),
   preOrderOpeningText: z.string().optional(),
 });
@@ -52,6 +53,7 @@ export interface CartContextValue {
   storeSlug: string;
   supportedOrderTypes: OrderType[];
   deliveryFee: number;
+  currency?: string;
   items: CartItem[];
   orderType: OrderType;
   customerName: string;

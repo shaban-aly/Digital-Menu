@@ -87,10 +87,10 @@
 - [X] T026 [P] Add Supabase CLI npm scripts (`db:link`, `db:push`, `db:reset`) to `package.json`.
 
 ### Sub-Agent 2: Live Supabase Layer Sync for Menu & Cart
-- [ ] T027 [P] Connect `/menu/[slug]` (`src/features/menu/`) to unified data repository with Supabase live fetch and graceful fallback.
-- [ ] T028 [P] Ensure store settings (name, logo, phone, delivery fee, business type) in `/menu/[slug]` are dynamically read from the live store profile.
-- [ ] T029 Connect `/features/cart/` to live product/store data and verify WhatsApp order payload matches live store data.
-- [ ] T030 [P] Write integration unit tests verifying instant reflection of merchant modifications in `/menu/[slug]`.
+- [X] T027 [P] Connect `/menu/[slug]` (`src/features/menu/`) to unified data repository with Supabase live fetch and graceful fallback.
+- [X] T028 [P] Ensure store settings (name, logo, phone, delivery fee, business type) in `/menu/[slug]` are dynamically read from the live store profile.
+- [X] T029 Connect `/features/cart/` to live product/store data and verify WhatsApp order payload matches live store data.
+- [X] T030 [P] Write integration unit tests verifying instant reflection of merchant modifications in `/menu/[slug]`.
 
 ### Sub-Agent 3: Unified Header, Flow Transitions & Pricing Page
 - [ ] T031 [P] Build unified responsive Navbar/Header component (`src/components/layout/platform-header.tsx`) with dynamic auth state, store links, and language switcher.

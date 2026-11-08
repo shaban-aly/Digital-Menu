@@ -19,6 +19,7 @@ interface CartDrawerProps {
   restaurantName: string;
   restaurantPhone: string;
   locale: Locale;
+  currency?: string;
   scheduleConfig?: StoreScheduleConfig;
 }
 
@@ -28,6 +29,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   restaurantName,
   restaurantPhone,
   locale,
+  currency,
   scheduleConfig,
 }) => {
   const { operatingStatus } = useStoreSchedule(scheduleConfig);
@@ -60,6 +62,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     locale,
     operatingStatus,
     onSuccess: onClose,
+    currency,
   });
 
   useEffect(() => {
