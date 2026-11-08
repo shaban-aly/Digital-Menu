@@ -2,15 +2,15 @@ import { MenuData, Restaurant, MenuItem } from "@/features/menu/types";
 import { STORES_MAP, getAllMockStores } from "@/features/menu/services/mock-menu-data";
 import { StoreSettings, Category } from "@/features/admin/types";
 import {
-  fetchStoreFromSupabase,
-  fetchAllStoresFromSupabase,
-  syncProductToSupabase,
-  syncProductAvailabilityToSupabase,
-  deleteProductFromSupabase,
-  syncCategoryToSupabase,
-  deleteCategoryFromSupabase,
-  syncStoreSettingsToSupabase,
-} from "./supabase-store-service";
+  getStoreBySlugAction,
+  getAllStoresAction,
+  saveMenuItemAction,
+  toggleItemAvailabilityAction,
+  deleteMenuItemAction,
+  saveCategoryAction,
+  deleteCategoryAction,
+  updateStoreSettingsAction,
+} from "@/lib/supabase/actions";
 import {
   STORE_UPDATED_EVENT,
   getStorageKey,
@@ -28,7 +28,7 @@ export const StoreRepository = {
     const overrides = getLocalOverrides(slug);
     if (isSupabaseConfigured()) {
       try {
-        const live = await fetchStoreFromSupabase(slug);
+        const live = await getStoreBySlugAction(slug);
         if (live) return applyOverridesToStore(live, overrides, slug);
       } catch (err) {
         console.warn("Supabase fetch fallback", err);
@@ -46,7 +46,7 @@ export const StoreRepository = {
   async getAllStores(): Promise<Restaurant[]> {
     if (isSupabaseConfigured()) {
       try {
-        const live = await fetchAllStoresFromSupabase();
+        const live = await getAllStoresAction();
         if (live && live.length > 0) return live;
       } catch {}
     }
@@ -57,7 +57,9 @@ export const StoreRepository = {
     const overrides = getLocalOverrides(slug);
     overrides.restaurant = { ...(overrides.restaurant || {}), ...settings };
     saveLocalOverrides(slug, overrides);
-    if (isSupabaseConfigured()) syncStoreSettingsToSupabase(slug, settings);
+    if (isSupabaseConfigured()) {
+      await updateStoreSettingsAction(slug, settings);
+    }
     const store = await this.getStore(slug);
     return store!.restaurant;
   },
@@ -67,7 +69,9 @@ export const StoreRepository = {
     overrides.updatedItems = overrides.updatedItems || {};
     overrides.updatedItems[itemId] = { ...(overrides.updatedItems[itemId] || {}), is_available: isAvailable };
     saveLocalOverrides(slug, overrides);
-    if (isSupabaseConfigured()) syncProductAvailabilityToSupabase(itemId, isAvailable);
+    if (isSupabaseConfigured()) {
+      await toggleItemAvailabilityAction(itemId, isAvailable);
+    }
     return isAvailable;
   },
 
@@ -107,7 +111,7 @@ export const StoreRepository = {
 
     if (isSupabaseConfigured()) {
       const store = await this.getStore(slug);
-      if (store) syncProductToSupabase(store.restaurant.id, fullItem);
+      if (store) await saveMenuItemAction(store.restaurant.id, fullItem);
     }
     return fullItem;
   },
@@ -119,7 +123,9 @@ export const StoreRepository = {
       overrides.addedItems = overrides.addedItems.filter((i) => i.id !== itemId);
     }
     saveLocalOverrides(slug, overrides);
-    if (isSupabaseConfigured()) deleteProductFromSupabase(itemId);
+    if (isSupabaseConfigured()) {
+      await deleteMenuItemAction(itemId);
+    }
     return true;
   },
 
@@ -143,7 +149,7 @@ export const StoreRepository = {
     saveLocalOverrides(slug, overrides);
     if (isSupabaseConfigured()) {
       const store = await this.getStore(slug);
-      if (store) syncCategoryToSupabase(store.restaurant.id, fullCat);
+      if (store) await saveCategoryAction(store.restaurant.id, fullCat);
     }
     return fullCat;
   },
@@ -155,7 +161,9 @@ export const StoreRepository = {
       overrides.addedCategories = overrides.addedCategories.filter((c) => c.id !== categoryId);
     }
     saveLocalOverrides(slug, overrides);
-    if (isSupabaseConfigured()) deleteCategoryFromSupabase(categoryId);
+    if (isSupabaseConfigured()) {
+      await deleteCategoryAction(categoryId);
+    }
     return true;
   },
 
