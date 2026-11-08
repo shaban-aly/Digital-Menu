@@ -15,9 +15,9 @@
 
 **Purpose**: Core data types, mock platform content, ROI calculation engine, and unit tests
 
-- [ ] T001 [P] Define landing page TypeScript types (`PricingPlan`, `FaqItem`, `BusinessSolution`, `CalculatorState`) and Zod schemas in `src/features/landing/types.ts`
-- [ ] T002 [P] Implement landing data service (`getPricingPlans`, `getFaqItems`, `getBusinessSolutions`, `calculateSavings`, `buildWhatsAppInquiryUrl`) in `src/features/landing/services/landing-data.ts`
-- [ ] T003 [P] Create unit tests for savings calculator formulas and turnover metrics in `tests/unit/roi-calculator.test.ts`
+- [X] T001 [P] Define landing page TypeScript types (`PricingPlan`, `FaqItem`, `BusinessSolution`, `CalculatorState`) and Zod schemas in `src/features/landing/types.ts`
+- [X] T002 [P] Implement landing data service (`getPricingPlans`, `getFaqItems`, `getBusinessSolutions`, `calculateSavings`, `buildWhatsAppInquiryUrl`) in `src/features/landing/services/landing-data.ts`
+- [X] T003 [P] Create unit tests for savings calculator formulas and turnover metrics in `tests/unit/roi-calculator.test.ts`
 
 **Checkpoint**: Core data structures and financial formulas verified by unit tests.
 
@@ -29,10 +29,10 @@
 
 **Independent Test**: Navigate to `/`, verify hero headline, value badges (0% commission, instant WhatsApp orders), language toggle, and 3 distinct pilot cards linking to `/menu/oriental-grill`, `/menu/specialty-cafe`, and `/menu/fresh-market`.
 
-- [ ] T004 [P] [US1] Create `LandingNavbar` component with brand logo, in-place language toggle, and direct WhatsApp contact action in `src/features/landing/components/landing-navbar.tsx`
-- [ ] T005 [P] [US1] Create `HeroSection` component with headline, value proposition badges, primary trial CTA, and pilot demo cards in `src/features/landing/components/hero-section.tsx`
-- [ ] T006 [US1] Create `LandingPageView` root container assembling sections in `src/features/landing/components/landing-page-view.tsx`
-- [ ] T007 [US1] Update `src/app/page.tsx` as a clean route delegating to `LandingPageView`
+- [X] T004 [P] [US1] Create `LandingNavbar` component with brand logo, in-place language toggle, and direct WhatsApp contact action in `src/features/landing/components/landing-navbar.tsx`
+- [X] T005 [P] [US1] Create `HeroSection` component with headline, value proposition badges, primary trial CTA, and pilot demo cards in `src/features/landing/components/hero-section.tsx`
+- [X] T006 [US1] Create `LandingPageView` root container assembling sections in `src/features/landing/components/landing-page-view.tsx`
+- [X] T007 [US1] Update `src/app/page.tsx` as a clean route delegating to `LandingPageView`
 
 **Checkpoint**: User Story 1 MVP fully operational: visiting `/` renders the high-impact hero and pilot demo links in Arabic and English.
 
@@ -44,8 +44,8 @@
 
 **Independent Test**: In the phone simulator on `/`, switch between Restaurant, Café, and Supermarket tabs, tap (+) on sample items, and verify the floating cart bar reacts live with total EGP price inside the mockup.
 
-- [ ] T008 [US2] Create `PhoneSimulator` component with responsive smartphone frame, vertical business tabs, interactive product cards, and reactive floating cart bar in `src/features/landing/components/phone-simulator.tsx`
-- [ ] T009 [US2] Integrate `PhoneSimulator` into `LandingPageView` alongside the hero section in `src/features/landing/components/landing-page-view.tsx`
+- [X] T008 [US2] Create `PhoneSimulator` component with responsive smartphone frame, vertical business tabs, interactive product cards, and reactive floating cart bar in `src/features/landing/components/phone-simulator.tsx`
+- [X] T009 [US2] Integrate `PhoneSimulator` into `LandingPageView` alongside the hero section in `src/features/landing/components/landing-page-view.tsx`
 
 **Checkpoint**: User Story 2 operational: merchants can test-drive the digital menu live inside the smartphone simulator.
 
@@ -57,8 +57,8 @@
 
 **Independent Test**: Scroll to Solutions section; verify 3 distinct feature cards with customized highlights for restaurants (dine-in & grills), cafés (cup sizes & pastries), and supermarkets (kg/liter units & grocery delivery).
 
-- [ ] T010 [P] [US3] Create `SolutionsSection` component rendering tailored cards with icons, bulleted highlights, and direct demo links in `src/features/landing/components/solutions-section.tsx`
-- [ ] T011 [US3] Mount `SolutionsSection` inside `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
+- [X] T010 [P] [US3] Create `SolutionsSection` component rendering tailored cards with icons, bulleted highlights, and direct demo links in `src/features/landing/components/solutions-section.tsx`
+- [X] T011 [US3] Mount `SolutionsSection` inside `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
 
 **Checkpoint**: User Story 3 operational: vertical-specific value propositions clearly displayed.
 
@@ -70,8 +70,8 @@
 
 **Independent Test**: Adjust orders slider to 500 and average order to 200 EGP; verify calculator outputs 18,000 EGP/month and 216,000 EGP/year saved with WhatsApp CTA button.
 
-- [ ] T012 [P] [US4] Create `RoiCalculator` component with monthly orders slider, average basket slider, live savings counters in EGP, and WhatsApp CTA in `src/features/landing/components/roi-calculator.tsx`
-- [ ] T013 [US4] Mount `RoiCalculator` inside `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
+- [X] T012 [P] [US4] Create `RoiCalculator` component with monthly orders slider, average basket slider, live savings counters in EGP, and WhatsApp CTA in `src/features/landing/components/roi-calculator.tsx`
+- [X] T013 [US4] Mount `RoiCalculator` inside `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
 
 **Checkpoint**: User Story 4 operational: real-time financial ROI calculator proven.
 
@@ -83,10 +83,10 @@
 
 **Independent Test**: Click "اشترك الآن" on any pricing card or "احجز نسختك" in FAQ; verify WhatsApp opens with pre-filled Arabic/English message targeting sales.
 
-- [ ] T014 [P] [US5] Create `PricingSection` component displaying 3 subscription tier cards with feature lists, monthly prices, and WhatsApp deep links in `src/features/landing/components/pricing-section.tsx`
-- [ ] T015 [P] [US5] Create `FaqSection` component with interactive accessible accordion answering key merchant questions in `src/features/landing/components/faq-section.tsx`
-- [ ] T016 [P] [US5] Create `LandingFooter` component with copyright, brand summary, and quick links in `src/features/landing/components/landing-footer.tsx`
-- [ ] T017 [US5] Mount Pricing, FAQ, and Footer components in `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
+- [X] T014 [P] [US5] Create `PricingSection` component displaying 3 subscription tier cards with feature lists, monthly prices, and WhatsApp deep links in `src/features/landing/components/pricing-section.tsx`
+- [X] T015 [P] [US5] Create `FaqSection` component with interactive accessible accordion answering key merchant questions in `src/features/landing/components/faq-section.tsx`
+- [X] T016 [P] [US5] Create `LandingFooter` component with copyright, brand summary, and quick links in `src/features/landing/components/landing-footer.tsx`
+- [X] T017 [US5] Mount Pricing, FAQ, and Footer components in `LandingPageView` in `src/features/landing/components/landing-page-view.tsx`
 
 **Checkpoint**: User Story 5 operational: complete conversion funnel ready for production.
 
@@ -96,9 +96,9 @@
 
 **Purpose**: Responsive checks, line-limit audit, E2E test suite, and production build verification.
 
-- [ ] T018 [P] Create end-to-end test suite covering landing page render, language toggle, and simulator interactions in `tests/e2e/landing-page.spec.ts`
-- [ ] T019 Audit all components in `src/features/landing/` to guarantee <= 180 lines per file, zero native dialogs, and 100% logical directional CSS
-- [ ] T020 Run full validation suite: `npm run type-check`, `npm run lint`, `npm test`, and `npm run build`
+- [X] T018 [P] Create end-to-end test suite covering landing page render, language toggle, and simulator interactions in `tests/e2e/landing-page.spec.ts`
+- [X] T019 Audit all components in `src/features/landing/` to guarantee <= 180 lines per file, zero native dialogs, and 100% logical directional CSS
+- [X] T020 Run full validation suite: `npm run type-check`, `npm run lint`, `npm test`, and `npm run build`
 
 ---
 
