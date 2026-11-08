@@ -7,7 +7,7 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
     });
   });
 
-  test("opens drawer, edits quantity, attaches note, validates table number, and triggers WhatsApp", async ({
+  test("opens drawer, edits quantity, attaches note, and triggers WhatsApp for dine-in", async ({
     page,
   }) => {
     await page.goto("/menu/oriental-grill");
@@ -36,18 +36,11 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
     const noteInput = drawer.locator('input[placeholder*="بدون"]').first();
     await noteInput.fill("بدون بصل");
 
-    // 6. Test Dine-in validation without table number
-    const whatsappBtn = page.locator('[data-testid="whatsapp-submit-btn"]');
-    await whatsappBtn.click();
-    const tableError = page.locator('[data-testid="table-number-error"]');
-    await expect(tableError).toBeVisible();
+    // 6. Enter customer name (optional for dine-in)
+    const nameInput = page.locator('[data-testid="customer-name-input"]');
+    await nameInput.fill("أحمد مجدي");
 
-    // 7. Enter table number
-    const tableInput = page.locator('[data-testid="table-number-input"]');
-    await tableInput.fill("7");
-    await expect(tableError).toBeHidden();
-
-    // 8. Intercept window.open call when submitting
+    // 7. Intercept window.open call when submitting
     let openedUrl = "";
     await page.exposeFunction("captureWhatsAppUrl", (url: string) => {
       openedUrl = url;
@@ -61,22 +54,10 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
       };
     });
 
+    const whatsappBtn = page.locator('[data-testid="whatsapp-submit-btn"]');
     await whatsappBtn.click();
     expect(openedUrl).toContain("https://wa.me/");
-    expect(openedUrl).toContain(encodeURIComponent("طاولة 7"));
-  });
-
-  test("auto-selects table number from ?table=N URL parameter", async ({ page }) => {
-    await page.goto("/menu/oriental-grill?table=12");
-
-    // Add item and open drawer
-    const addButtons = page.locator('[data-testid^="add-to-cart-"]');
-    await addButtons.first().click();
-    await page.locator('[data-testid="cart-bar"] button').click();
-
-    // Verify table input is pre-filled with "12"
-    const tableInput = page.locator('[data-testid="table-number-input"]');
-    await expect(tableInput).toHaveValue("12");
+    expect(openedUrl).toContain(encodeURIComponent("أحمد مجدي"));
   });
 
   test("supermarket model hides dine-in and validates delivery fields with fee", async ({ page }) => {
@@ -109,4 +90,3 @@ test.describe("Cart Drawer & WhatsApp Flow (US2 & US3 & US4)", () => {
     await expect(page.locator('[data-testid="delivery-address-error"]')).toBeHidden();
   });
 });
-

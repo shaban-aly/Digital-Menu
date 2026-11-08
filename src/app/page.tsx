@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Utensils, Coffee, ShoppingBasket, Globe, ArrowRight, ArrowLeft, QrCode } from "lucide-react";
+import { Utensils, Coffee, ShoppingBasket, Globe, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function HomePage() {
@@ -16,8 +16,8 @@ export default function HomePage() {
       type: isAr ? "مطعم مشويات" : "Grill Restaurant",
       icon: <Utensils className="w-5 h-5 text-brand-600" />,
       features: isAr
-        ? "يدعم: داخل المطعم (طاولة إجباري)، استلام من الفرع، وتوصيل للمنزل"
-        : "Supports: Dine-in (table required), Takeaway, and Home Delivery",
+        ? "يدعم: داخل المطعم، استلام من الفرع، وتوصيل للمنزل"
+        : "Supports: Dine-in, Takeaway, and Home Delivery",
       badge: isAr ? "نموذج 1: مطعم" : "Model 1: Restaurant",
     },
     {
@@ -36,8 +36,8 @@ export default function HomePage() {
       type: isAr ? "سوبر ماركت وبقالة" : "Supermarket",
       icon: <ShoppingBasket className="w-5 h-5 text-emerald-600" />,
       features: isAr
-        ? "يدعم: وحدات الوزن والعبوة (1 كجم، لتر)، وتوصيل واستلام فقط (إخفاء الطاولة)"
-        : "Supports: Weight/Volume units, Delivery & Takeaway only (hides table)",
+        ? "يدعم: وحدات الوزن والعبوة (1 كجم، لتر)، وتوصيل واستلام فقط"
+        : "Supports: Weight/Volume units, Delivery & Takeaway only",
       badge: isAr ? "نموذج 3: سوبر ماركت" : "Model 3: Supermarket",
     },
   ];
@@ -109,15 +109,7 @@ export default function HomePage() {
                 {store.features}
               </p>
 
-              <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-end gap-2">
-                <Link
-                  href={`/menu/${store.slug}/qr`}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors min-h-[44px]"
-                >
-                  <QrCode className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{isAr ? "بطاقات QR" : "QR Cards"}</span>
-                </Link>
-
+              <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-end">
                 <Link
                   href={`/menu/${store.slug}`}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 transition-colors shadow-xs min-h-[44px]"

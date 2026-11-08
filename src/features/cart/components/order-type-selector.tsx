@@ -9,7 +9,6 @@ import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
 export interface OrderValidationErrors {
-  table?: boolean;
   name?: boolean;
   phone?: boolean;
   address?: boolean;
@@ -19,8 +18,6 @@ interface OrderTypeSelectorProps {
   orderType: OrderType;
   onOrderTypeChange: (type: OrderType) => void;
   supportedOrderTypes?: OrderType[];
-  tableNumber: string;
-  onTableNumberChange: (table: string) => void;
   customerName: string;
   onCustomerNameChange: (name: string) => void;
   customerPhone: string;
@@ -36,8 +33,6 @@ export const OrderTypeSelector: React.FC<OrderTypeSelectorProps> = ({
   orderType,
   onOrderTypeChange,
   supportedOrderTypes = ["dine_in", "takeaway", "delivery"],
-  tableNumber,
-  onTableNumberChange,
   customerName,
   onCustomerNameChange,
   customerPhone,
@@ -91,26 +86,34 @@ export const OrderTypeSelector: React.FC<OrderTypeSelectorProps> = ({
         ))}
       </div>
 
-      {orderType === "dine_in" && (
-        <div className="space-y-1 animate-in fade-in duration-200">
-          <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{t.cart.tableNumber} *</label>
-          <input data-testid="table-number-input" type="text" value={tableNumber} onChange={(e) => onTableNumberChange(e.target.value)} placeholder={t.cart.tablePlaceholder} maxLength={10} className={inputCls(errors.table)} />
-          {errors.table && <p data-testid="table-number-error" className="text-[11px] font-medium text-rose-600">{t.cart.tableRequired}</p>}
-        </div>
-      )}
-
       <div className="space-y-1">
         <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
           {orderType === "dine_in" ? t.cart.customerNameOptional : `${t.cart.customerName} *`}
         </label>
-        <input data-testid="customer-name-input" type="text" value={customerName} onChange={(e) => onCustomerNameChange(e.target.value)} placeholder={t.cart.namePlaceholder} maxLength={50} className={inputCls(errors.name)} />
+        <input
+          data-testid="customer-name-input"
+          type="text"
+          value={customerName}
+          onChange={(e) => onCustomerNameChange(e.target.value)}
+          placeholder={t.cart.namePlaceholder}
+          maxLength={50}
+          className={inputCls(errors.name)}
+        />
         {errors.name && <p data-testid="customer-name-error" className="text-[11px] font-medium text-rose-600">{t.cart.nameRequired}</p>}
       </div>
 
       {orderType !== "dine_in" && (
         <div className="space-y-1 animate-in fade-in duration-200">
           <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{t.cart.customerPhone} *</label>
-          <input data-testid="customer-phone-input" type="tel" value={customerPhone} onChange={(e) => onCustomerPhoneChange(e.target.value)} placeholder={t.cart.phonePlaceholder} maxLength={20} className={inputCls(errors.phone)} />
+          <input
+            data-testid="customer-phone-input"
+            type="tel"
+            value={customerPhone}
+            onChange={(e) => onCustomerPhoneChange(e.target.value)}
+            placeholder={t.cart.phonePlaceholder}
+            maxLength={20}
+            className={inputCls(errors.phone)}
+          />
           {errors.phone && <p data-testid="customer-phone-error" className="text-[11px] font-medium text-rose-600">{t.cart.phoneRequired}</p>}
         </div>
       )}
@@ -118,7 +121,15 @@ export const OrderTypeSelector: React.FC<OrderTypeSelectorProps> = ({
       {orderType === "delivery" && (
         <div className="space-y-1 animate-in fade-in duration-200">
           <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{t.cart.deliveryAddress} *</label>
-          <textarea data-testid="delivery-address-input" value={deliveryAddress} onChange={(e) => onDeliveryAddressChange(e.target.value)} placeholder={t.cart.addressPlaceholder} maxLength={300} rows={2} className={cn(inputCls(errors.address), "resize-none")} />
+          <textarea
+            data-testid="delivery-address-input"
+            value={deliveryAddress}
+            onChange={(e) => onDeliveryAddressChange(e.target.value)}
+            placeholder={t.cart.addressPlaceholder}
+            maxLength={300}
+            rows={2}
+            className={cn(inputCls(errors.address), "resize-none")}
+          />
           {errors.address && <p data-testid="delivery-address-error" className="text-[11px] font-medium text-rose-600">{t.cart.addressRequired}</p>}
         </div>
       )}

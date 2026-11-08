@@ -28,7 +28,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const {
     items,
     orderType,
-    tableNumber,
     customerName,
     customerPhone,
     deliveryAddress,
@@ -42,7 +41,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     removeItem,
     updateItemNote,
     setOrderType,
-    setTableNumber,
     setCustomerName,
     setCustomerPhone,
     setDeliveryAddress,
@@ -64,7 +62,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const handleSubmitWhatsApp = () => {
     const errs: OrderValidationErrors = {};
-    if (orderType === "dine_in" && !tableNumber.trim()) errs.table = true;
     if (orderType === "takeaway" || orderType === "delivery") {
       if (!customerName.trim()) errs.name = true;
       if (!customerPhone.trim()) errs.phone = true;
@@ -81,7 +78,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       restaurantName,
       restaurantPhone,
       orderType,
-      tableNumber: orderType === "dine_in" ? tableNumber.trim() : "",
       customerName: customerName.trim(),
       customerPhone: customerPhone.trim(),
       deliveryAddress: orderType === "delivery" ? deliveryAddress.trim() : "",
@@ -136,8 +132,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 orderType={orderType}
                 onOrderTypeChange={setOrderType}
                 supportedOrderTypes={supportedOrderTypes}
-                tableNumber={tableNumber}
-                onTableNumberChange={(val) => { setTableNumber(val); if (val.trim()) setErrors((p) => ({ ...p, table: false })); }}
                 customerName={customerName}
                 onCustomerNameChange={(val) => { setCustomerName(val); if (val.trim()) setErrors((p) => ({ ...p, name: false })); }}
                 customerPhone={customerPhone}

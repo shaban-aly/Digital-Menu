@@ -14,7 +14,7 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   lines.push("------------------------------");
 
   const orderTypeLabels: Record<string, { ar: string; en: string }> = {
-    dine_in: { ar: "داخل المطعم", en: "Dine-in" },
+    dine_in: { ar: "داخل المطعم (صالة)", en: "Dine-in" },
     takeaway: { ar: "استلام من الفرع (سفري)", en: "Takeaway" },
     delivery: { ar: "توصيل للمنزل", en: "Home Delivery" },
   };
@@ -26,14 +26,6 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
       ? `📍 *نوع الطلب:* ${currentLabel.ar}`
       : `📍 *Order Type:* ${currentLabel.en}`
   );
-
-  if (payload.orderType === "dine_in" && payload.tableNumber) {
-    lines.push(
-      isAr
-        ? `🪑 *رقم الطاولة:* طاولة ${payload.tableNumber}`
-        : `🪑 *Table Number:* Table ${payload.tableNumber}`
-    );
-  }
 
   if (payload.customerName?.trim()) {
     lines.push(

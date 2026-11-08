@@ -11,7 +11,6 @@ interface CartProviderProps {
   storeSlug?: string;
   supportedOrderTypes?: OrderType[];
   deliveryFee?: number;
-  initialTableNumber?: string;
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({
@@ -19,7 +18,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({
   storeSlug = "oriental-grill",
   supportedOrderTypes = ["dine_in", "takeaway", "delivery"],
   deliveryFee = 20,
-  initialTableNumber,
 }) => {
   const storageKey = `cart_${storeSlug}`;
   const initialDefaultType = supportedOrderTypes.includes("dine_in")
@@ -27,12 +25,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({
     : supportedOrderTypes[0] || "takeaway";
 
   const [items, setItems] = useState<CartItem[]>([]);
-  const [orderType, setOrderType] = useState<OrderType>(
-    initialTableNumber && supportedOrderTypes.includes("dine_in")
-      ? "dine_in"
-      : initialDefaultType
-  );
-  const [tableNumber, setTableNumber] = useState(initialTableNumber || "");
+  const [orderType, setOrderType] = useState<OrderType>(initialDefaultType);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
@@ -46,21 +39,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({
         const p: CartState = JSON.parse(saved);
         if (p.items?.length) setItems(p.items);
         if (p.orderType && supportedOrderTypes.includes(p.orderType)) setOrderType(p.orderType);
-        if (p.tableNumber) setTableNumber(p.tableNumber);
         if (p.customerName) setCustomerName(p.customerName);
         if (p.customerPhone) setCustomerPhone(p.customerPhone);
         if (p.deliveryAddress) setDeliveryAddress(p.deliveryAddress);
         if (p.generalNote) setGeneralNote(p.generalNote);
-      }
-      if (initialTableNumber && supportedOrderTypes.includes("dine_in")) {
-        setTableNumber(initialTableNumber);
-        setOrderType("dine_in");
-      } else if (typeof window !== "undefined") {
-        const urlTable = new URLSearchParams(window.location.search).get("table");
-        if (urlTable && supportedOrderTypes.includes("dine_in")) {
-          setTableNumber(urlTable);
-          setOrderType("dine_in");
-        }
       }
     } catch (e) {
       console.warn("Failed reading cart", e);
@@ -76,7 +58,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({
         storeSlug,
         items,
         orderType,
-        tableNumber,
         customerName,
         customerPhone,
         deliveryAddress,
@@ -86,7 +67,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({
     } catch (e) {
       console.warn("Failed writing cart", e);
     }
-  }, [items, orderType, tableNumber, customerName, customerPhone, deliveryAddress, generalNote, isHydrated, storageKey, storeSlug]);
+  }, [items, orderType, customerName, customerPhone, deliveryAddress, generalNote, isHydrated, storageKey, storeSlug]);
 
   const addItem = (item: MenuItem, qty = 1) => {
     if (!item.is_available) return;
@@ -143,7 +124,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({
         deliveryFee,
         items,
         orderType,
-        tableNumber,
         customerName,
         customerPhone,
         deliveryAddress,
@@ -157,7 +137,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({
         updateQuantity,
         updateItemNote,
         setOrderType,
-        setTableNumber,
         setCustomerName,
         setCustomerPhone,
         setDeliveryAddress,

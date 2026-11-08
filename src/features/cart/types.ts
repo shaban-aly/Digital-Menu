@@ -23,7 +23,6 @@ export const CartStateSchema = z.object({
   storeSlug: z.string().default("oriental-grill"),
   items: z.array(CartItemSchema).default([]),
   orderType: OrderTypeSchema.default("dine_in"),
-  tableNumber: z.string().max(10).default(""),
   customerName: z.string().max(50).optional().default(""),
   customerPhone: z.string().max(20).optional().default(""),
   deliveryAddress: z.string().max(300).optional().default(""),
@@ -35,7 +34,6 @@ export const WhatsAppOrderPayloadSchema = z.object({
   restaurantName: z.string().min(1),
   restaurantPhone: z.string().min(7),
   orderType: OrderTypeSchema,
-  tableNumber: z.string().max(10).optional(),
   customerName: z.string().max(50).optional(),
   customerPhone: z.string().max(20).optional(),
   deliveryAddress: z.string().max(300).optional(),
@@ -54,7 +52,6 @@ export interface CartContextValue {
   deliveryFee: number;
   items: CartItem[];
   orderType: OrderType;
-  tableNumber: string;
   customerName: string;
   customerPhone: string;
   deliveryAddress: string;
@@ -68,7 +65,6 @@ export interface CartContextValue {
   updateQuantity: (itemId: string, quantity: number) => void;
   updateItemNote: (itemId: string, note: string) => void;
   setOrderType: (type: OrderType) => void;
-  setTableNumber: (table: string) => void;
   setCustomerName: (name: string) => void;
   setCustomerPhone: (phone: string) => void;
   setDeliveryAddress: (address: string) => void;

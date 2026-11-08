@@ -10,7 +10,6 @@ describe("whatsapp-service", () => {
     restaurantName: "مطعم البركة",
     restaurantPhone: "+201012345678",
     orderType: "dine_in",
-    tableNumber: "5",
     customerName: "كريم",
     generalNote: "بدون تأخير",
     items: [
@@ -31,10 +30,11 @@ describe("whatsapp-service", () => {
     locale: "ar",
   };
 
-  it("should format Arabic message with table number, item notes, and total in EGP", () => {
+  it("should format Arabic message for dine-in with item notes and total in EGP", () => {
     const message = formatWhatsAppMessage(samplePayload);
     expect(message).toContain("طلب جديد من منيو مطعم البركة");
-    expect(message).toContain("طاولة 5");
+    expect(message).toContain("داخل المطعم");
+    expect(message).toContain("كريم");
     expect(message).toContain("2x شوربة لسان عصفور");
     expect(message).toContain("ملاحظة: ليمون زيادة");
     expect(message).toContain("ج.م");
