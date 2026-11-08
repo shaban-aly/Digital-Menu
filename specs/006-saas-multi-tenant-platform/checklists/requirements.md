@@ -32,3 +32,4 @@
 ## Notes
 
 - Specification validated against Constitution v2.2.0 and Spec Kit quality standards. Ready for `/speckit-plan`.
+

@@ -52,3 +52,4 @@ export interface ISuperAdminService {
   updateStorePlan(slug: string, plan: SubscriptionPlanKey): Promise<void>;
   toggleStoreStatus(slug: string, isActive: boolean): Promise<void>;
 }
+

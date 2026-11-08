@@ -89,3 +89,4 @@ supabase/
    - Scoped to `src/features/dashboard/`, `/dashboard`, `/dashboard/[slug]`, quota usage progress meters, store switcher.
 4. **Sub-Agent 4 (Super Admin & Supabase Database)**:
    - Scoped to `src/features/admin/`, `/admin`, `supabase/migrations/`, `src/lib/supabase/`.
+

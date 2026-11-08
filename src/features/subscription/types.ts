@@ -52,3 +52,4 @@ export const QuotaUsageSchema = z.object({
   planKey: SubscriptionPlanKeySchema,
 });
 export type QuotaUsage = z.infer<typeof QuotaUsageSchema>;
+

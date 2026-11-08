@@ -70,3 +70,4 @@ To eliminate race conditions and file collisions:
 2. **Sub-Agent 2 (Subscription & Quotas)**: Scoped strictly to `src/features/subscription/`, `QuotaService`, `QuotaUpgradeModal`, `PricingComparison`.
 3. **Sub-Agent 3 (Merchant Dashboard)**: Scoped strictly to `src/features/dashboard/`, `src/app/dashboard/`, quota usage bars, store switcher.
 4. **Sub-Agent 4 (Super Admin & Database)**: Scoped strictly to `src/features/admin/`, `src/app/admin/`, `supabase/migrations/`, `src/lib/supabase/`.
+

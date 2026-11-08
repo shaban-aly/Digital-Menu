@@ -40,3 +40,4 @@ npm run lint
 ### Journey 4: Supabase Database Migration
 1. Review `supabase/migrations/20261108_saas_schema.sql`.
 2. Verify tables and indexes match the schema.
+
