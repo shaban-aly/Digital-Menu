@@ -59,7 +59,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ slug }) 
   const storeName = locale === "ar" ? store.restaurant.name_ar : store.restaurant.name_en;
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 pb-20">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 pb-20">
       <AdminHeader
         currentSlug={slug}
         storeName={storeName}
