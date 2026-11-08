@@ -1,54 +1,29 @@
 import { isSupabaseConfigured, supabase } from "@/lib/supabase/client";
 import { STORES_MAP } from "@/features/menu/services/mock-menu-data";
-import { StoreRepository } from "./store-repository";
+import { StoreRepository, STORE_UPDATED_EVENT } from "./store-repository";
+import {
+  getAllStoreMeta,
+  getStoreMeta,
+  updateStoreMeta,
+  LocalStoreMeta,
+} from "./store-meta-storage";
 import {
   SuperAdminStoreSummary,
   PlatformKPIs,
   SuperAdminPlanKey,
 } from "../types";
 
-const SUPERADMIN_STORAGE_KEY = "superadmin_stores_meta";
-
-interface LocalStoreMeta {
-  plan: SuperAdminPlanKey;
-  is_active: boolean;
-}
-
-const DEFAULT_STORE_META: Record<string, LocalStoreMeta> = {
-  "oriental-grill": { plan: "pro_monthly", is_active: true },
-  "specialty-cafe": { plan: "free", is_active: true },
-  "fresh-market": { plan: "enterprise", is_active: true },
-};
-
-function getLocalMeta(): Record<string, LocalStoreMeta> {
-  if (typeof window === "undefined") {
-    return { ...DEFAULT_STORE_META };
-  }
-  try {
-    const raw = window.localStorage.getItem(SUPERADMIN_STORAGE_KEY);
-    return raw
-      ? { ...DEFAULT_STORE_META, ...JSON.parse(raw) }
-      : { ...DEFAULT_STORE_META };
-  } catch {
-    return { ...DEFAULT_STORE_META };
-  }
-}
-
-function saveLocalMeta(meta: Record<string, LocalStoreMeta>): void {
-  if (typeof window === "undefined") {
-    Object.assign(DEFAULT_STORE_META, meta);
-    return;
-  }
-  try {
-    window.localStorage.setItem(SUPERADMIN_STORAGE_KEY, JSON.stringify(meta));
-  } catch {
-    Object.assign(DEFAULT_STORE_META, meta);
-  }
-}
-
 export const SuperAdminService = {
+  getStoreMeta(slug: string): LocalStoreMeta {
+    return getStoreMeta(slug);
+  },
+
+  isStoreActive(slug: string): boolean {
+    return getStoreMeta(slug).is_active;
+  },
+
   async listAllStores(): Promise<SuperAdminStoreSummary[]> {
-    const meta = getLocalMeta();
+    const meta = getAllStoreMeta();
     const slugs = Object.keys(STORES_MAP);
     const results: SuperAdminStoreSummary[] = [];
 
@@ -95,12 +70,7 @@ export const SuperAdminService = {
     const activeStores = stores.filter((s) => s.is_active).length;
     const totalProducts = stores.reduce((sum, s) => sum + s.productsCount, 0);
 
-    const planBreakdown = {
-      free: 0,
-      pro: 0,
-      enterprise: 0,
-    };
-
+    const planBreakdown = { free: 0, pro: 0, enterprise: 0 };
     for (const store of stores) {
       if (store.plan === "free") {
         planBreakdown.free += 1;
@@ -120,12 +90,13 @@ export const SuperAdminService = {
   },
 
   async updateStorePlan(slug: string, plan: SuperAdminPlanKey): Promise<void> {
-    const meta = getLocalMeta();
-    meta[slug] = {
-      ...(meta[slug] || { is_active: true }),
-      plan,
-    };
-    saveLocalMeta(meta);
+    updateStoreMeta(slug, { plan });
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent(STORE_UPDATED_EVENT, { detail: { slug } })
+      );
+    }
 
     if (isSupabaseConfigured()) {
       try {
@@ -137,12 +108,13 @@ export const SuperAdminService = {
   },
 
   async toggleStoreStatus(slug: string, isActive: boolean): Promise<void> {
-    const meta = getLocalMeta();
-    meta[slug] = {
-      ...(meta[slug] || { plan: "free" }),
-      is_active: isActive,
-    };
-    saveLocalMeta(meta);
+    updateStoreMeta(slug, { is_active: isActive });
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent(STORE_UPDATED_EVENT, { detail: { slug } })
+      );
+    }
 
     if (isSupabaseConfigured()) {
       try {

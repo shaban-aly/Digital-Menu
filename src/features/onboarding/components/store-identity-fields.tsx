@@ -3,6 +3,7 @@
 import React from "react";
 import { Check, X, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { AiTranslateButton } from "@/features/admin/components/ai-translate-button";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -28,9 +29,7 @@ export const StoreIdentityFields: React.FC<StoreIdentityFieldsProps> = ({
   const { locale } = useLanguage();
   const t = locale === "ar" ? arTranslations : enTranslations;
 
-  const handleNameEnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setNameEn(val);
+  const updateSlugFromName = (val: string) => {
     if (!slug || slugStatus !== "taken") {
       const autoSlug = val
         .toLowerCase()
@@ -41,16 +40,34 @@ export const StoreIdentityFields: React.FC<StoreIdentityFieldsProps> = ({
     }
   };
 
+  const handleNameEnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setNameEn(val);
+    updateSlugFromName(val);
+  };
+
+  const handleTranslatedName = (translated: string) => {
+    setNameEn(translated);
+    updateSlugFromName(translated);
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label
-            htmlFor="name-ar"
-            className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1.5 text-start"
-          >
-            {t.onboarding.nameAr}
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label
+              htmlFor="name-ar"
+              className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 text-start"
+            >
+              {t.onboarding.nameAr}
+            </label>
+            <AiTranslateButton
+              sourceText={nameAr}
+              onTranslated={handleTranslatedName}
+              testId="translate-store-name-btn"
+            />
+          </div>
           <input
             id="name-ar"
             type="text"
