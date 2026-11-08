@@ -16,17 +16,26 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- 2. Automatically sync auth.users inserts into public.profiles
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  v_role public.user_role := 'merchant';
+  v_meta_role TEXT;
 BEGIN
+  v_meta_role := NEW.raw_user_meta_data->>'role';
+  IF v_meta_role = 'superadmin' THEN
+    v_role := 'superadmin';
+  END IF;
+
   INSERT INTO public.profiles (id, email, full_name, role)
   VALUES (
     NEW.id,
     COALESCE(NEW.email, ''),
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', ''),
-    COALESCE((NEW.raw_user_meta_data->>'role')::public.user_role, 'merchant'::public.user_role)
+    v_role
   )
   ON CONFLICT (id) DO UPDATE SET
     email = EXCLUDED.email,
-    full_name = CASE WHEN EXCLUDED.full_name <> '' THEN EXCLUDED.full_name ELSE public.profiles.full_name END;
+    full_name = CASE WHEN EXCLUDED.full_name <> '' THEN EXCLUDED.full_name ELSE public.profiles.full_name END,
+    updated_at = timezone('utc'::text, now());
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

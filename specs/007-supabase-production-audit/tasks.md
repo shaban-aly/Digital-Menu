@@ -10,10 +10,10 @@
 
 **Goal**: Verify, harden, and clean all Supabase migrations, ensuring clean cascade resets, enums, tables, triggers, and seed data.
 
-- [ ] T039 [P] Audit `supabase/migrations/` (5 files) to ensure clean `CASCADE` drops, exact enum values, and no leftover legacy tables.
-- [ ] T040 [P] Verify `profiles`, `subscriptions`, `stores`, `categories`, and `products` foreign keys, indexes, and RLS policies.
-- [ ] T041 [P] Ensure triggers `check_category_quota` and `check_product_quota` accurately enforce Free (7/50), Pro (50/500), and Enterprise (unlimited) limits.
-- [ ] T042 [P] Verify `supabase/seed.sql` populates the 3 demo stores (`oriental-grill`, `specialty-cafe`, `fresh-market`) with full bilingual data and correct tiers.
+- [x] T039 [P] Audit `supabase/migrations/` (5 files) to ensure clean `CASCADE` drops, exact enum values, and no leftover legacy tables.
+- [x] T040 [P] Verify `profiles`, `subscriptions`, `stores`, `categories`, and `products` foreign keys, indexes, and RLS policies.
+- [x] T041 [P] Ensure triggers `check_category_quota` and `check_product_quota` accurately enforce Free (7/50), Pro (50/500), and Enterprise (unlimited) limits.
+- [x] T042 [P] Verify `supabase/seed.sql` populates the 3 demo stores (`oriental-grill`, `specialty-cafe`, `fresh-market`) with full bilingual data and correct tiers.
 
 ---
 

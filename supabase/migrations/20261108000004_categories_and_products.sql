@@ -43,19 +43,39 @@ DECLARE
   v_max INTEGER;
   v_count INTEGER;
 BEGIN
+  -- Allow upsert/update of an existing category without consuming quota
+  IF NEW.id IS NOT NULL AND EXISTS (SELECT 1 FROM public.categories WHERE id = NEW.id) THEN
+    RETURN NEW;
+  END IF;
+
+  -- Read active subscription quota limit
   SELECT max_categories INTO v_max
   FROM public.subscriptions
   WHERE store_id = NEW.store_id AND is_active = true
   LIMIT 1;
 
+  -- Fallback to store plan if subscription record is absent
+  IF v_max IS NULL THEN
+    SELECT CASE
+      WHEN plan = 'enterprise' THEN -1
+      WHEN plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 50
+      ELSE 7
+    END INTO v_max
+    FROM public.stores
+    WHERE id = NEW.store_id;
+  END IF;
+
+  -- Default to Free tier limit if still undetermined
   IF v_max IS NULL THEN
     v_max := 7;
   END IF;
 
-  IF v_max = -1 THEN
+  -- Unlimited tier bypass
+  IF v_max = -1 OR v_max >= 999999 THEN
     RETURN NEW;
   END IF;
 
+  -- Count existing categories for this store
   SELECT COUNT(*) INTO v_count
   FROM public.categories
   WHERE store_id = NEW.store_id;
@@ -80,19 +100,39 @@ DECLARE
   v_max INTEGER;
   v_count INTEGER;
 BEGIN
+  -- Allow upsert/update of an existing product without consuming quota
+  IF NEW.id IS NOT NULL AND EXISTS (SELECT 1 FROM public.products WHERE id = NEW.id) THEN
+    RETURN NEW;
+  END IF;
+
+  -- Read active subscription quota limit
   SELECT max_products INTO v_max
   FROM public.subscriptions
   WHERE store_id = NEW.store_id AND is_active = true
   LIMIT 1;
 
+  -- Fallback to store plan if subscription record is absent
+  IF v_max IS NULL THEN
+    SELECT CASE
+      WHEN plan = 'enterprise' THEN -1
+      WHEN plan IN ('pro', 'pro_monthly', 'pro_yearly') THEN 500
+      ELSE 50
+    END INTO v_max
+    FROM public.stores
+    WHERE id = NEW.store_id;
+  END IF;
+
+  -- Default to Free tier limit if still undetermined
   IF v_max IS NULL THEN
     v_max := 50;
   END IF;
 
-  IF v_max = -1 THEN
+  -- Unlimited tier bypass
+  IF v_max = -1 OR v_max >= 999999 THEN
     RETURN NEW;
   END IF;
 
+  -- Count existing products for this store
   SELECT COUNT(*) INTO v_count
   FROM public.products
   WHERE store_id = NEW.store_id;
