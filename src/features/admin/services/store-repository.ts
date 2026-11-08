@@ -1,12 +1,10 @@
 import { MenuData, Restaurant, MenuItem, CategoryWithItems } from "@/features/menu/types";
 import { STORES_MAP } from "@/features/menu/services/mock-menu-data";
-import { StoreSettings, Category, StoreQRConfig, StoreOverrideState } from "../types";
+import { StoreSettings, Category, StoreOverrideState } from "../types";
+import { getStoreMeta } from "./store-meta-storage";
 
 export const STORE_UPDATED_EVENT = "digital_menu_store_updated";
-
-function getStorageKey(slug: string) {
-  return `store_override_${slug}`;
-}
+const getStorageKey = (slug: string) => `store_override_${slug}`;
 
 export function getLocalOverrides(slug: string): StoreOverrideState {
   if (typeof window === "undefined") return {};
@@ -28,57 +26,42 @@ export function saveLocalOverrides(slug: string, overrides: StoreOverrideState) 
   }
 }
 
-export function applyOverridesToStore(base: MenuData, overrides: StoreOverrideState): MenuData {
+export function applyOverridesToStore(base: MenuData, overrides: StoreOverrideState, slug?: string): MenuData {
+  const meta = slug ? getStoreMeta(slug) : undefined;
   const restaurant: Restaurant = {
     ...base.restaurant,
     ...(overrides.restaurant || {}),
+    ...(meta ? { plan: meta.plan, is_active: meta.is_active } : {}),
   };
 
-  const deletedCatIds = new Set(overrides.deletedCategoryIds || []);
-  const deletedItemIds = new Set(overrides.deletedItemIds || []);
+  const delCats = new Set(overrides.deletedCategoryIds || []);
+  const delItems = new Set(overrides.deletedItemIds || []);
 
-  let categories: CategoryWithItems[] = base.categories
-    .filter((cat) => !deletedCatIds.has(cat.id))
-    .map((cat) => {
-      const catOverride = overrides.updatedCategories?.[cat.id];
-      const updatedCat: CategoryWithItems = {
-        ...cat,
-        ...(catOverride || {}),
-        items: cat.items
-          .filter((item) => !deletedItemIds.has(item.id))
-          .map((item) => {
-            const itemOverride = overrides.updatedItems?.[item.id];
-            return itemOverride ? { ...item, ...itemOverride } : item;
-          }),
-      };
-      return updatedCat;
-    });
+  const categories: CategoryWithItems[] = base.categories
+    .filter((cat) => !delCats.has(cat.id))
+    .map((cat) => ({
+      ...cat,
+      ...(overrides.updatedCategories?.[cat.id] || {}),
+      items: cat.items
+        .filter((item) => !delItems.has(item.id))
+        .map((it) => overrides.updatedItems?.[it.id] ? { ...it, ...overrides.updatedItems[it.id] } : it),
+    }));
 
   if (overrides.addedCategories?.length) {
-    for (const addedCat of overrides.addedCategories) {
-      if (!deletedCatIds.has(addedCat.id) && !categories.some((c) => c.id === addedCat.id)) {
-        categories.push({
-          id: addedCat.id,
-          name_ar: addedCat.name_ar,
-          name_en: addedCat.name_en,
-          display_order: addedCat.display_order ?? categories.length + 1,
-          is_active: addedCat.is_active ?? true,
-          items: [],
-        });
+    for (const add of overrides.addedCategories) {
+      if (!delCats.has(add.id) && !categories.some((c) => c.id === add.id)) {
+        categories.push({ ...add, display_order: add.display_order ?? categories.length + 1, items: [] });
       }
     }
   }
 
   if (overrides.addedItems?.length) {
-    for (const addedItem of overrides.addedItems) {
-      if (!deletedItemIds.has(addedItem.id)) {
-        const itemOverride = overrides.updatedItems?.[addedItem.id];
-        const finalItem = itemOverride ? { ...addedItem, ...itemOverride } : addedItem;
-        const targetCat = categories.find((c) => c.id === finalItem.category_id);
-        if (targetCat) {
-          if (!targetCat.items.some((i) => i.id === finalItem.id)) {
-            targetCat.items.push(finalItem);
-          }
+    for (const add of overrides.addedItems) {
+      if (!delItems.has(add.id)) {
+        const item = overrides.updatedItems?.[add.id] ? { ...add, ...overrides.updatedItems[add.id] } : add;
+        const target = categories.find((c) => c.id === item.category_id);
+        if (target && !target.items.some((i) => i.id === item.id)) {
+          target.items.push(item);
         }
       }
     }
@@ -91,8 +74,11 @@ export const StoreRepository = {
   async getStore(slug: string): Promise<MenuData | null> {
     const base = STORES_MAP[slug];
     if (!base) return null;
-    const overrides = getLocalOverrides(slug);
-    return applyOverridesToStore(base, overrides);
+    return applyOverridesToStore(base, getLocalOverrides(slug), slug);
+  },
+
+  async isStoreAvailable(slug: string): Promise<boolean> {
+    return getStoreMeta(slug).is_active;
   },
 
   async updateSettings(slug: string, settings: Partial<StoreSettings>): Promise<Restaurant> {
@@ -113,7 +99,6 @@ export const StoreRepository = {
 
   async saveMenuItem(slug: string, itemData: Partial<MenuItem> & { name_ar: string; name_en: string; price: number; category_id: string }): Promise<MenuItem> {
     const overrides = getLocalOverrides(slug);
-    const isNew = !itemData.id;
     const id = itemData.id || `item_${Date.now()}`;
     const fullItem: MenuItem = {
       id,
@@ -133,8 +118,7 @@ export const StoreRepository = {
       badges: itemData.badges || [],
       allergens: itemData.allergens || [],
     };
-
-    if (isNew) {
+    if (!itemData.id) {
       overrides.addedItems = [...(overrides.addedItems || []), fullItem];
     } else {
       overrides.updatedItems = overrides.updatedItems || {};
@@ -156,7 +140,6 @@ export const StoreRepository = {
 
   async saveCategory(slug: string, catData: { id?: string; name_ar: string; name_en: string }): Promise<Category> {
     const overrides = getLocalOverrides(slug);
-    const isNew = !catData.id;
     const id = catData.id || `cat_${Date.now()}`;
     const fullCat: Category = {
       id,
@@ -165,7 +148,7 @@ export const StoreRepository = {
       display_order: Date.now(),
       is_active: true,
     };
-    if (isNew) {
+    if (!catData.id) {
       overrides.addedCategories = [...(overrides.addedCategories || []), fullCat];
     } else {
       overrides.updatedCategories = overrides.updatedCategories || {};
@@ -192,4 +175,3 @@ export const StoreRepository = {
     }
   },
 };
-

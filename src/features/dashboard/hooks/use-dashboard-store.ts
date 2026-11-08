@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useStoreAdmin } from "@/features/admin/hooks/use-store-admin";
 import { QuotaService } from "@/features/subscription/services/quota-service";
 import { SubscriptionPlanKey, QuotaUsage } from "@/features/subscription/types";
+import { getStoreMeta } from "@/features/admin/services/store-meta-storage";
 import { DashboardTab } from "../types";
 
 export function useDashboardStore(slug: string) {
@@ -12,14 +13,21 @@ export function useDashboardStore(slug: string) {
   const [quotaModalType, setQuotaModalType] = useState<"category" | "product">("category");
 
   const planKey: SubscriptionPlanKey = useMemo(() => {
+    if (storeAdmin.store?.restaurant?.plan) {
+      return QuotaService.normalizePlanKey(storeAdmin.store.restaurant.plan);
+    }
+    const meta = getStoreMeta(slug);
+    if (meta?.plan) {
+      return QuotaService.normalizePlanKey(meta.plan);
+    }
     if (typeof window !== "undefined") {
       const savedPlan = window.localStorage.getItem(`store_plan_${slug}`);
-      if (savedPlan === "pro" || savedPlan === "enterprise" || savedPlan === "free") {
-        return savedPlan;
+      if (savedPlan) {
+        return QuotaService.normalizePlanKey(savedPlan);
       }
     }
     return "free";
-  }, [slug]);
+  }, [storeAdmin.store?.restaurant?.plan, slug]);
 
   const quotaUsage: QuotaUsage = useMemo(() => {
     if (!storeAdmin.store) {

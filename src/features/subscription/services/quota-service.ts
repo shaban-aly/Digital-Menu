@@ -16,21 +16,32 @@ export interface QuotaStoreData {
 }
 
 /**
+ * Normalizes any plan key variant (e.g. "pro_monthly", "pro_yearly") to standard SubscriptionPlanKey.
+ */
+export function normalizePlanKey(plan?: string | null): SubscriptionPlanKey {
+  if (!plan) return "free";
+  if (plan === "enterprise") return "enterprise";
+  if (plan === "pro" || plan === "pro_monthly" || plan === "pro_yearly") {
+    return "pro";
+  }
+  return "free";
+}
+
+/**
  * Calculates current quota utilization against the active or requested subscription plan.
  */
 export function getQuotaUsage(
   storeData: MenuData | QuotaStoreData,
-  planKey?: SubscriptionPlanKey
+  planKey?: SubscriptionPlanKey | string
 ): QuotaUsage {
-  const resolvedPlan: SubscriptionPlanKey =
-    planKey ??
-    (storeData.restaurant &&
+  const storePlan =
+    storeData.restaurant &&
     "plan" in storeData.restaurant &&
-    typeof storeData.restaurant.plan === "string" &&
-    storeData.restaurant.plan in SUBSCRIPTION_QUOTAS
-      ? (storeData.restaurant.plan as SubscriptionPlanKey)
-      : "free");
+    typeof storeData.restaurant.plan === "string"
+      ? storeData.restaurant.plan
+      : undefined;
 
+  const resolvedPlan: SubscriptionPlanKey = normalizePlanKey(planKey ?? storePlan);
   const quota = SUBSCRIPTION_QUOTAS[resolvedPlan] || SUBSCRIPTION_QUOTAS.free;
   const categoriesCount = storeData.categories ? storeData.categories.length : 0;
   const productsCount = storeData.categories
@@ -81,7 +92,7 @@ export function getQuotaUsage(
  */
 export function canAddCategory(
   storeData: MenuData | QuotaStoreData,
-  planKey?: SubscriptionPlanKey
+  planKey?: SubscriptionPlanKey | string
 ): boolean {
   const usage = getQuotaUsage(storeData, planKey);
   return !usage.isCategoriesExceeded;
@@ -92,18 +103,16 @@ export function canAddCategory(
  */
 export function canAddProduct(
   storeData: MenuData | QuotaStoreData,
-  planKey?: SubscriptionPlanKey
+  planKey?: SubscriptionPlanKey | string
 ): boolean {
   const usage = getQuotaUsage(storeData, planKey);
   return !usage.isProductsExceeded;
 }
 
-/**
- * Alias for canAddProduct for backward/contract compatibility.
- */
 export const canAddItem = canAddProduct;
 
 export const QuotaService = {
+  normalizePlanKey,
   getQuotaUsage,
   canAddCategory,
   canAddProduct,

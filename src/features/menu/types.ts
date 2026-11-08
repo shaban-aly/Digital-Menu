@@ -41,6 +41,8 @@ export const RestaurantSchema = z.object({
   ]),
   delivery_fee: z.number().nonnegative().default(20),
   schedule: StoreScheduleConfigSchema.optional(),
+  plan: z.string().optional(),
+  is_active: z.boolean().optional(),
 });
 export type Restaurant = z.infer<typeof RestaurantSchema>;
 export type Store = Restaurant;
