@@ -36,50 +36,22 @@ vi.mock("@/features/auth/hooks/use-auth", () => ({
   }),
 }));
 
-function createMockStore(categoryCount: number, productsPerCategory: number): MenuData {
-  const categories: CategoryWithItems[] = Array.from({ length: categoryCount }, (_, catIdx) => ({
-    id: `cat_${catIdx + 1}`,
-    name_ar: `قسم ${catIdx + 1}`,
-    name_en: `Category ${catIdx + 1}`,
-    display_order: catIdx + 1,
-    is_active: true,
-    items: Array.from({ length: productsPerCategory }, (_, itemIdx) => ({
-      id: `item_${catIdx + 1}_${itemIdx + 1}`,
-      category_id: `cat_${catIdx + 1}`,
-      name_ar: `صنف ${itemIdx + 1}`,
-      name_en: `Item ${itemIdx + 1}`,
-      short_desc_ar: "",
-      short_desc_en: "",
-      full_desc_ar: "",
-      full_desc_en: "",
-      price: 50,
-      unit_ar: null,
-      unit_en: null,
-      image_url: null,
-      display_order: itemIdx + 1,
-      is_available: true,
-      badges: [],
-      allergens: [],
-    })),
-  }));
-
+function createMockStore(cats: number, prods: number): MenuData {
   return {
     restaurant: {
-      id: "rest_1",
-      slug: "test-store",
-      name_ar: "متجر تجريبي",
-      name_en: "Test Store",
-      business_type: "restaurant",
-      description_ar: "",
-      description_en: "",
-      logo_url: "https://example.com/logo.png",
-      phone_number: "201012345678",
-      default_language: "ar",
-      currency: "EGP",
-      supported_order_types: ["dine_in", "takeaway", "delivery"],
-      delivery_fee: 20,
+      id: "rest_1", slug: "test-store", name_ar: "متجر تجريبي", name_en: "Test Store",
+      business_type: "restaurant", description_ar: "", description_en: "", logo_url: "https://example.com/logo.png",
+      phone_number: "201012345678", default_language: "ar", currency: "EGP",
+      supported_order_types: ["dine_in", "takeaway", "delivery"], delivery_fee: 20,
     },
-    categories,
+    categories: Array.from({ length: cats }, (_, c) => ({
+      id: `cat_${c + 1}`, name_ar: `قسم ${c + 1}`, name_en: `Category ${c + 1}`, display_order: c + 1, is_active: true,
+      items: Array.from({ length: prods }, (_, i) => ({
+        id: `item_${c + 1}_${i + 1}`, category_id: `cat_${c + 1}`, name_ar: `صنف ${i + 1}`, name_en: `Item ${i + 1}`,
+        short_desc_ar: "", short_desc_en: "", full_desc_ar: "", full_desc_en: "", price: 50,
+        unit_ar: null, unit_en: null, image_url: null, display_order: i + 1, is_available: true, badges: [], allergens: [],
+      })),
+    })),
   };
 }
 
@@ -97,12 +69,8 @@ describe("Dashboard Routing & 1-Account-1-Store Protection", () => {
 
   it("should redirect authenticated merchant to their own store /dashboard/[storeSlug]", () => {
     mockUser = {
-      id: "merchant-1",
-      email: "merchant@test.com",
-      fullName: "Ahmed Merchant",
-      role: "merchant",
-      storeSlug: "oriental-grill",
-      createdAt: new Date().toISOString(),
+      id: "merchant-1", email: "merchant@test.com", fullName: "Ahmed Merchant",
+      role: "merchant", storeSlug: "oriental-grill", createdAt: new Date().toISOString(),
     };
     mockIsLoading = false;
     DashboardRootPage();
@@ -111,12 +79,8 @@ describe("Dashboard Routing & 1-Account-1-Store Protection", () => {
 
   it("should redirect merchant without store to /onboarding", async () => {
     mockUser = {
-      id: "merchant-new",
-      email: "new@test.com",
-      fullName: "New Merchant",
-      role: "merchant",
-      storeSlug: undefined,
-      createdAt: new Date().toISOString(),
+      id: "merchant-new", email: "new@test.com", fullName: "New Merchant",
+      role: "merchant", storeSlug: undefined, createdAt: new Date().toISOString(),
     };
     mockIsLoading = false;
     vi.spyOn(OnboardingService, "getUserStore").mockResolvedValue(null);
