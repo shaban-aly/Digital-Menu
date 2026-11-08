@@ -12,9 +12,10 @@ import enTranslations from "@/lib/i18n/en.json";
 interface QRTabProps {
   restaurant: Restaurant;
   locale: Locale;
+  printBasePath?: string;
 }
 
-export const QRTab: React.FC<QRTabProps> = ({ restaurant, locale }) => {
+export const QRTab: React.FC<QRTabProps> = ({ restaurant, locale, printBasePath = "/dashboard" }) => {
   const t = locale === "ar" ? arTranslations.admin.qr : enTranslations.admin.qr;
   const {
     qrDataUrl,
@@ -27,7 +28,7 @@ export const QRTab: React.FC<QRTabProps> = ({ restaurant, locale }) => {
   } = useStoreQR(restaurant.slug);
 
   const handlePrint = () => {
-    window.open(`/admin/${restaurant.slug}/print-qr?ssid=${encodeURIComponent(wifiSsid)}&pass=${encodeURIComponent(wifiPassword)}`, "_blank");
+    window.open(`${printBasePath}/${restaurant.slug}/print-qr?ssid=${encodeURIComponent(wifiSsid)}&pass=${encodeURIComponent(wifiPassword)}`, "_blank");
   };
 
   const inputCls =
