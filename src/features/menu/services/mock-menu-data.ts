@@ -6,6 +6,7 @@ export const MOCK_MENU_DATA: MenuData = {
     name_ar: "مطعم ومطبخ البركة",
     name_en: "Al-Baraka Restaurant",
     logo_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&auto=format&fit=crop&q=80",
+    phone_number: "201012345678",
     default_language: "ar",
     currency: "EGP",
   },

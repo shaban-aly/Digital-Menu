@@ -12,6 +12,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { useCategoryScroll } from "../hooks/use-category-scroll";
 import { useMenuSearch } from "../hooks/use-menu-search";
 import { useLanguage } from "../hooks/use-language";
+import { CartProvider } from "@/features/cart/hooks/use-cart";
+import { CartBar } from "@/features/cart/components/cart-bar";
+import { CartDrawer } from "@/features/cart/components/cart-drawer";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -20,7 +23,7 @@ interface MenuPageProps {
   initialLocale: Locale;
 }
 
-export const MenuPage: React.FC<MenuPageProps> = ({
+const MenuContent: React.FC<MenuPageProps> = ({
   initialData,
   initialLocale,
 }) => {
@@ -40,6 +43,7 @@ export const MenuPage: React.FC<MenuPageProps> = ({
 
   // Detail Modal & URL Hash management
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const handleHash = () => {
@@ -80,7 +84,7 @@ export const MenuPage: React.FC<MenuPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pb-20">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pb-28 sm:pb-32">
       <RestaurantHeader
         restaurant={initialData.restaurant}
         locale={locale}
@@ -130,7 +134,31 @@ export const MenuPage: React.FC<MenuPageProps> = ({
         onClose={handleCloseModal}
         locale={locale}
       />
+
+      <CartBar
+        locale={locale}
+        onOpenCart={() => setIsCartOpen(true)}
+      />
+
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        restaurantName={
+          locale === "ar"
+            ? initialData.restaurant.name_ar
+            : initialData.restaurant.name_en
+        }
+        restaurantPhone={initialData.restaurant.phone_number}
+        locale={locale}
+      />
     </div>
   );
 };
 
+export const MenuPage: React.FC<MenuPageProps> = (props) => {
+  return (
+    <CartProvider>
+      <MenuContent {...props} />
+    </CartProvider>
+  );
+};

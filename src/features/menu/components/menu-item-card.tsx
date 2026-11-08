@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { MenuItem } from "@/features/menu/types";
@@ -5,6 +7,7 @@ import { Locale } from "@/types";
 import { formatCurrency, cn } from "@/lib/utils";
 import { BadgeList } from "./badge-list";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
+import { AddToCartButton } from "@/features/cart/components/add-to-cart-button";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -66,7 +69,9 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
               {formatCurrency(item.price, locale)}
             </span>
 
-            {!item.is_available && (
+            {item.is_available ? (
+              <AddToCartButton item={item} size="sm" />
+            ) : (
               <span className="text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-md">
                 {t.menu.unavailable}
               </span>

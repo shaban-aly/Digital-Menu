@@ -26,6 +26,34 @@
       "shellfish": "قشريات",
       "wheat": "قمح"
     }
+  },
+  "cart": {
+    "title": "سلة الطلبات",
+    "viewCart": "عرض السلة",
+    "itemCount": "صنف",
+    "emptyTitle": "سلتك فارغة",
+    "emptyDesc": "أضف بعض الأطباق اللذيذة من قائمة الطعام للبدء في طلبك.",
+    "browseMenu": "تصفح المنيو",
+    "clearCart": "إفراغ السلة",
+    "confirmClear": "هل أنت متأكد من رغبتك في إفراغ السلة بالكامل؟",
+    "orderType": "نوع الطلب",
+    "dineIn": "داخل المطعم",
+    "takeaway": "استلام من الفرع",
+    "tableNumber": "رقم الطاولة",
+    "tablePlaceholder": "أدخل رقم الطاولة (مثلاً: 4)",
+    "tableRequired": "برجاء إدخال رقم الطاولة لإتمام الطلب داخل المطعم",
+    "customerName": "اسم العميل (اختياري)",
+    "namePlaceholder": "أدخل اسمك الكريم",
+    "generalNotes": "ملاحظات عامة على الطلب",
+    "generalNotesPlaceholder": "أي تعليمات إضافية للمطبخ؟",
+    "addNote": "إضافة ملاحظة",
+    "editNote": "تعديل الملاحظة",
+    "notePlaceholder": "مثال: بدون شطة / سكر خارجي",
+    "subtotal": "الإجمالي الفرعي",
+    "total": "الإجمالي النهائي",
+    "sendWhatsApp": "إرسال الطلب عبر واتساب",
+    "itemUnavailableWarning": "بعض الأصناف في سلتك غير متاحة حالياً، يرجى حذفها لإتمام الطلب.",
+    "addToCart": "إضافة للسلة",
+    "added": "تمت الإضافة"
   }
 }
-

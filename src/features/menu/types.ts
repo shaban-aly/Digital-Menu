@@ -19,6 +19,7 @@ export const RestaurantSchema = z.object({
   name_ar: z.string().min(1),
   name_en: z.string().min(1),
   logo_url: z.string().url(),
+  phone_number: z.string().default("201012345678"),
   default_language: z.enum(["ar", "en"]).default("ar"),
   currency: z.literal("EGP").default("EGP"),
 });

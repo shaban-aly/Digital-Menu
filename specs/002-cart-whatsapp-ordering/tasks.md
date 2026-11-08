@@ -10,9 +10,9 @@
 
 **Purpose**: Directory scaffolding, translation dictionary entries for cart interactions
 
-- [ ] T001 Create cart feature directory structure in `src/features/cart/components/`, `src/features/cart/hooks/`, `src/features/cart/services/`
-- [ ] T002 [P] Add Arabic translation keys for cart, order types, notes, and WhatsApp buttons in `src/lib/i18n/ar.json`
-- [ ] T003 [P] Add English translation keys for cart, order types, notes, and WhatsApp buttons in `src/lib/i18n/en.json`
+- [X] T001 Create cart feature directory structure in `src/features/cart/components/`, `src/features/cart/hooks/`, `src/features/cart/services/`
+- [X] T002 [P] Add Arabic translation keys for cart, order types, notes, and WhatsApp buttons in `src/lib/i18n/ar.json`
+- [X] T003 [P] Add English translation keys for cart, order types, notes, and WhatsApp buttons in `src/lib/i18n/en.json`
 
 ---
 
@@ -20,11 +20,11 @@
 
 **Purpose**: Core types, WhatsApp formatting service, and CartContext state provider
 
-- [ ] T004 [P] Create cart TypeScript interfaces and Zod schemas (`CartItem`, `OrderType`, `CartState`, `WhatsAppOrderPayload`) in `src/features/cart/types.ts`
-- [ ] T005 [P] Implement pure WhatsApp message generator and `wa.me` deep link builder in `src/features/cart/services/whatsapp-service.ts` per contract in `specs/002-cart-whatsapp-ordering/contracts/whatsapp-payload.md`
-- [ ] T006 [P] Unit test for WhatsApp URL builder and formatting in `tests/unit/whatsapp-service.test.ts`
-- [ ] T007 Implement React 19 CartContext & `useCart` hook with `localStorage` persistence and hydration guard in `src/features/cart/hooks/use-cart.tsx`
-- [ ] T008 [P] Unit test for cart calculations, item additions, removals, and quantities in `tests/unit/cart-reducer.test.ts`
+- [X] T004 [P] Create cart TypeScript interfaces and Zod schemas (`CartItem`, `OrderType`, `CartState`, `WhatsAppOrderPayload`) in `src/features/cart/types.ts`
+- [X] T005 [P] Implement pure WhatsApp message generator and `wa.me` deep link builder in `src/features/cart/services/whatsapp-service.ts` per contract in `specs/002-cart-whatsapp-ordering/contracts/whatsapp-payload.md`
+- [X] T006 [P] Unit test for WhatsApp URL builder and formatting in `tests/unit/whatsapp-service.test.ts`
+- [X] T007 Implement React 19 CartContext & `useCart` hook with `localStorage` persistence and hydration guard in `src/features/cart/hooks/use-cart.tsx`
+- [X] T008 [P] Unit test for cart calculations, item additions, removals, and quantities in `tests/unit/cart-reducer.test.ts`
 
 ---
 
@@ -35,15 +35,15 @@
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] End-to-end test for quick add to cart, out-of-stock guard, and floating summary bar in `tests/e2e/cart-bar.spec.ts`
+- [X] T009 [P] [US1] End-to-end test for quick add to cart, out-of-stock guard, and floating summary bar in `tests/e2e/cart-bar.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Create AddToCartButton component with (+) trigger, quantity steppers, and out-of-stock disabled state in `src/features/cart/components/add-to-cart-button.tsx`
-- [ ] T011 [P] [US1] Create CartBar sticky floating bottom component with item count, total price in EGP, and "View Cart" action in `src/features/cart/components/cart-bar.tsx`
-- [ ] T012 [US1] Integrate AddToCartButton into menu cards in `src/features/menu/components/menu-item-card.tsx`
-- [ ] T013 [US1] Integrate AddToCartButton into detail modal in `src/features/menu/components/item-detail-modal.tsx`
-- [ ] T014 [US1] Wrap `src/features/menu/components/menu-page.tsx` with CartProvider and mount CartBar
+- [X] T010 [P] [US1] Create AddToCartButton component with (+) trigger, quantity steppers, and out-of-stock disabled state in `src/features/cart/components/add-to-cart-button.tsx`
+- [X] T011 [P] [US1] Create CartBar sticky floating bottom component with item count, total price in EGP, and "View Cart" action in `src/features/cart/components/cart-bar.tsx`
+- [X] T012 [US1] Integrate AddToCartButton into menu cards in `src/features/menu/components/menu-item-card.tsx`
+- [X] T013 [US1] Integrate AddToCartButton into detail modal in `src/features/menu/components/item-detail-modal.tsx`
+- [X] T014 [US1] Wrap `src/features/menu/components/menu-page.tsx` with CartProvider and mount CartBar
 
 **Checkpoint**: User Story 1 is fully functional and delivers an independently testable MVP.
 
@@ -56,14 +56,14 @@
 
 ### Tests for User Story 2 & 3
 
-- [ ] T015 [P] [US2] End-to-end test for cart drawer quantity controls, item note input, and WhatsApp link generation in `tests/e2e/cart-drawer.spec.ts`
+- [X] T015 [P] [US2] End-to-end test for cart drawer quantity controls, item note input, and WhatsApp link generation in `tests/e2e/cart-drawer.spec.ts`
 
 ### Implementation for User Story 2 & 3
 
-- [ ] T016 [P] [US2] Create CartItemRow component with quantity controls (+/-), note toggle, and delete action in `src/features/cart/components/cart-item-row.tsx`
-- [ ] T017 [US2] Create CartDrawer slide-up component with header, itemized list, empty state, and "Empty Cart" button in `src/features/cart/components/cart-drawer.tsx`
-- [ ] T018 [US3] Add WhatsApp submit button with validation, error toast, and `buildWhatsAppOrderUrl` trigger in `src/features/cart/components/cart-drawer.tsx`
-- [ ] T019 [US2] Connect CartDrawer open/close state to CartBar in `src/features/menu/components/menu-page.tsx`
+- [X] T016 [P] [US2] Create CartItemRow component with quantity controls (+/-), note toggle, and delete action in `src/features/cart/components/cart-item-row.tsx`
+- [X] T017 [US2] Create CartDrawer slide-up component with header, itemized list, empty state, and "Empty Cart" button in `src/features/cart/components/cart-drawer.tsx`
+- [X] T018 [US3] Add WhatsApp submit button with validation, error toast, and `buildWhatsAppOrderUrl` trigger in `src/features/cart/components/cart-drawer.tsx`
+- [X] T019 [US2] Connect CartDrawer open/close state to CartBar in `src/features/menu/components/menu-page.tsx`
 
 **Checkpoint**: Full cart review, item customizations, and WhatsApp ordering are operational.
 
@@ -76,9 +76,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T020 [P] [US4] Create OrderTypeSelector toggle component (Dine-in vs. Takeaway) with table number input in `src/features/cart/components/order-type-selector.tsx`
-- [ ] T021 [US4] Add URL search params parser (`?table=...`) to auto-set table number in `src/features/cart/hooks/use-cart.tsx`
-- [ ] T022 [US4] Embed OrderTypeSelector into CartDrawer before the submit button in `src/features/cart/components/cart-drawer.tsx`
+- [X] T020 [P] [US4] Create OrderTypeSelector toggle component (Dine-in vs. Takeaway) with table number input in `src/features/cart/components/order-type-selector.tsx`
+- [X] T021 [US4] Add URL search params parser (`?table=...`) to auto-set table number in `src/features/cart/hooks/use-cart.tsx`
+- [X] T022 [US4] Embed OrderTypeSelector into CartDrawer before the submit button in `src/features/cart/components/cart-drawer.tsx`
 
 **Checkpoint**: Order type fulfillment and automatic table pre-filling are fully functional.
 
@@ -91,7 +91,7 @@
 
 ### Tests for User Story 5
 
-- [ ] T023 [US5] End-to-end test for cart persistence across browser reloads and language toggling in `tests/e2e/cart-persistence.spec.ts`
+- [X] T023 [US5] End-to-end test for cart persistence across browser reloads and language toggling in `tests/e2e/cart-persistence.spec.ts`
 
 **Checkpoint**: Zero cart loss on mobile browsers or during language toggling.
 
@@ -101,11 +101,11 @@
 
 **Purpose**: Strict compliance verification, linting, type-checking, and production build
 
-- [ ] T024 [P] Audit component line counts in `src/features/cart/` to guarantee all files are <= 180 lines
-- [ ] T025 [P] Audit CSS classes in `src/features/cart/` to ensure 100% logical properties (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`)
-- [ ] T026 Run TypeScript strict type-check (`npm run type-check`) ensuring zero `any` or `@ts-ignore`
-- [ ] T027 Run ESLint check (`npm run lint`) and Vitest test suite (`npm test`)
-- [ ] T028 Execute production build (`npm run build`) with Next.js 16 Turbopack and verify clean build
+- [X] T024 [P] Audit component line counts in `src/features/cart/` to guarantee all files are <= 180 lines
+- [X] T025 [P] Audit CSS classes in `src/features/cart/` to ensure 100% logical properties (`ms-`, `me-`, `ps-`, `pe-`, `text-start`, `text-end`)
+- [X] T026 Run TypeScript strict type-check (`npm run type-check`) ensuring zero `any` or `@ts-ignore`
+- [X] T027 Run ESLint check (`npm run lint`) and Vitest test suite (`npm test`)
+- [X] T028 Execute production build (`npm run build`) with Next.js 16 Turbopack and verify clean build
 
 ---
 

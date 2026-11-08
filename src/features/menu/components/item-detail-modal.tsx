@@ -7,6 +7,7 @@ import { formatCurrency } from "@/lib/utils";
 import { BadgeList } from "./badge-list";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import { Flame, ShieldAlert } from "lucide-react";
+import { AddToCartButton } from "@/features/cart/components/add-to-cart-button";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -101,6 +102,31 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 })}
               </div>
             </div>
+          )}
+        </div>
+
+        {/* Modal Action Footer */}
+        <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-3">
+          <div>
+            <span className="text-xs text-neutral-500 dark:text-neutral-400 block">
+              {t.cart.total}
+            </span>
+            <span className="text-lg font-black text-brand-700 dark:text-brand-400">
+              {formatCurrency(item.price, locale)}
+            </span>
+          </div>
+
+          {item.is_available ? (
+            <AddToCartButton
+              item={item}
+              size="md"
+              label={t.cart.addToCart}
+              className="px-4 py-2.5 shadow-md"
+            />
+          ) : (
+            <span className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-950/40">
+              {t.menu.unavailable}
+            </span>
           )}
         </div>
       </div>

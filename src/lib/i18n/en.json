@@ -26,6 +26,34 @@
       "shellfish": "Shellfish",
       "wheat": "Wheat"
     }
+  },
+  "cart": {
+    "title": "Your Order",
+    "viewCart": "View Cart",
+    "itemCount": "item(s)",
+    "emptyTitle": "Your cart is empty",
+    "emptyDesc": "Add some delicious dishes from our menu to start your order.",
+    "browseMenu": "Browse Menu",
+    "clearCart": "Empty Cart",
+    "confirmClear": "Are you sure you want to remove all items from your cart?",
+    "orderType": "Order Type",
+    "dineIn": "Dine-in",
+    "takeaway": "Takeaway",
+    "tableNumber": "Table Number",
+    "tablePlaceholder": "Enter table number (e.g. 4)",
+    "tableRequired": "Please enter your table number for dine-in orders",
+    "customerName": "Customer Name (optional)",
+    "namePlaceholder": "Enter your name",
+    "generalNotes": "General Order Notes",
+    "generalNotesPlaceholder": "Any extra instructions for the kitchen?",
+    "addNote": "Add Note",
+    "editNote": "Edit Note",
+    "notePlaceholder": "e.g. no onions / sugar on side",
+    "subtotal": "Subtotal",
+    "total": "Grand Total",
+    "sendWhatsApp": "Send Order via WhatsApp",
+    "itemUnavailableWarning": "Some items in your cart are currently unavailable. Please remove them to proceed.",
+    "addToCart": "Add to Cart",
+    "added": "Added"
   }
 }
-
