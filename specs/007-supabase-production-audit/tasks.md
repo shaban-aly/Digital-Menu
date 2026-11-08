@@ -21,10 +21,10 @@
 
 **Goal**: Remove legacy mock files, unify all data access through typed Supabase actions and queries, and clean up repositories.
 
-- [ ] T043 [P] Safely delete obsolete directory `src/features/menu/services/mock-data/` (`fresh-market.ts`, `oriental-grill.ts`, `specialty-cafe.ts`).
-- [ ] T044 [P] Refactor `src/features/menu/services/store-repository.ts` and `src/features/menu/services/mock-menu-data.ts` to use a lightweight, schema-compliant fallback for offline dev.
-- [ ] T045 [P] Create/verify typed Supabase Server Actions in `src/lib/supabase/actions.ts` for store creation, item/category mutation, and stock toggling.
-- [ ] T046 [P] Update unit tests to ensure all store repository tests pass without relying on legacy mock files.
+- [x] T043 [P] Safely delete obsolete directory `src/features/menu/services/mock-data/` (`fresh-market.ts`, `oriental-grill.ts`, `specialty-cafe.ts`).
+- [x] T044 [P] Refactor `src/features/menu/services/store-repository.ts` and `src/features/menu/services/mock-menu-data.ts` to use a lightweight, schema-compliant fallback for offline dev.
+- [x] T045 [P] Create/verify typed Supabase Server Actions in `src/lib/supabase/actions.ts` for store creation, item/category mutation, and stock toggling.
+- [x] T046 [P] Update unit tests to ensure all store repository tests pass without relying on legacy mock files.
 
 ---
 
