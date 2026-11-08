@@ -21,7 +21,7 @@ This specification transitions the Digital Menu solution from a localized single
    - **All operational features** (cart, dine-in, takeaway, home delivery via WhatsApp, QR tent card generation, operating hours) are available in **ALL plans**.
    - Differentiation is strictly by capacity quotas and multi-store support:
      * **Free Plan (`free`)**: 0 EGP. Max 7 categories, max 50 products per store. Single store.
-     * **Pro Plan (`pro`)**: 250 EGP/month or 2,500 EGP/year (toggleable). Max 50 categories, max 500 products per store. Multiple stores under one owner account. Subscriptions initiated via pre-filled WhatsApp deep link to platform owner, architected for future payment gateway drop-in.
+     * **Pro Plan (`pro`)**: 250 EGP/month or 2,500 EGP/year (toggleable). Max 50 categories, max 500 products per store. Dedicated single business per account. Subscriptions initiated via pre-filled WhatsApp deep link to platform owner, architected for future payment gateway drop-in.
      * **Enterprise Plan (`enterprise`)**: Custom pricing. Unlimited categories, products, branches, and custom branding. Inquiries routed to WhatsApp.
 3. **Database Foundation**:
    - Full PostgreSQL / Supabase migration schemas (`profiles`, `stores`, `subscriptions`, `categories`, `products`) with Row Level Security (RLS).
@@ -64,9 +64,9 @@ This specification transitions the Digital Menu solution from a localized single
 2. **Given** an authenticated user on `/onboarding`,  
    **When** they fill the business creation form (Type: restaurant/cafe/supermarket/store, Business Name AR & EN, unique Slug, WhatsApp Phone, Delivery Fee, and Initial Plan selection),  
    **Then** slug uniqueness is validated; selecting `free` activates the menu immediately and redirects to `/dashboard`, while selecting `pro` generates a pre-filled WhatsApp activation message to platform management.
-3. **Given** a merchant with a Pro or Enterprise plan,  
-   **When** in `/dashboard`,  
-   **Then** they can add additional businesses and switch between them seamlessly.
+3. **Given** an authenticated user who completed onboarding,  
+   **When** they visit `/dashboard`,  
+   **Then** they directly manage their single registered business without clutter or account ambiguity.
 
 ---
 

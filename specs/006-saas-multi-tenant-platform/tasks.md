@@ -10,8 +10,8 @@
 
 **Purpose**: Externalized bilingual translation keys and core subscription types
 
-- [ ] T001 [P] Add Arabic and English translation keys for SaaS, Auth, Onboarding, Quota warnings, and Super Admin in `src/lib/i18n/ar.json` & `src/lib/i18n/en.json`
-- [ ] T002 [P] Create subscription and SaaS shared types and Zod schemas in `src/features/subscription/types.ts`
+- [X] T001 [P] Add Arabic and English translation keys for SaaS, Auth, Onboarding, Quota warnings, and Super Admin in `src/lib/i18n/ar.json` & `src/lib/i18n/en.json`
+- [X] T002 [P] Create subscription and SaaS shared types and Zod schemas in `src/features/subscription/types.ts`
 
 ---
 
@@ -43,7 +43,7 @@
 **Goal**: Routing migration (`/admin` -> `/dashboard`), visual quota progress bars, quota-guarded catalog management, and store switcher.
 
 - [ ] T012 Implement merchant dashboard routes at `src/app/dashboard/page.tsx` and `src/app/dashboard/[slug]/page.tsx`
-- [ ] T013 Implement `DashboardView` and `StoreSwitcher` in `src/features/dashboard/components/`
+- [ ] T013 Implement `DashboardView` with quota progress meters and store management in `src/features/dashboard/components/`
 - [ ] T014 Integrate `QuotaService` into item and category creation modals in the merchant dashboard so quota breaches trigger `QuotaUpgradeModal`
 - [ ] T015 Ensure `/menu` automatically redirects to `/` if accessed without a slug
 

@@ -21,7 +21,6 @@ export const SubscriptionQuotaSchema = z.object({
   billingCycle: BillingCycleSchema.optional(),
   maxCategories: z.number().int().nonnegative(),
   maxProducts: z.number().int().nonnegative(),
-  allowMultiStore: z.boolean(),
   priceMonthly: z.number().nonnegative(),
   priceYearly: z.number().nonnegative(),
 });
@@ -32,7 +31,7 @@ export const UserProfileSchema = z.object({
   email: z.string().email(),
   fullName: z.string().min(2),
   role: z.enum(["merchant", "superadmin"]).default("merchant"),
-  storeSlugs: z.array(z.string()).default([]),
+  storeSlug: z.string().nullable().optional(),
   createdAt: z.string(),
 });
 export type UserProfile = z.infer<typeof UserProfileSchema>;
@@ -77,7 +76,6 @@ export const SUBSCRIPTION_QUOTAS: Record<SubscriptionPlanKey, SubscriptionQuota>
     planKey: "free",
     maxCategories: 7,
     maxProducts: 50,
-    allowMultiStore: false,
     priceMonthly: 0,
     priceYearly: 0,
   },
@@ -85,7 +83,6 @@ export const SUBSCRIPTION_QUOTAS: Record<SubscriptionPlanKey, SubscriptionQuota>
     planKey: "pro",
     maxCategories: 50,
     maxProducts: 500,
-    allowMultiStore: true,
     priceMonthly: 250,
     priceYearly: 2500,
   },
@@ -93,7 +90,6 @@ export const SUBSCRIPTION_QUOTAS: Record<SubscriptionPlanKey, SubscriptionQuota>
     planKey: "enterprise",
     maxCategories: 999999,
     maxProducts: 999999,
-    allowMultiStore: true,
     priceMonthly: 0,
     priceYearly: 0,
   },
