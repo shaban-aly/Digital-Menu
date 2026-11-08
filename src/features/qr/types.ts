@@ -54,3 +54,4 @@ export const DEFAULT_QR_CONFIG: QRGeneratorConfig = {
   customInstructionAr: "",
   customInstructionEn: "",
 };
+

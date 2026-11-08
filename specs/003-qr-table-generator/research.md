@@ -98,3 +98,4 @@ When a customer scans a table QR code (`/menu/oriental-grill?table=7`), the land
   - Default order type to `dine_in`.
   - Automatically populate `tableNumber` state in `useCart` / cart storage.
 - Customer immediately sees table number locked or pre-filled in their cart!
+

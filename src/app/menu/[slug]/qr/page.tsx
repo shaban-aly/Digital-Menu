@@ -31,3 +31,4 @@ export default async function StoreQRPage({ params }: PageProps) {
 
   return <QRGeneratorScreen store={data.restaurant} />;
 }
+

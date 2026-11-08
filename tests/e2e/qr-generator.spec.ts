@@ -41,3 +41,4 @@ test.describe("QR Table Generator & Scan Flow", () => {
     await expect(tableInput).toHaveValue("7");
   });
 });
+

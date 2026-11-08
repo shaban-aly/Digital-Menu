@@ -90,3 +90,4 @@ stateDiagram-v2
 2. **Cart Context (`src/features/cart/hooks/use-cart.tsx`)**:
    - `tableNumber`: Pre-populated when customer arrives at `/menu/[slug]?table=[number]`.
    - `orderType`: Automatically set to `dine_in` when table parameter is present.
+
