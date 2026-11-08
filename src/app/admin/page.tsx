@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import React from "react";
+import { SuperAdminDashboard } from "@/features/admin/components/superadmin-dashboard";
 
-export default function AdminRootPage() {
-  redirect("/admin/oriental-grill");
+export default function SuperAdminPage() {
+  return <SuperAdminDashboard />;
 }
-
