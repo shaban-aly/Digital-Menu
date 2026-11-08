@@ -26,6 +26,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
   const [showNoteInput, setShowNoteInput] = useState(Boolean(item.itemNote));
   const t = locale === "ar" ? arTranslations : enTranslations;
   const name = locale === "ar" ? item.name_ar : item.name_en;
+  const unit = locale === "ar" ? item.unit_ar : item.unit_en;
 
   return (
     <div
@@ -35,15 +36,25 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
       <div className="flex items-start justify-between gap-3">
         {/* Item Title & Subtotal */}
         <div className="flex-1">
-          <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 leading-snug">
-            {name}
-          </h4>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 leading-snug">
+              {name}
+            </h4>
+            {unit && (
+              <span
+                data-testid={`cart-item-unit-${item.id}`}
+                className="text-xs font-medium text-neutral-500 dark:text-neutral-400"
+              >
+                ({unit})
+              </span>
+            )}
+          </div>
           <span className="text-xs font-bold text-brand-700 dark:text-brand-400 mt-1 inline-block">
             {formatCurrency(item.price * item.quantity, locale)}
           </span>
           {item.quantity > 1 && (
             <span className="text-[11px] text-neutral-400 ms-1.5">
-              ({formatCurrency(item.price, locale)} × {item.quantity})
+              ({formatCurrency(item.price, locale)}{unit ? ` / ${unit}` : ""} × {item.quantity})
             </span>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { OrderValidationErrors } from "../components/order-type-selector";
-import { buildWhatsAppOrderUrl } from "../services/whatsapp-service";
+import { generateWhatsAppLink } from "../services/whatsapp-service";
 import { useCart } from "./use-cart";
 import { Locale } from "@/types";
 import { StoreOperatingStatus } from "@/features/schedule/types";
@@ -11,6 +11,7 @@ interface UseCartCheckoutParams {
   locale: Locale;
   operatingStatus: StoreOperatingStatus;
   onSuccess: () => void;
+  currency?: string;
 }
 
 export const useCartCheckout = ({
@@ -19,6 +20,7 @@ export const useCartCheckout = ({
   locale,
   operatingStatus,
   onSuccess,
+  currency = "EGP",
 }: UseCartCheckoutParams) => {
   const {
     items,
@@ -54,7 +56,7 @@ export const useCartCheckout = ({
         ? operatingStatus.nextOpeningDateTextAr
         : operatingStatus.nextOpeningDateTextEn;
 
-    const url = buildWhatsAppOrderUrl({
+    const url = generateWhatsAppLink({
       restaurantName,
       restaurantPhone,
       orderType,
@@ -67,6 +69,7 @@ export const useCartCheckout = ({
       deliveryFee: orderType === "delivery" ? deliveryFee : 0,
       totalPrice,
       locale,
+      currency,
       isPreOrder: operatingStatus.isPreOrder,
       preOrderOpeningText,
     });

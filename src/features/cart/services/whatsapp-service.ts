@@ -1,9 +1,17 @@
 import { WhatsAppOrderPayload } from "@/features/cart/types";
 import { formatCurrency } from "@/lib/utils";
 
+export interface WhatsAppStoreOverrides {
+  phone_number?: string;
+  currency?: string;
+  delivery_fee?: number;
+  supported_order_types?: string[];
+}
+
 export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   const isAr = payload.locale === "ar";
   const lines: string[] = [];
+  const currency = payload.currency || "EGP";
 
   // 1. Header & Order Info
   if (payload.isPreOrder) {
@@ -72,7 +80,7 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
     const itemName = isAr ? item.name_ar : item.name_en;
     const unit = isAr ? item.unit_ar : item.unit_en;
     const subtotal = item.price * item.quantity;
-    const formattedSubtotal = formatCurrency(subtotal, payload.locale);
+    const formattedSubtotal = formatCurrency(subtotal, payload.locale, currency);
     const unitText = unit ? ` (${unit})` : "";
 
     lines.push(`• ${item.quantity}x ${itemName}${unitText} (${formattedSubtotal})`);
@@ -98,8 +106,8 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
   // 4. Financial Breakdown
   lines.push("------------------------------");
   if (payload.orderType === "delivery" && (payload.deliveryFee || 0) > 0) {
-    const sub = formatCurrency(payload.itemsTotal, payload.locale);
-    const fee = formatCurrency(payload.deliveryFee, payload.locale);
+    const sub = formatCurrency(payload.itemsTotal, payload.locale, currency);
+    const fee = formatCurrency(payload.deliveryFee, payload.locale, currency);
     lines.push(
       isAr ? `💵 *المجموع الفرعي:* ${sub}` : `💵 *Subtotal:* ${sub}`
     );
@@ -108,7 +116,7 @@ export function formatWhatsAppMessage(payload: WhatsAppOrderPayload): string {
     );
   }
 
-  const formattedTotal = formatCurrency(payload.totalPrice, payload.locale);
+  const formattedTotal = formatCurrency(payload.totalPrice, payload.locale, currency);
   lines.push(
     isAr
       ? `💰 *الإجمالي النهائي: ${formattedTotal}*`
@@ -124,4 +132,28 @@ export function buildWhatsAppOrderUrl(payload: WhatsAppOrderPayload): string {
   const encodedText = encodeURIComponent(message);
 
   return `https://wa.me/${cleanPhone}?text=${encodedText}`;
+}
+
+export function generateWhatsAppLink(
+  payload: WhatsAppOrderPayload,
+  storeConfig?: WhatsAppStoreOverrides
+): string {
+  const currency = storeConfig?.currency || payload.currency || "EGP";
+  const restaurantPhone = storeConfig?.phone_number || payload.restaurantPhone;
+  const deliveryFee =
+    payload.orderType === "delivery"
+      ? storeConfig?.delivery_fee !== undefined
+        ? storeConfig.delivery_fee
+        : payload.deliveryFee || 0
+      : 0;
+
+  const totalPrice = payload.itemsTotal + deliveryFee;
+
+  return buildWhatsAppOrderUrl({
+    ...payload,
+    restaurantPhone,
+    deliveryFee,
+    currency,
+    totalPrice,
+  });
 }

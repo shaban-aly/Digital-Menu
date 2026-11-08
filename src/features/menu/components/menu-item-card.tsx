@@ -86,7 +86,10 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
             {formatCurrency(item.price, locale)}
           </span>
           {unit && (
-            <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+            <span
+              data-testid="item-unit"
+              className="text-xs font-medium text-neutral-500 dark:text-neutral-400"
+            >
               / {unit}
             </span>
           )}

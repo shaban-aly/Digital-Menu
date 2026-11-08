@@ -15,7 +15,7 @@ import { useLanguage } from "../hooks/use-language";
 import { CartProvider } from "@/features/cart/hooks/use-cart";
 import { CartBar } from "@/features/cart/components/cart-bar";
 import { CartDrawer } from "@/features/cart/components/cart-drawer";
-import { StoreRepository, STORE_UPDATED_EVENT } from "@/features/admin/services/store-repository";
+import { StoreRepository, STORE_UPDATED_EVENT } from "@/features/menu/services/store-repository";
 import arTranslations from "@/lib/i18n/ar.json";
 import enTranslations from "@/lib/i18n/en.json";
 
@@ -24,22 +24,14 @@ interface MenuPageProps {
   initialLocale?: Locale;
 }
 
-const MenuContent: React.FC<MenuPageProps> = ({
-  initialData,
-}) => {
+const MenuContent: React.FC<MenuPageProps> = ({ initialData }) => {
   const { locale, toggleLanguage } = useLanguage();
   const t = locale === "ar" ? arTranslations : enTranslations;
 
-  const {
-    searchQuery,
-    setSearchQuery,
-    filteredCategories,
-    isSearching,
-    clearSearch,
-  } = useMenuSearch(initialData.categories, locale);
+  const { searchQuery, setSearchQuery, filteredCategories, isSearching, clearSearch } =
+    useMenuSearch(initialData.categories, locale);
 
-  const { activeCategoryId, scrollToCategory } =
-    useCategoryScroll(filteredCategories);
+  const { activeCategoryId, scrollToCategory } = useCategoryScroll(filteredCategories);
 
   // Detail Modal & URL Hash management
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
@@ -138,6 +130,7 @@ const MenuContent: React.FC<MenuPageProps> = ({
             : initialData.restaurant.name_en
         }
         restaurantPhone={initialData.restaurant.phone_number}
+        currency={initialData.restaurant.currency}
         locale={locale}
         scheduleConfig={initialData.restaurant.schedule}
       />
@@ -168,6 +161,7 @@ export const MenuPage: React.FC<MenuPageProps> = (props) => {
       storeSlug={storeData.restaurant.slug}
       supportedOrderTypes={storeData.restaurant.supported_order_types}
       deliveryFee={storeData.restaurant.delivery_fee}
+      currency={storeData.restaurant.currency}
     >
       <MenuContent {...props} initialData={storeData} />
     </CartProvider>

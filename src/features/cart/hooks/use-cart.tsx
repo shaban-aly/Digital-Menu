@@ -11,6 +11,7 @@ interface CartProviderProps {
   storeSlug?: string;
   supportedOrderTypes?: OrderType[];
   deliveryFee?: number;
+  currency?: string;
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({
@@ -18,6 +19,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({
   storeSlug = "oriental-grill",
   supportedOrderTypes = ["dine_in", "takeaway", "delivery"],
   deliveryFee = 20,
+  currency = "EGP",
 }) => {
   const storageKey = `cart_${storeSlug}`;
   const initialDefaultType = supportedOrderTypes.includes("dine_in")
@@ -122,6 +124,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({
         storeSlug,
         supportedOrderTypes,
         deliveryFee,
+        currency,
         items,
         orderType,
         customerName,

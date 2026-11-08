@@ -6,15 +6,18 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number, locale: Locale): string {
+export function formatCurrency(
+  amount: number,
+  locale: Locale,
+  currency: string = "EGP"
+): string {
   const formatted = amount.toLocaleString(locale === "ar" ? "ar-EG" : "en-US", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });
 
-  if (locale === "ar") {
-    return `${formatted} ج.م`;
+  if (currency === "EGP") {
+    return locale === "ar" ? `${formatted} ج.م` : `${formatted} EGP`;
   }
-  return `${formatted} EGP`;
+  return `${formatted} ${currency}`;
 }
-

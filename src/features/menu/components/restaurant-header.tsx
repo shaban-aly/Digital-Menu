@@ -2,17 +2,25 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Restaurant } from "@/features/menu/types";
 import { Locale } from "@/types";
-import { Globe } from "lucide-react";
+import { Globe, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStoreSchedule } from "@/features/schedule/hooks/use-store-schedule";
 import { StoreStatusBadge } from "@/features/schedule/components/store-status-badge";
 import { ScheduleModal } from "@/features/schedule/components/schedule-modal";
+import { formatCurrency } from "@/lib/utils";
 
 interface RestaurantHeaderProps {
   restaurant: Restaurant;
   locale: Locale;
   onToggleLanguage: () => void;
 }
+
+const businessTypeLabels: Record<string, { ar: string; en: string }> = {
+  restaurant: { ar: "مطعم", en: "Restaurant" },
+  cafe: { ar: "كافيه", en: "Café" },
+  supermarket: { ar: "سوبر ماركت", en: "Supermarket" },
+  store: { ar: "متجر", en: "Store" },
+};
 
 export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
   restaurant,
@@ -26,6 +34,10 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
 
   const name = locale === "ar" ? restaurant.name_ar : restaurant.name_en;
   const targetLanguageLabel = locale === "ar" ? "English" : "العربية";
+  const typeLabel = businessTypeLabels[restaurant.business_type] || {
+    ar: restaurant.business_type,
+    en: restaurant.business_type,
+  };
 
   return (
     <>
@@ -59,11 +71,39 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
                   locale={locale}
                   onClickSchedule={() => setIsScheduleOpen(true)}
                 />
+
+                <span
+                  data-testid="store-business-type"
+                  className="inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
+                >
+                  {locale === "ar" ? typeLabel.ar : typeLabel.en}
+                </span>
+
+                {restaurant.delivery_fee > 0 && (
+                  <span
+                    data-testid="store-delivery-fee"
+                    className="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400"
+                  >
+                    {locale === "ar" ? "توصيل:" : "Delivery:"}{" "}
+                    {formatCurrency(restaurant.delivery_fee, locale, restaurant.currency)}
+                  </span>
+                )}
+
+                {restaurant.phone_number && (
+                  <a
+                    href={`tel:${restaurant.phone_number}`}
+                    data-testid="store-phone-number"
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    aria-label={restaurant.phone_number}
+                  >
+                    <Phone className="w-3 h-3" />
+                    <span dir="ltr">+{restaurant.phone_number.replace(/^\+/, "")}</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Language Switcher Button (Min 44x44px touch target) */}
           <Button
             variant="outline"
             size="sm"
@@ -81,7 +121,6 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
         </div>
       </header>
 
-      {/* 7-Day Schedule Modal */}
       <ScheduleModal
         isOpen={isScheduleOpen}
         onClose={() => setIsScheduleOpen(false)}

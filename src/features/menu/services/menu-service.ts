@@ -1,21 +1,16 @@
-import {
-  MenuData,
-  Restaurant,
-} from "@/features/menu/types";
-import {
-  getMockStoreBySlug,
-  getAllMockStores,
-  MOCK_MENU_DATA,
-} from "./mock-menu-data";
+import { MenuData, Restaurant } from "@/features/menu/types";
+import { StoreRepository } from "./store-repository";
+import { MOCK_MENU_DATA } from "./mock-menu-data";
 
 export async function getStoreBySlug(slug: string): Promise<MenuData | null> {
-  return getMockStoreBySlug(slug);
+  return StoreRepository.getStore(slug);
 }
 
 export async function getAllStores(): Promise<Restaurant[]> {
-  return getAllMockStores();
+  return StoreRepository.getAllStores();
 }
 
 export async function getMenuData(): Promise<MenuData> {
-  return MOCK_MENU_DATA;
+  const store = await StoreRepository.getStore("oriental-grill");
+  return store || MOCK_MENU_DATA;
 }
