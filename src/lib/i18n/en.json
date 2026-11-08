@@ -104,7 +104,7 @@
       "price": "Price (EGP)",
       "unitAr": "Unit in Arabic (optional, e.g. كجم)",
       "unitEn": "Unit in English (optional, e.g. kg)",
-      "imageUrl": "Image URL",
+      "imageUrl": "Item Image",
       "descAr": "Description in Arabic (optional)",
       "descEn": "Description in English (optional)",
       "save": "Save Item",

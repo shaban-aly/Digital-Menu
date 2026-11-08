@@ -9,13 +9,25 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+  bodyClassName?: string;
 }
+
+const maxWidthMap: Record<string, string> = {
+  sm: "sm:max-w-sm",
+  md: "sm:max-w-md",
+  lg: "sm:max-w-lg",
+  xl: "sm:max-w-xl",
+  "2xl": "sm:max-w-2xl",
+};
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
   children,
+  maxWidth = "lg",
+  bodyClassName,
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -46,14 +58,15 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         className={cn(
-          "w-full sm:max-w-lg bg-white dark:bg-neutral-900 rounded-t-3xl sm:rounded-2xl",
+          "w-full bg-white dark:bg-neutral-900 rounded-t-3xl sm:rounded-2xl",
+          maxWidthMap[maxWidth] || "sm:max-w-lg",
           "overflow-hidden shadow-2xl max-h-[90vh] flex flex-col",
           "transform transition-all"
         )}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-neutral-100 dark:border-neutral-800">
+        <div className="flex items-center justify-between p-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
           <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 truncate pe-4">
             {title}
           </h2>
@@ -67,9 +80,10 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="overflow-y-auto p-4 flex-1">{children}</div>
+        <div className={cn("overflow-y-auto p-4 flex-1 overscroll-contain", bodyClassName)}>
+          {children}
+        </div>
       </div>
     </div>
   );
 };
-

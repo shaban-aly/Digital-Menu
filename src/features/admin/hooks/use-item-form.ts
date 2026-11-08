@@ -76,7 +76,7 @@ export function useItemForm({
 
     const parsedPrice = parseFloat(price);
     const candidate = {
-      id: item?.id || "temp_id",
+      ...(item?.id ? { id: item.id } : {}),
       name_ar: nameAr.trim(),
       name_en: nameEn.trim(),
       short_desc_ar: shortDescAr.trim(),
@@ -101,10 +101,7 @@ export function useItemForm({
     }
 
     setIsSubmitting(true);
-    const success = await onSave({
-      ...(item ? { id: item.id } : {}),
-      ...candidate,
-    });
+    const success = await onSave(candidate);
     setIsSubmitting(false);
     if (success) onClose();
   };

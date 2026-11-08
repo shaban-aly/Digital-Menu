@@ -3,6 +3,7 @@ import { Database, Json } from "@/lib/supabase/types";
 import { MenuData, Restaurant, MenuItem } from "@/features/menu/types";
 import { StoreSettings, Category } from "@/features/admin/types";
 import { mapStoreToRestaurant, buildCategoriesWithItems } from "./action-mappers";
+import { isValidUUID } from "@/lib/utils";
 
 export async function getStoreBySlugAction(slug: string): Promise<MenuData | null> {
   if (!isSupabaseConfigured()) return null;
@@ -77,9 +78,11 @@ export async function updateStoreSettingsAction(slug: string, settings: Partial<
 }
 
 export async function saveMenuItemAction(storeId: string, item: MenuItem): Promise<MenuItem> {
-  if (!isSupabaseConfigured()) return item;
+  const id = (item.id && isValidUUID(item.id)) ? item.id : crypto.randomUUID();
+  const validItem: MenuItem = { ...item, id };
+  if (!isSupabaseConfigured()) return validItem;
   const { error } = await supabase.from("products").upsert({
-    id: item.id,
+    id,
     store_id: storeId,
     category_id: item.category_id,
     name_ar: item.name_ar,
@@ -104,7 +107,7 @@ export async function saveMenuItemAction(storeId: string, item: MenuItem): Promi
     }
     throw new Error(`Failed saving product: ${error.message}`);
   }
-  return item;
+  return validItem;
 }
 
 export async function toggleItemAvailabilityAction(itemId: string, isAvailable: boolean): Promise<boolean> {
@@ -123,10 +126,11 @@ export async function deleteMenuItemAction(itemId: string): Promise<boolean> {
 
 export async function saveCategoryAction(
   storeId: string,
-  category: { id: string; name_ar: string; name_en: string; display_order?: number }
+  category: { id?: string; name_ar: string; name_en: string; display_order?: number }
 ): Promise<Category> {
+  const id = (category.id && isValidUUID(category.id)) ? category.id : crypto.randomUUID();
   const result: Category = {
-    id: category.id,
+    id,
     name_ar: category.name_ar,
     name_en: category.name_en,
     display_order: category.display_order ?? 0,
@@ -134,7 +138,7 @@ export async function saveCategoryAction(
   };
   if (!isSupabaseConfigured()) return result;
   const { error } = await supabase.from("categories").upsert({
-    id: category.id,
+    id,
     store_id: storeId,
     name_ar: category.name_ar,
     name_en: category.name_en,

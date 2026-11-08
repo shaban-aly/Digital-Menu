@@ -49,7 +49,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
     setErrors({});
 
     const candidate = {
-      id: category?.id || "temp_cat_id",
+      ...(category?.id ? { id: category.id } : {}),
       name_ar: nameAr.trim(),
       name_en: nameEn.trim(),
     };
@@ -65,11 +65,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
     }
 
     setIsSubmitting(true);
-    const success = await onSave({
-      ...(category ? { id: category.id } : {}),
-      name_ar: candidate.name_ar,
-      name_en: candidate.name_en,
-    });
+    const success = await onSave(candidate);
     setIsSubmitting(false);
     if (success) onClose();
   };
@@ -82,7 +78,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? t.categories.editCategory : t.categories.addCategory}>
-      <form onSubmit={handleSubmit} className="p-4 space-y-3.5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
@@ -118,11 +114,11 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
           {errors.name_en && <p className="text-[10px] text-rose-600">{errors.name_en}</p>}
         </div>
 
-        <div className="flex justify-end gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+        <div className="sticky bottom-0 -mx-4 -mb-4 p-4 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xs border-t border-neutral-100 dark:border-neutral-800 flex justify-end gap-2 z-10">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800 transition-colors"
           >
             {t.items.cancelBtn}
           </button>
@@ -130,7 +126,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             data-testid="save-category-submit-btn"
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50"
+            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 transition-colors"
           >
             {t.categories.save}
           </button>

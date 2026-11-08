@@ -47,6 +47,14 @@ describe("Admin Zod Validation Schemas", () => {
     };
     expect(AdminMenuItemSchema.safeParse(valid).success).toBe(true);
 
+    const withoutId = {
+      category_id: "cat_1",
+      name_ar: "كباب حلبى",
+      name_en: "Halabi Kebab",
+      price: 180,
+    };
+    expect(AdminMenuItemSchema.safeParse(withoutId).success).toBe(true);
+
     const invalidPrice = { ...valid, price: -10 };
     expect(AdminMenuItemSchema.safeParse(invalidPrice).success).toBe(false);
   });
@@ -58,6 +66,12 @@ describe("Admin Zod Validation Schemas", () => {
       name_en: "Grills",
     };
     expect(CategorySchema.safeParse(valid).success).toBe(true);
+
+    const withoutId = {
+      name_ar: "المشويات",
+      name_en: "Grills",
+    };
+    expect(CategorySchema.safeParse(withoutId).success).toBe(true);
 
     const invalidShortName = { id: "cat_1", name_ar: "ا", name_en: "G" };
     expect(CategorySchema.safeParse(invalidShortName).success).toBe(false);

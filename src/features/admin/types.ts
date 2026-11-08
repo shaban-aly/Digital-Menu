@@ -20,16 +20,16 @@ export const StoreSettingsSchema = z.object({
 export type StoreSettings = z.infer<typeof StoreSettingsSchema>;
 
 export const CategorySchema = z.object({
-  id: z.string().min(1),
+  id: z.string().optional(),
   name_ar: z.string().min(2, "اسم القسم بالعربية مطلوب"),
   name_en: z.string().min(2, "English category name is required"),
   display_order: z.number().int().default(0),
   is_active: z.boolean().default(true),
 });
-export type Category = z.infer<typeof CategorySchema>;
+export type Category = z.infer<typeof CategorySchema> & { id: string };
 
 export const AdminMenuItemSchema = z.object({
-  id: z.string().min(1),
+  id: z.string().optional(),
   category_id: z.string().min(1, "يجب تحديد قسم للصنف"),
   name_ar: z.string().min(2, "اسم الصنف بالعربية مطلوب"),
   name_en: z.string().min(2, "English item name is required"),

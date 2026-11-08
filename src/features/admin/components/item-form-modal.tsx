@@ -53,8 +53,9 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={isEdit ? t.editItem : t.addItem}
+      maxWidth="xl"
     >
-      <form onSubmit={form.handleSubmit} className="p-4 space-y-3.5 max-h-[80vh] overflow-y-auto">
+      <form onSubmit={form.handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-1">
             <div className="flex items-center justify-between">
@@ -122,11 +123,11 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           storeSlug={storeSlug}
         />
 
-        <div className="flex justify-end gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+        <div className="sticky bottom-0 -mx-4 -mb-4 p-4 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xs border-t border-neutral-100 dark:border-neutral-800 flex justify-end gap-2 z-10">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800 transition-colors"
           >
             {t.cancelBtn}
           </button>
@@ -134,7 +135,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
             data-testid="save-item-submit-btn"
             type="submit"
             disabled={form.isSubmitting}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50"
+            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 transition-colors"
           >
             {t.save}
           </button>

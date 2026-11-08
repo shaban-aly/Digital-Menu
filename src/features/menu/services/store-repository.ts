@@ -16,6 +16,10 @@ import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 export { STORE_UPDATED_EVENT, getLocalOverrides, saveLocalOverrides, applyOverridesToStore };
 
+export function isValidUUID(id?: string | null): boolean {
+  return Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
+}
+
 function notifyStoreUpdated(slug: string): void {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(STORE_UPDATED_EVENT, { detail: { slug } }));
@@ -86,7 +90,7 @@ export const StoreRepository = {
     if (isSupabaseConfigured()) {
       const store = await this.getStore(slug);
       if (!store) throw new Error(`Store ${slug} not found`);
-      const id = itemData.id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `item_${Date.now()}`);
+      const id = (itemData.id && isValidUUID(itemData.id)) ? itemData.id : crypto.randomUUID();
       const fullItem: MenuItem = {
         id,
         category_id: itemData.category_id,
@@ -132,7 +136,7 @@ export const StoreRepository = {
     if (isSupabaseConfigured()) {
       const store = await this.getStore(slug);
       if (!store) throw new Error(`Store ${slug} not found`);
-      const id = catData.id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `cat_${Date.now()}`);
+      const id = (catData.id && isValidUUID(catData.id)) ? catData.id : crypto.randomUUID();
       const saved = await saveCategoryAction(store.restaurant.id, {
         id,
         name_ar: catData.name_ar,
