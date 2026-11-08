@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { StoreScheduleConfigSchema, StoreScheduleConfig } from "@/features/schedule/types";
 
-export const BusinessTypeSchema = z.enum(["restaurant", "cafe", "supermarket"]);
+export const BusinessTypeSchema = z.enum(["restaurant", "cafe", "supermarket", "store"]);
 export type BusinessType = z.infer<typeof BusinessTypeSchema>;
 
 export const StoreOrderTypeSchema = z.enum(["dine_in", "takeaway", "delivery"]);

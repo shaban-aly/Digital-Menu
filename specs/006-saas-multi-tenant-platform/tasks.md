@@ -19,10 +19,10 @@
 
 **Goal**: Full registration, login, and multi-tenant store creation wizard with slug validation.
 
-- [ ] T003 [P] Implement `AuthService` and `useAuth` hook in `src/features/auth/services/auth-service.ts` & `src/features/auth/hooks/use-auth.ts`
-- [ ] T004 [P] Implement Login and Register components and pages (`/login` and `/register`)
-- [ ] T005 Implement `OnboardingService` and `OnboardingWizard` in `src/features/onboarding/` and route `/onboarding`
-- [ ] T006 [P] Unit tests for Auth and Onboarding workflows in `tests/unit/auth-onboarding.test.ts`
+- [X] T003 [P] Implement `AuthService` and `useAuth` hook in `src/features/auth/services/auth-service.ts` & `src/features/auth/hooks/use-auth.ts`
+- [X] T004 [P] Implement Login and Register components and pages (`/login` and `/register`)
+- [X] T005 Implement `OnboardingService` and `OnboardingWizard` in `src/features/onboarding/` and route `/onboarding`
+- [X] T006 [P] Unit tests for Auth and Onboarding workflows in `tests/unit/auth-onboarding.test.ts`
 
 ---
 

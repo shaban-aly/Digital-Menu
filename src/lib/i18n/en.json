@@ -219,7 +219,14 @@
     "phone": "WhatsApp Order Receiving Number",
     "deliveryFee": "Initial Delivery Fee (EGP)",
     "selectPlan": "Select Subscription Plan",
-    "launch": "Create Store & Launch"
+    "launch": "Create Store & Launch",
+    "slugAvailable": "Slug is available",
+    "slugTaken": "Slug is already taken or reserved",
+    "slugChecking": "Checking availability...",
+    "proActivationTitle": "Activate Your Plan via WhatsApp",
+    "proActivationDesc": "Your store is created! To activate your {plan} quota, please confirm your subscription with our platform team on WhatsApp.",
+    "openWhatsApp": "Chat with Platform on WhatsApp",
+    "continueToDashboard": "Continue to Merchant Dashboard"
   },
   "subscription": {
     "plansTitle": "Subscription Plans & Pricing",
