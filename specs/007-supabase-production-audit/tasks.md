@@ -43,10 +43,10 @@
 
 **Goal**: Verify complete compliance of Features 005 and 006 against their specs.
 
-- [ ] T051 [P] Audit Feature 005 (Smart Operating Hours): Schedule editor, emergency rush pause, pre-orders guard, and store closed badges.
-- [ ] T052 [P] Audit Feature 006 (SaaS Platform & Quotas): Auth (`/login`, `/register`), Onboarding wizard (`/onboarding`), Quota progress meters, and `/pricing` page.
-- [ ] T053 [P] Audit AI Translation: Verify `/api/translate` button integration across category modal, item modal, and onboarding store name.
-- [ ] T054 [P] Audit Super Admin Console: Verify `/admin` store table, 1-click tier modification, and live quota sync to `/dashboard`.
+- [x] T051 [P] Audit Feature 005 (Smart Operating Hours): Schedule editor, emergency rush pause, pre-orders guard, and store closed badges.
+- [x] T052 [P] Audit Feature 006 (SaaS Platform & Quotas): Auth (`/login`, `/register`), Onboarding wizard (`/onboarding`), Quota progress meters, and `/pricing` page.
+- [x] T053 [P] Audit AI Translation: Verify `/api/translate` button integration across category modal, item modal, and onboarding store name.
+- [x] T054 [P] Audit Super Admin Console: Verify `/admin` store table, 1-click tier modification, and live quota sync to `/dashboard`.
 
 ---
 

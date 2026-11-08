@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Locale } from "@/types";
 import { AdminActiveTab } from "../types";
+import { StoreStatusBadge } from "@/features/schedule/components/store-status-badge";
+import { StoreOperatingStatus } from "@/features/schedule/types";
 import { Utensils, FolderTree, Settings, QrCode, ExternalLink, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import arTranslations from "@/lib/i18n/ar.json";
@@ -17,6 +19,8 @@ interface AdminHeaderProps {
   onTabChange: (tab: AdminActiveTab) => void;
   locale: Locale;
   onToggleLanguage: () => void;
+  operatingStatus?: StoreOperatingStatus;
+  onClickSchedule?: () => void;
 }
 
 const STORES = [
@@ -32,6 +36,8 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   onTabChange,
   locale,
   onToggleLanguage,
+  operatingStatus,
+  onClickSchedule,
 }) => {
   const router = useRouter();
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
@@ -53,6 +59,13 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               <span className="shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
                 {t.title}
               </span>
+              {operatingStatus && (
+                <StoreStatusBadge
+                  operatingStatus={operatingStatus}
+                  locale={locale}
+                  onClickSchedule={onClickSchedule}
+                />
+              )}
               <h1 className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100 truncate">
                 {storeName}
               </h1>

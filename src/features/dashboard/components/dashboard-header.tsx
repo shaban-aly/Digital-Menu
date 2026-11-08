@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Locale } from "@/types";
 import { DashboardTab } from "../types";
 import { SubscriptionPlanKey } from "@/features/subscription/types";
+import { StoreStatusBadge } from "@/features/schedule/components/store-status-badge";
+import { StoreOperatingStatus } from "@/features/schedule/types";
 import {
   Utensils,
   FolderTree,
@@ -28,6 +30,8 @@ interface DashboardHeaderProps {
   locale: Locale;
   onToggleLanguage: () => void;
   planKey?: SubscriptionPlanKey;
+  operatingStatus?: StoreOperatingStatus;
+  onClickSchedule?: () => void;
 }
 
 const STORES = [
@@ -44,6 +48,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   locale,
   onToggleLanguage,
   planKey = "free",
+  operatingStatus,
+  onClickSchedule,
 }) => {
   const router = useRouter();
   const t = locale === "ar" ? arTranslations.admin : enTranslations.admin;
@@ -83,6 +89,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 {t.title}
               </span>
               {planBadge}
+              {operatingStatus && (
+                <StoreStatusBadge
+                  operatingStatus={operatingStatus}
+                  locale={locale}
+                  onClickSchedule={onClickSchedule}
+                />
+              )}
               <h1 className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100 truncate">
                 {storeName}
               </h1>
