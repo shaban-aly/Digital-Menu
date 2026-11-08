@@ -2,14 +2,12 @@
 
 import React from "react";
 import { useLanguage } from "@/lib/i18n/language-context";
-import { Check, Zap, MessageSquare } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
-import { getPricingPlans, buildWhatsAppInquiryUrl } from "../services/landing-data";
+import { Zap } from "lucide-react";
+import { PricingComparison } from "@/features/subscription/components/pricing-comparison";
 
 export const PricingSection: React.FC = () => {
   const { locale } = useLanguage();
   const isAr = locale === "ar";
-  const plans = getPricingPlans();
 
   return (
     <section id="pricing" className="py-16 px-4 sm:px-6">
@@ -25,76 +23,13 @@ export const PricingSection: React.FC = () => {
           </h2>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto">
             {isAr
-              ? "اختر الباقة المناسبة وابدأ في تشغيل منيو متجرك الرقمي في أقل من 24 ساعة."
-              : "Choose a plan and launch your branded digital menu in under 24 hours."}
+              ? "ابدأ مجاناً 100% بدون أي بطاقة بنكية، أو اشترك في باقة النمو بـ 250 ج.م شهرياً مع وفر شهرين عند الاشتراك السنوي."
+              : "Start 100% free with no credit card required, or upgrade to Pro Growth at 250 EGP/mo with 2 months free on annual billing."}
           </p>
         </div>
 
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-start">
-          {plans.map((plan) => {
-            const planName = isAr ? plan.name_ar : plan.name_en;
-            const waUrl = buildWhatsAppInquiryUrl(planName, plan.whatsappMessage);
-
-            return (
-              <div
-                key={plan.id}
-                className={`relative p-6 rounded-3xl flex flex-col justify-between transition-all ${
-                  plan.isPopular
-                    ? "bg-white dark:bg-neutral-900 border-2 border-brand-500 shadow-xl md:scale-102 z-10"
-                    : "bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 shadow-xs hover:shadow-md"
-                }`}
-              >
-                {plan.isPopular && (
-                  <span className="absolute -top-3 start-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-brand-600 text-white text-[11px] font-black uppercase tracking-wider shadow-sm">
-                    {isAr ? plan.badge_ar : plan.badge_en}
-                  </span>
-                )}
-
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-extrabold text-lg text-neutral-900 dark:text-neutral-100">{planName}</h3>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
-                      {isAr ? plan.description_ar : plan.description_en}
-                    </p>
-                  </div>
-
-                  <div className="pt-2">
-                    <span className="text-3xl font-black text-neutral-900 dark:text-neutral-50">
-                      {formatCurrency(plan.priceMonthly, locale)}
-                    </span>
-                    <span className="text-xs text-neutral-500 ms-1 font-semibold">/{isAr ? "شهرياً" : "month"}</span>
-                  </div>
-
-                  <ul className="space-y-2.5 pt-4 border-t border-neutral-100 dark:border-neutral-800">
-                    {(isAr ? plan.features_ar : plan.features_en).map((feat, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs text-neutral-600 dark:text-neutral-300">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-neutral-100 dark:border-neutral-800">
-                  <a
-                    href={waUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
-                      plan.isPopular
-                        ? "bg-brand-600 hover:bg-brand-700 text-white shadow-md hover:shadow-lg"
-                        : "bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200"
-                    }`}
-                  >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>{isAr ? plan.ctaText_ar : plan.ctaText_en}</span>
-                  </a>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Unified Pricing Comparison with Monthly/Yearly Toggle & WhatsApp Deep-Links */}
+        <PricingComparison locale={locale} />
       </div>
     </section>
   );

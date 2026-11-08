@@ -157,7 +157,7 @@ describe("Audit Suite: Features 001 to 004 Specifications", () => {
       expect(plans.length).toBe(3);
       const proPlan = plans.find((p) => p.isPopular);
       expect(proPlan).toBeDefined();
-      expect(proPlan?.priceMonthly).toBe(599);
+      expect(proPlan?.priceMonthly).toBe(250);
 
       const inquiryUrl = buildWhatsAppInquiryUrl(proPlan!.name_ar, proPlan!.whatsappMessage);
       expect(inquiryUrl).toContain("https://wa.me/");

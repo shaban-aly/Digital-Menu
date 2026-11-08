@@ -35,7 +35,14 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({
   const isAr = locale === "ar";
 
   const handleAction = (planKey: SubscriptionPlanKey) => {
-    onSelectPlan?.(planKey, cycle);
+    if (onSelectPlan) {
+      onSelectPlan(planKey, cycle);
+      return;
+    }
+    if (planKey === "free" && typeof window !== "undefined") {
+      window.location.href = "/register";
+      return;
+    }
     if (planKey !== "free" && typeof window !== "undefined") {
       const url = buildUpgradeWhatsAppUrl({
         platformPhone,
