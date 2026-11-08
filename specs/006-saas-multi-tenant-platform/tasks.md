@@ -75,16 +75,16 @@
 **Goal**: Seamless end-to-end integration across Supabase modular migrations, live menu/cart syncing, unified navigation headers, routing transitions, and AI translation integration.
 
 ### Sub-Agent 1: Supabase Migrations, CLI & Environment Configuration
-- [ ] T023 [P] Delete old unified `20261108_saas_schema.sql` and initialize `supabase/config.toml` for Supabase CLI.
-- [ ] T024 [P] Split database migrations into 5 modular, clean SQL files under `supabase/migrations/`:
+- [X] T023 [P] Delete old unified `20261108_saas_schema.sql` and initialize `supabase/config.toml` for Supabase CLI.
+- [X] T024 [P] Split database migrations into 5 modular, clean SQL files under `supabase/migrations/`:
   - `20261108000001_clean_reset_and_enums.sql`: Drop tables with CASCADE and create enums (`business_type`, `plan_tier`, `billing_cycle`, `user_role`).
   - `20261108000002_profiles_and_subscriptions.sql`: `profiles` linked to `auth.users` via trigger, `subscriptions` with plan quotas.
   - `20261108000003_stores_table.sql`: `stores` table linked to `owner_id` and `slug`.
   - `20261108000004_categories_and_products.sql`: `categories` & `products` tables with AR/EN fields, units, and quota trigger.
   - `20261108000005_rls_policies_and_indexes.sql`: Declarative RLS policies for public read and merchant write.
   - `supabase/seed.sql`: Seed data for the 3 demo businesses.
-- [ ] T025 [P] Update `.env.local` and `.env.example` with Supabase configuration keys and credentials.
-- [ ] T026 [P] Add Supabase CLI npm scripts (`db:link`, `db:push`, `db:reset`) to `package.json`.
+- [X] T025 [P] Update `.env.local` and `.env.example` with Supabase configuration keys and credentials.
+- [X] T026 [P] Add Supabase CLI npm scripts (`db:link`, `db:push`, `db:reset`) to `package.json`.
 
 ### Sub-Agent 2: Live Supabase Layer Sync for Menu & Cart
 - [ ] T027 [P] Connect `/menu/[slug]` (`src/features/menu/`) to unified data repository with Supabase live fetch and graceful fallback.
