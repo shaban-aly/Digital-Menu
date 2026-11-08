@@ -21,6 +21,7 @@ import enTranslations from "@/lib/i18n/en.json";
 interface MenuPageProps {
   initialData: MenuData;
   initialLocale?: Locale;
+  initialTableNumber?: string;
 }
 
 const MenuContent: React.FC<MenuPageProps> = ({
@@ -160,6 +161,7 @@ export const MenuPage: React.FC<MenuPageProps> = (props) => {
       storeSlug={props.initialData.restaurant.slug}
       supportedOrderTypes={props.initialData.restaurant.supported_order_types}
       deliveryFee={props.initialData.restaurant.delivery_fee}
+      initialTableNumber={props.initialTableNumber}
     >
       <MenuContent {...props} />
     </CartProvider>

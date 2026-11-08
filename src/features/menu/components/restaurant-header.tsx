@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Restaurant } from "@/features/menu/types";
 import { Locale } from "@/types";
-import { Globe } from "lucide-react";
+import { Globe, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface RestaurantHeaderProps {
@@ -50,23 +51,33 @@ export const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({
           </div>
         </div>
 
-        {/* Language Switcher Button (Min 44x44px touch target) */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onToggleLanguage}
-          className="flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold"
-          aria-label={
-            locale === "ar"
-              ? "التحويل إلى اللغة الإنجليزية"
-              : "Switch to Arabic language"
-          }
-        >
-          <Globe className="w-4 h-4 text-brand-600" />
-          <span>{targetLanguageLabel}</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/menu/${restaurant.slug}/qr`}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-neutral-200 dark:border-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 min-h-[44px] transition-colors"
+            title={locale === "ar" ? "طباعة وتوليد كود QR" : "Generate & Print QR"}
+          >
+            <QrCode className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="hidden sm:inline">{locale === "ar" ? "كود QR" : "QR Code"}</span>
+          </Link>
+
+          {/* Language Switcher Button (Min 44x44px touch target) */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onToggleLanguage}
+            className="flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold min-h-[44px]"
+            aria-label={
+              locale === "ar"
+                ? "التحويل إلى اللغة الإنجليزية"
+                : "Switch to Arabic language"
+            }
+          >
+            <Globe className="w-4 h-4 text-brand-600" />
+            <span>{targetLanguageLabel}</span>
+          </Button>
+        </div>
       </div>
     </header>
   );
 };
-

@@ -9,6 +9,7 @@ interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -22,8 +23,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function StoreMenuPage({ params }: PageProps) {
+export default async function StoreMenuPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const tableParam = resolvedSearchParams?.table;
+  const initialTable = typeof tableParam === "string" ? tableParam : undefined;
+
   const data = await getStoreBySlug(slug);
 
   if (!data) {
@@ -32,8 +37,7 @@ export default async function StoreMenuPage({ params }: PageProps) {
 
   return (
     <Suspense fallback={<MenuSkeleton />}>
-      <MenuPage initialData={data} />
+      <MenuPage initialData={data} initialTableNumber={initialTable} />
     </Suspense>
   );
 }
-
